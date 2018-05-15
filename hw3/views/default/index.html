@@ -1,0 +1,120 @@
+{{extend 'layout.html'}}
+
+{{block head}}
+<script src="{{=URL('static', 'js/vue.js')}}"></script>
+<script>
+    var posts_url = "{{=URL('api', 'get_posts')}}";
+    var add_post_url = "{{=URL('api', 'add_post', user_signature=True)}}";
+    var edit_post_url = "{{=URL('api', 'edit_post', user_signature=True)}}";
+    var del_post_url = "{{=URL('api', 'del_post', user_signature=True)}}";
+</script>
+{{end}}
+
+<div class="main_content">
+
+    <div id="vue-div" class="display:none">
+
+        <!-- Your code goes here.  Remember to call $("#vue-div").show() once you get the data for the first time. -->
+        <!-- Used example found on old class webpage. https://sites.google.com/a/ucsc.edu/luca/classes/cmps-183-hypermedia-and-the-web/cmps-183-fall-2016/homework-3 -->
+        <div class="button_bar">
+            <button v-if="!is_adding_post" class="btn btn-danger btn-sm" v-on:click="add_post_button()" v-bind:class="{'disabled': !logged_in}">
+                Add new post
+            </button>
+
+            <button v-if="is_adding_post" class="btn btn-warning btn-sm" v-on:click="add_post_button()">
+                Cancel
+            </button>
+        </div>
+
+
+        <div v-if="is_adding_post" id="add-new-post">
+                <div>
+                    <textarea class="form-control string" id="no_table_content" v-model="form_content" placeholder="Content" type="text" ></textarea>
+                    <span class="help-block"></span>
+                </div>
+
+
+                <div>
+                    <button class="btn btn-primary btn-sm post-button" v-on:click="add_post()">
+                        Post
+                    </button>
+                </div>
+        </div>
+
+
+        <div class="result_table">
+
+
+
+            <div v-for="post in posts">
+
+
+                <!-- Create the div for each post -->
+                <div class="post text-left post-content">
+                    <p>First name: ${post.first_name}</p>
+                    <p>Last name: ${post.last_name}</p>
+                    <div v-if="editing && edit_id==post.id">
+
+                        <!-- Content that is being edited for a post -->
+                        <div class="form-group" id="no_table_content__row">
+                            <div>
+                                <textarea class="form-control string" id="no_table_content" v-model="edit_content = post.content" placeholder="Content" type="text" ></textarea>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+
+                        <!-- The post and cancel buttond for editing a post -->
+                        <div class="form-group row edit-buttons" id="submit_record__row">
+                            <div class="col-md-6">
+                                <button v-if="editing" class="btn btn-warning btn-sm cancel-button" v-on:click="cancel_edit()" type="button">
+                                    Cancel
+                                </button>
+                            </div>
+
+                            <div class="col-md-6">
+                                <button v-if="editing" class="btn btn-primary btn-sm post-edit-button" v-on:click="edit_post_submit()" type="submit">
+                                    Post
+                                </button>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div v-if="!editing || (editing && edit_id != post.id)">
+                        <p>${post.content}</p>
+                    </div>
+
+                    <p>${post.created_on}</p>
+                    <p>${post.updated_on}</p>
+
+                    <!-- if it is your post show the editing icons -->
+                    {{if auth.user:}}
+                        <div v-if="post.user_email == '{{=auth.user.email}}'">
+                            <i class="fa fa-pencil" v-on:click="edit_post(post.id)"></i>
+                            <i class="fa fa-trash-o" v-on:click="delete_track(post.id)"></i>
+
+                        </div>
+                    {{pass}}
+                </div>
+            </div>
+
+
+            <div v-if="has_more" class="show_more">
+                <button id="load-more" class="btn btn-default" v-on:click="get_more()">Load more</button>
+            </div>
+        </div>
+
+        </div>
+
+
+
+
+
+</div>
+
+
+
+
+
+<script src="{{=URL('static', 'js/default_index.js')}}"></script>

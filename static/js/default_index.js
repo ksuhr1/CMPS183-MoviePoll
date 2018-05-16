@@ -80,6 +80,7 @@ var app = function() {
                 self.vue.editing = !self.vue.editing;
             });
     };
+
     self.edit_post = function(post_id) {
         console.log("yes");
         self.vue.editing = !self.vue.editing;
@@ -92,7 +93,7 @@ var app = function() {
 
     };
 
-    self.delete_track = function(post_id) {
+    self.delete_post = function(post_id) {
         $.post(del_post_url,
             {
                 post_id: post_id
@@ -119,6 +120,17 @@ var app = function() {
         )
     };
 
+    self.toggle_public = function(post_id){
+        $.post(toggle_public_url,
+            {
+                post_id: post_id
+            },
+            function (data) {
+                post = self.vue.posts.find(post => post.id === post_id);
+                post.is_public = data.post.is_public;
+            }
+        )
+    }
 
     // Complete as needed.
     self.vue = new Vue({
@@ -141,10 +153,11 @@ var app = function() {
             get_more: self.get_more,
             add_post_button: self.add_post_button,
             add_post: self.add_post,
-            delete_track: self.delete_track,
+            delete_post: self.delete_post,
             edit_post: self.edit_post,
             edit_post_submit: self.edit_post_submit,
-            cancel_edit: self.cancel_edit
+            cancel_edit: self.cancel_edit,
+            toggle_public: self.toggle_public,
         }
 
 

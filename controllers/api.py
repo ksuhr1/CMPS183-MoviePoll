@@ -12,20 +12,20 @@ def get_user_name_from_email(email):
 
 
 def get_posts():
-    """This controller is used to get the posts.  Follow what we did in lecture 10, to ensure
-    that the first time, we get 4 posts max, and each time the "load more" button is pressed,
-    we load at most 4 more posts."""
-    # Implement me!
-    print "Made it to the get posts api"
     start_idx = int(request.vars.start_idx) if request.vars.start_idx is not None else 0
     end_idx = int(request.vars.end_idx) if request.vars.end_idx is not None else 0
-    # We just generate a lot of of data.
+
     posts = []
     has_more = False
 
-    rows = db().select(db.post.ALL, orderby=~db.post.created_on, limitby=(start_idx, end_idx + 1))
+    if auth.user is not None:
+        q = db((db.post.user_email == auth.user.email) | (db.post.is_public == True))
+        rows = q.select(db.post.ALL, orderby=~db.post.created_on, limitby=(start_idx, end_idx + 1))
+    else:         
+        q = db(db.post.is_public == True)
+        rows = q.select(db.post.ALL, orderby=~db.post.created_on, limitby=(start_idx, end_idx + 1))
+
     for i, r in enumerate(rows):
-        #print r
         name = get_user_name_from_email(r.user_email)
         if i < end_idx - start_idx:
             t = dict(
@@ -34,10 +34,9 @@ def get_posts():
                 content=r.post_content,
                 created_on=r.created_on,
                 updated_on=r.updated_on,
+                is_public=r.is_public,
                 first_name=name[0],
-                last_name=name[1]
-
-
+                last_name=name[1],                
             )
             posts.append(t)
         else:
@@ -65,9 +64,9 @@ def add_post():
             content=p.post_content,
             created_on=p.created_on,
             updated_on=p.updated_on,
+            is_public=p.is_public,
             first_name=name[0],
             last_name=name[1]
-
     )
     print p
     return response.json(dict(post=post))
@@ -78,20 +77,20 @@ def toggle_public():
     if auth.user == None:
         return "Not Authorized"
 
-    q = ((db.memos.user_email == auth.user.email) &
-         (db.memos.id == request.vars.memo_id))
+    q = ((db.post.user_email == auth.user.email) &
+         (db.post.id == request.vars.post_id))
 
-    memo = db(q).select().first()
+    post = db(q).select().first()
 
-    if memo is None:
+    if post is None:
         return "Not Authorized"
     else:
-        if (memo.is_public):
-            memo.update_record(is_public=False)
+        if (post.is_public):
+            post.update_record(is_public=False)
         else:
-            memo.update_record(is_public=True)
-
-    return "toggle_public"
+            post.update_record(is_public=True)
+    # return post
+    return response.json(dict(post=post))
 
 @auth.requires_signature()
 def edit_post():

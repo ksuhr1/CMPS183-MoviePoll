@@ -12,6 +12,10 @@ var app = function() {
         }
     };
 
+
+
+
+
     function get_posts_url(start_idx, end_idx) {
         console.log("I am in the get posts url method");
         var pp = {
@@ -20,9 +24,6 @@ var app = function() {
         };
         return posts_url + "?" + $.param(pp);
     }
-
-
-
 
     self.get_posts = function () {
         console.log("I am in the get posts method");
@@ -34,6 +35,17 @@ var app = function() {
             self.vue.logged_in = data.logged_in;
         })
     };
+
+    self.get_more = function () {
+        var num_posts = self.vue.posts.length;
+        $.getJSON(get_posts_url(num_posts, num_posts + 4), function (data) {
+            self.vue.has_more = data.has_more;
+            self.extend(self.vue.posts, data.posts);
+        });
+    };
+
+
+
 
     self.add_post_button = function () {
         // The button to add a track has been pressed.
@@ -60,13 +72,8 @@ var app = function() {
             });
     };
 
-    self.get_more = function () {
-        var num_posts = self.vue.posts.length;
-        $.getJSON(get_posts_url(num_posts, num_posts + 4), function (data) {
-            self.vue.has_more = data.has_more;
-            self.extend(self.vue.posts, data.posts);
-        });
-    };
+
+
 
     self.edit_post_submit = function () {
         // The submit button to add a track has been added.
@@ -80,8 +87,8 @@ var app = function() {
                 self.vue.editing = !self.vue.editing;
             });
     };
+
     self.edit_post = function(post_id) {
-        console.log("yes");
         self.vue.editing = !self.vue.editing;
         self.vue.edit_id = post_id;
     };
@@ -92,33 +99,54 @@ var app = function() {
 
     };
 
-    self.delete_track = function(post_id) {
+
+
+
+    self.delete_post = function(post_id) {
         $.post(del_post_url,
             {
                 post_id: post_id
             },
             function () {
-                var idx = null;
-                for (var i = 0; i < self.vue.posts.length; i++) {
-                    if (self.vue.posts[i].id === post_id) {
-                        // If I set this to i, it won't work, as the if below will
-                        // return false for items in first position.
-                        idx = i + 1;
-                        break;
-                    }
-                }
-                if (idx) {
-                    self.vue.posts.splice(idx - 1, 1);
+                postIndex = self.vue.posts.findIndex(post => post.id === post_id);
+                self.vue.posts.splice(postIndex, 1);
 
-                    //if posts length is less that 5 has_more is false
-                    if (self.vue.posts.length < 5) {
-                        self.vue.has_more = false;
-                    }
-                }
+
+                // var idx = null;
+                // for (var i = 0; i < self.vue.posts.length; i++) {
+                //     if (self.vue.posts[i].id === post_id) {
+                //         // If I set this to i, it won't work, as the if below will
+                //         // return false for items in first position.
+                //         idx = i + 1;
+                //         break;
+                //     }
+                // }
+                // if (idx) {
+                //     self.vue.posts.splice(idx - 1, 1);
+
+                //     //if posts length is less that 5 has_more is false
+                //     if (self.vue.posts.length < 5) {
+                //         self.vue.has_more = false;
+                //     }
+                // }
+
             }
         )
     };
 
+
+
+    self.toggle_public = function(post_id){
+        $.post(toggle_public_url,
+            {
+                post_id: post_id
+            },
+            function (data) {
+                post = self.vue.posts.find(post => post.id === post_id);
+                post.is_public = data.post.is_public;
+            }
+        )
+    }
 
     // Complete as needed.
     self.vue = new Vue({
@@ -128,23 +156,26 @@ var app = function() {
         data: {
             posts: [],
             get_more: false,
+            has_more: false,
+            
             logged_in: false,
+            
             editing: false,
             is_adding_post: false,
-            has_more: false,
+
             form_content: null,
             edit_content: null,
             edit_id: 0,
-            show: true
         },
         methods: {
             get_more: self.get_more,
             add_post_button: self.add_post_button,
             add_post: self.add_post,
-            delete_track: self.delete_track,
+            delete_post: self.delete_post,
             edit_post: self.edit_post,
             edit_post_submit: self.edit_post_submit,
-            cancel_edit: self.cancel_edit
+            cancel_edit: self.cancel_edit,
+            toggle_public: self.toggle_public,
         }
 
 

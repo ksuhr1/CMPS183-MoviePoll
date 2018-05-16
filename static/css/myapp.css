@@ -22,17 +22,14 @@
   border-radius: 16px;
 }
 
-.edit-buttons{
-  width:200px;
+/* line 21, ../sass/_main.scss */
+.main-content {
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-bottom: 50px;
 }
 
-.my-nav-tag {
-  background-color: orange;
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s
-}
-.fade-enter, .fade-leave-active {
-  opacity: 0
+/* line 27, ../sass/_main.scss */
+.button-bar {
+  padding: 10px 0px;
 }

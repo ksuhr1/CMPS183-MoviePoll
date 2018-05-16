@@ -12,11 +12,6 @@ def get_user_name_from_email(email):
 
 
 def get_posts():
-    """This controller is used to get the posts.  Follow what we did in lecture 10, to ensure
-    that the first time, we get 4 posts max, and each time the "load more" button is pressed,
-    we load at most 4 more posts."""
-    # Implement me!
-
     start_idx = int(request.vars.start_idx) if request.vars.start_idx is not None else 0
     end_idx = int(request.vars.end_idx) if request.vars.end_idx is not None else 0
 
@@ -31,7 +26,6 @@ def get_posts():
         rows = q.select(db.post.ALL, orderby=~db.post.created_on, limitby=(start_idx, end_idx + 1))
 
     for i, r in enumerate(rows):
-        #print r
         name = get_user_name_from_email(r.user_email)
         if i < end_idx - start_idx:
             t = dict(
@@ -40,9 +34,9 @@ def get_posts():
                 content=r.post_content,
                 created_on=r.created_on,
                 updated_on=r.updated_on,
-                first_name=name[0],
-                last_name=name[1],
                 is_public=r.is_public,
+                first_name=name[0],
+                last_name=name[1],                
             )
             posts.append(t)
         else:
@@ -80,7 +74,6 @@ def add_post():
 
 @auth.requires_signature()
 def toggle_public():
-    print "toggle public"
     if auth.user == None:
         return "Not Authorized"
 
@@ -96,7 +89,7 @@ def toggle_public():
             post.update_record(is_public=False)
         else:
             post.update_record(is_public=True)
-
+    # return post
     return response.json(dict(post=post))
 
 @auth.requires_signature()

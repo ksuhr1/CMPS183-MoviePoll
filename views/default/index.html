@@ -45,7 +45,7 @@
             </div>
             <div>
                 <button v-on:click="add_post()" 
-                    class="btn btn-primary btn-sm post-button">
+                    class="btn btn-primary btn-sm">
                     Post
                 </button>
                 <button v-if="is_adding_post" 
@@ -78,32 +78,31 @@
                     <div class="form-group row edit-buttons" id="submit_record__row">
                         <div class="col-md-6">
                             <button v-if="editing" 
-                                class="btn btn-warning btn-sm cancel-button" 
-                                v-on:click="cancel_edit()" type="button">
-                                Cancel
-                            </button>
-                        </div>
-                        <div class="col-md-6">
-                            <button v-if="editing" 
                                 class="btn btn-primary btn-sm post-edit-button" 
                                 v-on:click="edit_post_submit()" type="submit">
                                 Post
                             </button>
+                            <button v-if="editing" 
+                                class="btn btn-warning btn-sm cancel-button" 
+                                v-on:click="cancel_edit()" type="button">
+                                Cancel
+                            </button>                            
                         </div>
                     </div>
                 </div>
 
 
+                <!-- Post content  -->
                 <div v-if="!editing || (editing && edit_id != post.id)">
                     <p>${post.content}</p>
                 </div>
-
                 <!-- author and date info -->
                 <small>
-                    Submitted at: ${post.created_on} by ${post.first_name} ${post.last_name}                    
+                    Submitted at: ${post.created_on} by ${post.name}
                     <br>
                     Last updated: ${post.updated_on}
                 </small>
+
 
                 <!-- if it is your post show the editing icons -->
                 {{if auth.user:}}

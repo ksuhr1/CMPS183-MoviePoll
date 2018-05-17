@@ -76,7 +76,8 @@ var app = function() {
 
 
     self.edit_post_submit = function () {
-        // The submit button to add a track has been added.
+        // post = self.vue.posts.find(post => post.id === post_id);
+        // post.content = self.vue.edit_content;
         $.post(edit_post_url,
             {
                 post_content: self.vue.edit_content,

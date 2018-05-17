@@ -75,9 +75,9 @@ var app = function() {
 
 
 
-    self.edit_post_submit = function () {
-        // post = self.vue.posts.find(post => post.id === post_id);
-        // post.content = self.vue.edit_content;
+    self.edit_post_submit = function (post_id) {
+        post = self.vue.posts.find(post => post.id === post_id);
+        post.content = self.vue.edit_content;
         $.post(edit_post_url,
             {
                 post_content: self.vue.edit_content,
@@ -92,12 +92,13 @@ var app = function() {
     self.edit_post = function(post_id) {
         self.vue.editing = !self.vue.editing;
         self.vue.edit_id = post_id;
+        post = self.vue.posts.find(post => post.id === post_id);
+        self.vue.edit_content = post.content;
     };
 
     self.cancel_edit = function () {
         self.vue.editing = !self.vue.editing;
         self.vue.edit_id = 0;
-
     };
 
 
@@ -111,33 +112,14 @@ var app = function() {
             function () {
                 postIndex = self.vue.posts.findIndex(post => post.id === post_id);
                 self.vue.posts.splice(postIndex, 1);
-
-
-                // var idx = null;
-                // for (var i = 0; i < self.vue.posts.length; i++) {
-                //     if (self.vue.posts[i].id === post_id) {
-                //         // If I set this to i, it won't work, as the if below will
-                //         // return false for items in first position.
-                //         idx = i + 1;
-                //         break;
-                //     }
-                // }
-                // if (idx) {
-                //     self.vue.posts.splice(idx - 1, 1);
-
-                //     //if posts length is less that 5 has_more is false
-                //     if (self.vue.posts.length < 5) {
-                //         self.vue.has_more = false;
-                //     }
-                // }
-
             }
         )
     };
 
 
 
-    self.toggle_public = function(post_id){
+
+    self.toggle_public = function(post_id) {
         $.post(toggle_public_url,
             {
                 post_id: post_id

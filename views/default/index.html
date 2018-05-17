@@ -61,7 +61,7 @@
             <div v-if="editing && edit_id==post.id">
                 <!-- Content that is being edited for a post -->
                 <div class="form-group">
-                    <textarea v-model="edit_content = post.content"
+                    <textarea v-model="edit_content"
                         class="form-control string" 
                         id="no_table_content" 
                         placeholder="Content" type="text">
@@ -72,7 +72,7 @@
                 <div class="form-group">
                     <button v-if="editing" 
                         class="btn btn-primary btn-sm post-edit-button" 
-                        v-on:click="edit_post_submit()" type="submit">
+                        v-on:click="edit_post_submit(post.id)" type="submit">
                         Post
                     </button>
                     <button v-if="editing" 

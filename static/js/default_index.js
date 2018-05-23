@@ -11,13 +11,29 @@ var app = function() {
             a.push(b[i]);
         }
     };
+    
+    self.getUberURL = function () {
+        var pp = {
+            client_id: "<CLIENT_ID>",
+            action: "setPickup",
+            
+            pickup: "my_location",
+            
+            dropoff: {
+                latitude: 37.802374,
+                longitude: -122.405818,
+                nickname: "Coit Tower",
+            },            
 
+            product_id: "a1111c8c-c720-46c3-8534-2fcdd730040d",
+        }
+        self.vue.uberURL = "https://m.uber.com/ul/" + "?" + $.param(pp);
+    }
 
 
 
 
     function get_posts_url(start_idx, end_idx) {
-        console.log("I am in the get posts url method");
         var pp = {
             start_idx: start_idx,
             end_idx: end_idx
@@ -26,10 +42,8 @@ var app = function() {
     }
 
     self.get_posts = function () {
-        console.log("I am in the get posts method");
         var post_len = self.vue.posts.length;
         $.getJSON(get_posts_url(post_len, post_len+4), function (data) {
-            console.log(data);
             self.vue.posts = data.posts;
             self.vue.has_more = data.has_more;
             self.vue.logged_in = data.logged_in;
@@ -149,6 +163,8 @@ var app = function() {
             form_content: null,
             edit_content: null,
             edit_id: 0,
+
+            uberURL: null,
         },
         methods: {
             get_more: self.get_more,
@@ -159,12 +175,15 @@ var app = function() {
             edit_post_submit: self.edit_post_submit,
             cancel_edit: self.cancel_edit,
             toggle_public: self.toggle_public,
+
+            getUberURL: self.getUberURL, 
         }
 
 
     });
 
     self.get_posts();
+    self.getUberURL();
     $("#vue-div").show();
     return self;
 };

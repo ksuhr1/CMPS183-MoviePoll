@@ -18,6 +18,8 @@
 
     <div id="vue-div" class="display:none">
 
+        <a v-bind:href="uberURL">Book an Uber</a>
+
         <!-- Used example found on old class webpage.  -->
         <!-- https://sites.google.com/a/ucsc.edu/luca/classes/cmps-183-hypermedia-and-the-web/cmps-183-fall-2016/homework-3 -->
         
@@ -116,7 +118,7 @@
                             class="btn btn-default btn-sm" 
                             v-on:click="toggle_public(post.id)">
                             <i class="fa fa-users"></i>
-                    </button>                        
+                    </button>
                 </div>
             {{pass}}
         </div>

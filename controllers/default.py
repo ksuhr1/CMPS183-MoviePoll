@@ -16,6 +16,9 @@ def index():
     posts = db().select(db.post.ALL)
     return dict(posts=posts)
 
+def googlemaps():
+    response.view = 'default/googlemaps.html'
+    return dict()
 
 def user():
     """

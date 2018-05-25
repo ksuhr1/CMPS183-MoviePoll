@@ -29,8 +29,10 @@ response.google_analytics_id = None
 # ----------------------------------------------------------------------------------------------------------------------
 
 response.menu = [
-    (T('Home'), False, URL('default', 'index'), [(T('Design'), False, URL('admin', 'default', 'design/%s' % request.application))]),
-    (T('About'), False, "", [])
+    (T('Home'), False, URL('default', 'index'), []),
+    # (T('Home'), False, URL('default', 'index'), [(T('Design'), False, URL('admin', 'default', 'design/%s' % request.application))]),
+    (T('About'), False, "", []),
+    (T('Admin'), False, URL('admin', 'default', 'design/%s' % request.application)),
 ]
 
 DEVELOPMENT_MENU = False

@@ -104,11 +104,11 @@ select.autocomplete {
     padding-right: 15px;
     margin: 20px;
 }
+
 .background {
     background: url(../images/background.jpg) no-repeat center center;
 }
 body {
-    padding-top: 60px;
     margin-bottom: 60px;
 }
 header {
@@ -126,8 +126,8 @@ html {
     bottom: 0;
     width: 100%;
     height: 60px;
-    background: #333;
-    color: #aaa;
+    line-height: 60px;
+    background: #f7f7f7;
 }
 header h1 {
     color: #FFF!important;

@@ -18,123 +18,118 @@
 
     <div id="vue-div" class="display:none">
 
+        <a v-bind:href="uberURL">Book an Uber</a>
+
         <!-- Used example found on old class webpage.  -->
         <!-- https://sites.google.com/a/ucsc.edu/luca/classes/cmps-183-hypermedia-and-the-web/cmps-183-fall-2016/homework-3 -->
         
 
         <!-- Add post button  -->
-        <div>
-            <button v-if="!is_adding_post" 
-                class="btn btn-primary btn-lg btn-block"
-                v-on:click="add_post_button()" 
-                v-bind:class="{'disabled': !logged_in}">
-                Add new post
-            </button>
-        </div>
-
+        <button v-if="!is_adding_post" 
+            class="btn btn-primary btn-lg btn-block"
+            v-on:click="add_post_button()" 
+            v-bind:class="{'disabled': !logged_in}">
+            Add new post
+        </button>
 
         <!-- Form to add post -->
-        <div v-if="is_adding_post" id="add-new-post">
-            <div>
+        <div v-if="is_adding_post">
+            <div class="form-group">
                 <textarea v-model="form_content"
                     class="form-control string" 
                     id="no_table_content" 
                     placeholder="Content" type="text">                        
                 </textarea>
-                <span class="help-block"></span>
             </div>
-            <div>
+            <div class="form-group">
                 <button v-on:click="add_post()" 
-                    class="btn btn-primary btn-sm post-button">
+                    class="btn btn-primary btn-sm">
                     Post
                 </button>
                 <button v-if="is_adding_post" 
                     class="btn btn-warning btn-sm" 
                     v-on:click="add_post_button()">
                     Cancel
-                </button>                
+                </button>
             </div>
         </div>
 
 
         <!-- Posts -->
-        <div v-for="post in posts">
-            <!-- Create the div for each post -->
-            <div class="post text-left post-content">
-                
-                <!-- Edit form -->
-                <div v-if="editing && edit_id==post.id">
-                    <!-- Content that is being edited for a post -->
-                    <div class="form-group" id="no_table_content__row">
-                        <textarea v-model="edit_content = post.content"
-                            class="form-control string" 
-                            id="no_table_content" 
-                            placeholder="Content" type="text">
-                        </textarea>
-                        <span class="help-block"></span>
-                    </div>
-
-                    <!-- The post and cancel button for edit form -->
-                    <div class="form-group row edit-buttons" id="submit_record__row">
-                        <div class="col-md-6">
-                            <button v-if="editing" 
-                                class="btn btn-warning btn-sm cancel-button" 
-                                v-on:click="cancel_edit()" type="button">
-                                Cancel
-                            </button>
-                        </div>
-                        <div class="col-md-6">
-                            <button v-if="editing" 
-                                class="btn btn-primary btn-sm post-edit-button" 
-                                v-on:click="edit_post_submit()" type="submit">
-                                Post
-                            </button>
-                        </div>
-                    </div>
+        <!-- create the div for each post -->
+        <div v-for="post in posts" class="post text-left">
+            
+            <!-- Edit form -->
+            <div v-if="editing && edit_id==post.id">
+                <!-- Content that is being edited for a post -->
+                <div class="form-group">
+                    <textarea v-model="edit_content"
+                        class="form-control string" 
+                        id="no_table_content" 
+                        placeholder="Content" type="text">
+                    </textarea>
                 </div>
 
-
-                <div v-if="!editing || (editing && edit_id != post.id)">
-                    <p>${post.content}</p>
+                <!-- The post and cancel button for edit form -->
+                <div class="form-group">
+                    <button v-if="editing" 
+                        class="btn btn-primary btn-sm post-edit-button" 
+                        v-on:click="edit_post_submit(post.id)" type="submit">
+                        Post
+                    </button>
+                    <button v-if="editing" 
+                        class="btn btn-warning btn-sm cancel-button" 
+                        v-on:click="cancel_edit()" type="button">
+                        Cancel
+                    </button>
                 </div>
-
-                <!-- author and date info -->
-                <small>
-                    Submitted at: ${post.created_on} by ${post.first_name} ${post.last_name}                    
-                    <br>
-                    Last updated: ${post.updated_on}
-                </small>
-
-                <!-- if it is your post show the editing icons -->
-                {{if auth.user:}}
-                    <div class="button-bar" v-if="post.user_email == '{{=auth.user.email}}'">
-                        <button class="btn btn-default btn-sm" 
-                            v-on:click="edit_post(post.id)">
-                            <i class="fa fa-pencil"></i>
-                        </button>
-                        <button class="btn btn-default btn-sm" 
-                            v-on:click="delete_post(post.id)">
-                            <i class="fa fa-trash-o"></i>
-                        </button>
-                        <button v-if="!post.is_public"
-                                class="btn btn-default btn-sm" 
-                                v-on:click="toggle_public(post.id)">
-                                <i class="fa fa-user"></i>
-                        </button>
-                        <button v-if="post.is_public"
-                                class="btn btn-default btn-sm" 
-                                v-on:click="toggle_public(post.id)">
-                                <i class="fa fa-users"></i>
-                        </button>                        
-                    </div>
-                {{pass}}
             </div>
-        </div>
 
 
-        <div v-if="has_more" class="show_more">
-            <button class="btn btn-primary btn-sm" v-on:click="get_more()">Load more</button>
+            <!-- Post content  -->
+            <div v-if="!editing || (editing && edit_id != post.id)">
+                <p>${post.content}</p>
+            </div>
+            <!-- author and date info -->
+            <small>
+                Submitted at: ${post.created_on} by ${post.name}
+                <br>
+                Last updated: ${post.updated_on}
+            </small>
+
+
+            <!-- Edit, Delete, Toggle buttons -->
+            {{if auth.user:}}
+                <div class="button-bar" v-if="post.user_email == '{{=auth.user.email}}'">
+                    <button class="btn btn-default btn-sm" 
+                        v-on:click="edit_post(post.id)">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    <button class="btn btn-default btn-sm" 
+                        v-on:click="delete_post(post.id)">
+                        <i class="fa fa-trash-o"></i>
+                    </button>
+                    <button v-if="!post.is_public"
+                            class="btn btn-default btn-sm" 
+                            v-on:click="toggle_public(post.id)">
+                            <i class="fa fa-user"></i>
+                    </button>
+                    <button v-if="post.is_public"
+                            class="btn btn-default btn-sm" 
+                            v-on:click="toggle_public(post.id)">
+                            <i class="fa fa-users"></i>
+                    </button>
+                </div>
+            {{pass}}
         </div>
+
+        <!-- Load more button -->
+        <button v-if="has_more" 
+            class="btn btn-primary btn-sm" 
+            v-on:click="get_more()">
+            Load more
+        </button>
+
     </div>
 
 

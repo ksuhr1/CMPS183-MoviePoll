@@ -1,9 +1,7 @@
 # These are the controllers for your ajax api.
 
-
-def get_user_name_from_email(email):
-    """Returns a string corresponding to the user first and last names,
-    given the user email."""
+# returns the name (first and last) of the user as a string 
+def get_name(email):
     u = db(db.auth_user.email == email).select().first()
     if u is None:
         return 'None'
@@ -26,7 +24,7 @@ def get_posts():
         rows = q.select(db.post.ALL, orderby=~db.post.created_on, limitby=(start_idx, end_idx + 1))
 
     for i, r in enumerate(rows):
-        name = get_user_name_from_email(r.user_email)
+        name = get_name(r.user_email)
         if i < end_idx - start_idx:
             t = dict(
                 id=r.id,
@@ -35,8 +33,7 @@ def get_posts():
                 created_on=r.created_on,
                 updated_on=r.updated_on,
                 is_public=r.is_public,
-                first_name=name[0],
-                last_name=name[1],                
+                name=name,
             )
             posts.append(t)
         else:
@@ -52,12 +49,10 @@ def get_posts():
 # Note that we need the URL to be signed, as this changes the db.
 @auth.requires_signature()
 def add_post():
-    """Here you get a new post and add it.  Return what you want."""
-    # Implement me!
     user_email = auth.user.email or None
     p_id = db.post.insert(post_content=request.vars.content)
     p = db.post(p_id)
-    name = get_user_name_from_email(p.user_email)
+    name = get_name(p.user_email)
     post = dict(
             id=p.id,
             user_email=p.user_email,
@@ -65,10 +60,8 @@ def add_post():
             created_on=p.created_on,
             updated_on=p.updated_on,
             is_public=p.is_public,
-            first_name=name[0],
-            last_name=name[1]
+            name=name,
     )
-    print p
     return response.json(dict(post=post))
 
 

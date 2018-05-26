@@ -11,9 +11,19 @@
 </script>
 {{end}}
 
+
 <div class="main-content">
+
     
-    <!-- Table of all polls for debugging purposes -->
+    {{if auth.user is None:}}
+        <h1 class="main_title">Welcome!</h1>
+        <p class="explanation">
+            This site will help you organize your life by storing your checklists.
+            Please log in to create a memo. 
+        </p>
+        <a href="{{=URL('default', 'user')}}" class="btn btn-default btn-lg">Login</a>
+
+    {{else:}}
 
     <div id="vue-div" class="display:none">
 
@@ -88,6 +98,7 @@
             <!-- poll content  -->
             <div v-if="!editing || (editing && edit_id != poll.id)">
                 <p>${poll.content}</p>
+                <p v-for="movie in poll.movies">Option: ${movie.title}</p>
             </div>
             <!-- author and date info -->
             <small>
@@ -130,6 +141,7 @@
         </button>
 
     </div>
+    {{pass}}
 
 
 </div>

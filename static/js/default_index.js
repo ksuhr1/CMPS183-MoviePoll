@@ -32,7 +32,7 @@ var app = function() {
 
 
 
-
+    // ######################### Get polls
     function get_polls_url(start_idx, end_idx) {
         var pp = {
             start_idx: start_idx,
@@ -61,6 +61,7 @@ var app = function() {
 
 
 
+    // ######################### Add polls
     self.add_poll_button = function () {
         // The button to add a track has been pressed.
         if(self.vue.logged_in)
@@ -88,7 +89,7 @@ var app = function() {
 
 
 
-
+    // ######################### Edit polls
     self.edit_poll_submit = function (poll_id) {
         poll = self.vue.polls.find(poll => poll.id === poll_id);
         poll.content = self.vue.edit_content;
@@ -117,9 +118,10 @@ var app = function() {
 
 
 
-
+    // ######################### Delete polls
     self.delete_poll = function(poll_id) {
         $.post(del_poll_url,
+    
             {
                 poll_id: poll_id
             },
@@ -132,7 +134,8 @@ var app = function() {
 
 
 
-
+    
+    // ######################### Toggle PUblic
     self.toggle_public = function(poll_id) {
         $.post(toggle_public_url,
             {

@@ -35,6 +35,10 @@ def get_polls():
                 is_public=r.is_public,
                 name=name,
             )
+
+            # returns all movies that belong to this poll 
+            movies = db(db.movie.poll_id == r.id).select(db.movie.ALL)
+            t['movies'] = movies
             polls.append(t)
         else:
             has_more = True

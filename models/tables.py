@@ -14,7 +14,12 @@ db.define_table('poll',
                 Field('poll_content', 'text'),
                 Field('created_on', 'datetime', default=datetime.datetime.utcnow()),
                 Field('updated_on', 'datetime', update=datetime.datetime.utcnow()),
-                Field('is_public', 'boolean', default=False)
+                Field('is_public', 'boolean', default=False),
+                )
+
+db.define_table('movie',
+                Field('poll_id', 'reference poll'),	
+                Field('title', 'text'),
                 )
 
 # I don't want to display the user email by default in all forms.

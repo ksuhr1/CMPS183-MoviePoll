@@ -13,8 +13,8 @@ def index():
     """
     This is your main controller.  Here you do almost nothing; you just cause index.html to be served.
     """
-    posts = db().select(db.post.ALL)
-    return dict(posts=posts)
+
+    return dict()
 
 
 def user():

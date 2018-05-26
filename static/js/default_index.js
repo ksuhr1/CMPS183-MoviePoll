@@ -33,55 +33,55 @@ var app = function() {
 
 
 
-    function get_posts_url(start_idx, end_idx) {
+    function get_polls_url(start_idx, end_idx) {
         var pp = {
             start_idx: start_idx,
             end_idx: end_idx
         };
-        return posts_url + "?" + $.param(pp);
+        return polls_url + "?" + $.param(pp);
     }
 
-    self.get_posts = function () {
-        var post_len = self.vue.posts.length;
-        $.getJSON(get_posts_url(post_len, post_len+4), function (data) {
-            self.vue.posts = data.posts;
+    self.get_polls = function () {
+        var poll_len = self.vue.polls.length;
+        $.getJSON(get_polls_url(poll_len, poll_len+4), function (data) {
+            self.vue.polls = data.polls;
             self.vue.has_more = data.has_more;
             self.vue.logged_in = data.logged_in;
         })
     };
 
     self.get_more = function () {
-        var num_posts = self.vue.posts.length;
-        $.getJSON(get_posts_url(num_posts, num_posts + 4), function (data) {
+        var num_polls = self.vue.polls.length;
+        $.getJSON(get_polls_url(num_polls, num_polls + 4), function (data) {
             self.vue.has_more = data.has_more;
-            self.extend(self.vue.posts, data.posts);
+            self.extend(self.vue.polls, data.polls);
         });
     };
 
 
 
 
-    self.add_post_button = function () {
+    self.add_poll_button = function () {
         // The button to add a track has been pressed.
         if(self.vue.logged_in)
-          self.vue.is_adding_post = !self.vue.is_adding_post;
+          self.vue.is_adding_poll = !self.vue.is_adding_poll;
     };
 
-    self.add_post = function () {
+    self.add_poll = function () {
         // The submit button to add a track has been added.
-        $.post(add_post_url,
+        $.post(add_poll_url,
             {
                 content: self.vue.form_content,
             },
             function (data) {
-                $.web2py.enableElement($("#add_post_submit"));
-                self.vue.posts.unshift(data.post);
-                console.log(self.vue.posts.length);
-                // if posts length is greater than 4 has_more is true
-                if (self.vue.posts.length > 4) {
+                $.web2py.enableElement($("#add_poll_submit"));
+                self.vue.polls.unshift(data.poll);
+                console.log(self.vue.polls.length);
+                // if polls length is greater than 4 has_more is true
+                if (self.vue.polls.length > 4) {
                     self.vue.has_more = true;
                 }
-                self.vue.is_adding_post = !self.vue.is_adding_post;
+                self.vue.is_adding_poll = !self.vue.is_adding_poll;
                 self.vue.form_content = "";
             });
     };
@@ -89,25 +89,25 @@ var app = function() {
 
 
 
-    self.edit_post_submit = function (post_id) {
-        post = self.vue.posts.find(post => post.id === post_id);
-        post.content = self.vue.edit_content;
-        $.post(edit_post_url,
+    self.edit_poll_submit = function (poll_id) {
+        poll = self.vue.polls.find(poll => poll.id === poll_id);
+        poll.content = self.vue.edit_content;
+        $.post(edit_poll_url,
             {
-                post_content: self.vue.edit_content,
+                poll_content: self.vue.edit_content,
                 id: self.vue.edit_id
             },
             function (data) {
-                $.web2py.enableElement($("#edit_post_submit"));
+                $.web2py.enableElement($("#edit_poll_submit"));
                 self.vue.editing = !self.vue.editing;
             });
     };
 
-    self.edit_post = function(post_id) {
+    self.edit_poll = function(poll_id) {
         self.vue.editing = !self.vue.editing;
-        self.vue.edit_id = post_id;
-        post = self.vue.posts.find(post => post.id === post_id);
-        self.vue.edit_content = post.content;
+        self.vue.edit_id = poll_id;
+        poll = self.vue.polls.find(poll => poll.id === poll_id);
+        self.vue.edit_content = poll.content;
     };
 
     self.cancel_edit = function () {
@@ -118,14 +118,14 @@ var app = function() {
 
 
 
-    self.delete_post = function(post_id) {
-        $.post(del_post_url,
+    self.delete_poll = function(poll_id) {
+        $.post(del_poll_url,
             {
-                post_id: post_id
+                poll_id: poll_id
             },
             function () {
-                postIndex = self.vue.posts.findIndex(post => post.id === post_id);
-                self.vue.posts.splice(postIndex, 1);
+                pollIndex = self.vue.polls.findIndex(poll => poll.id === poll_id);
+                self.vue.polls.splice(pollIndex, 1);
             }
         )
     };
@@ -133,14 +133,14 @@ var app = function() {
 
 
 
-    self.toggle_public = function(post_id) {
+    self.toggle_public = function(poll_id) {
         $.post(toggle_public_url,
             {
-                post_id: post_id
+                poll_id: poll_id
             },
             function (data) {
-                post = self.vue.posts.find(post => post.id === post_id);
-                post.is_public = data.post.is_public;
+                poll = self.vue.polls.find(poll => poll.id === poll_id);
+                poll.is_public = data.poll.is_public;
             }
         )
     }
@@ -151,14 +151,14 @@ var app = function() {
         delimiters: ['${', '}'],
         unsafeDelimiters: ['!{', '}'],
         data: {
-            posts: [],
+            polls: [],
             get_more: false,
             has_more: false,
             
             logged_in: false,
             
             editing: false,
-            is_adding_post: false,
+            is_adding_poll: false,
 
             form_content: null,
             edit_content: null,
@@ -168,11 +168,11 @@ var app = function() {
         },
         methods: {
             get_more: self.get_more,
-            add_post_button: self.add_post_button,
-            add_post: self.add_post,
-            delete_post: self.delete_post,
-            edit_post: self.edit_post,
-            edit_post_submit: self.edit_post_submit,
+            add_poll_button: self.add_poll_button,
+            add_poll: self.add_poll,
+            delete_poll: self.delete_poll,
+            edit_poll: self.edit_poll,
+            edit_poll_submit: self.edit_poll_submit,
             cancel_edit: self.cancel_edit,
             toggle_public: self.toggle_public,
 
@@ -182,7 +182,7 @@ var app = function() {
 
     });
 
-    self.get_posts();
+    self.get_polls();
     self.getUberURL();
     $("#vue-div").show();
     return self;

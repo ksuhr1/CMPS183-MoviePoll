@@ -1,16 +1,16 @@
 /* line 2, ../sass/_main.scss */
-.post_listing {
+.poll_listing {
   margin: 10px 0px 10px 0px;
   padding: 0 0 0 0px;
 }
 
 /* line 7, ../sass/_main.scss */
-.post_list {
+.poll_list {
   padding-top: 10px;
 }
 
 /* line 11, ../sass/_main.scss */
-.post {
+.poll {
   border-color: #cccccc;
   border-style: solid;
   border-width: 1px;

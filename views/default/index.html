@@ -3,18 +3,17 @@
 {{block head}}
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 <script>
-    var posts_url = "{{=URL('api', 'get_posts')}}";
-    var add_post_url = "{{=URL('api', 'add_post', user_signature=True)}}";
-    var edit_post_url = "{{=URL('api', 'edit_post', user_signature=True)}}";
-    var del_post_url = "{{=URL('api', 'del_post', user_signature=True)}}";
+    var polls_url = "{{=URL('api', 'get_polls')}}";
+    var add_poll_url = "{{=URL('api', 'add_poll', user_signature=True)}}";
+    var edit_poll_url = "{{=URL('api', 'edit_poll', user_signature=True)}}";
+    var del_poll_url = "{{=URL('api', 'del_poll', user_signature=True)}}";
     var toggle_public_url = "{{=URL('api', 'toggle_public', user_signature=True)}}";
 </script>
 {{end}}
 
 <div class="main-content">
     
-    <!-- Table of all posts for debugging purposes -->
-    <!-- {{=SQLTABLE(posts)}} -->
+    <!-- Table of all polls for debugging purposes -->
 
     <div id="vue-div" class="display:none">
 
@@ -24,16 +23,16 @@
         <!-- https://sites.google.com/a/ucsc.edu/luca/classes/cmps-183-hypermedia-and-the-web/cmps-183-fall-2016/homework-3 -->
         
 
-        <!-- Add post button  -->
-        <button v-if="!is_adding_post" 
+        <!-- Add poll button  -->
+        <button v-if="!is_adding_poll" 
             class="btn btn-primary btn-lg btn-block"
-            v-on:click="add_post_button()" 
+            v-on:click="add_poll_button()" 
             v-bind:class="{'disabled': !logged_in}">
-            Add new post
+            Add new poll
         </button>
 
-        <!-- Form to add post -->
-        <div v-if="is_adding_post">
+        <!-- Form to add poll -->
+        <div v-if="is_adding_poll">
             <div class="form-group">
                 <textarea v-model="form_content"
                     class="form-control string" 
@@ -42,26 +41,26 @@
                 </textarea>
             </div>
             <div class="form-group">
-                <button v-on:click="add_post()" 
+                <button v-on:click="add_poll()" 
                     class="btn btn-primary btn-sm">
-                    Post
+                    poll
                 </button>
-                <button v-if="is_adding_post" 
+                <button v-if="is_adding_poll" 
                     class="btn btn-warning btn-sm" 
-                    v-on:click="add_post_button()">
+                    v-on:click="add_poll_button()">
                     Cancel
                 </button>
             </div>
         </div>
 
 
-        <!-- Posts -->
-        <!-- create the div for each post -->
-        <div v-for="post in posts" class="post text-left">
+        <!-- polls -->
+        <!-- create the div for each poll -->
+        <div v-for="poll in polls" class="poll text-left">
             
             <!-- Edit form -->
-            <div v-if="editing && edit_id==post.id">
-                <!-- Content that is being edited for a post -->
+            <div v-if="editing && edit_id==poll.id">
+                <!-- Content that is being edited for a poll -->
                 <div class="form-group">
                     <textarea v-model="edit_content"
                         class="form-control string" 
@@ -70,12 +69,12 @@
                     </textarea>
                 </div>
 
-                <!-- The post and cancel button for edit form -->
+                <!-- The poll and cancel button for edit form -->
                 <div class="form-group">
                     <button v-if="editing" 
-                        class="btn btn-primary btn-sm post-edit-button" 
-                        v-on:click="edit_post_submit(post.id)" type="submit">
-                        Post
+                        class="btn btn-primary btn-sm poll-edit-button" 
+                        v-on:click="edit_poll_submit(poll.id)" type="submit">
+                        poll
                     </button>
                     <button v-if="editing" 
                         class="btn btn-warning btn-sm cancel-button" 
@@ -86,37 +85,37 @@
             </div>
 
 
-            <!-- Post content  -->
-            <div v-if="!editing || (editing && edit_id != post.id)">
-                <p>${post.content}</p>
+            <!-- poll content  -->
+            <div v-if="!editing || (editing && edit_id != poll.id)">
+                <p>${poll.content}</p>
             </div>
             <!-- author and date info -->
             <small>
-                Submitted at: ${post.created_on} by ${post.name}
+                Submitted at: ${poll.created_on} by ${poll.name}
                 <br>
-                Last updated: ${post.updated_on}
+                Last updated: ${poll.updated_on}
             </small>
 
 
             <!-- Edit, Delete, Toggle buttons -->
             {{if auth.user:}}
-                <div class="button-bar" v-if="post.user_email == '{{=auth.user.email}}'">
+                <div class="button-bar" v-if="poll.user_email == '{{=auth.user.email}}'">
                     <button class="btn btn-default btn-sm" 
-                        v-on:click="edit_post(post.id)">
+                        v-on:click="edit_poll(poll.id)">
                         <i class="fa fa-pencil"></i>
                     </button>
                     <button class="btn btn-default btn-sm" 
-                        v-on:click="delete_post(post.id)">
+                        v-on:click="delete_poll(poll.id)">
                         <i class="fa fa-trash-o"></i>
                     </button>
-                    <button v-if="!post.is_public"
+                    <button v-if="!poll.is_public"
                             class="btn btn-default btn-sm" 
-                            v-on:click="toggle_public(post.id)">
+                            v-on:click="toggle_public(poll.id)">
                             <i class="fa fa-user"></i>
                     </button>
-                    <button v-if="post.is_public"
+                    <button v-if="poll.is_public"
                             class="btn btn-default btn-sm" 
-                            v-on:click="toggle_public(post.id)">
+                            v-on:click="toggle_public(poll.id)">
                             <i class="fa fa-users"></i>
                     </button>
                 </div>

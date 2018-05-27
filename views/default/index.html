@@ -8,6 +8,7 @@
     var edit_poll_url = "{{=URL('api', 'edit_poll', user_signature=True)}}";
     var del_poll_url = "{{=URL('api', 'del_poll', user_signature=True)}}";
     var toggle_public_url = "{{=URL('api', 'toggle_public', user_signature=True)}}";
+
 </script>
 {{end}}
 
@@ -31,11 +32,10 @@
 
         <!-- Used example found on old class webpage.  -->
         <!-- https://sites.google.com/a/ucsc.edu/luca/classes/cmps-183-hypermedia-and-the-web/cmps-183-fall-2016/homework-3 -->
-        
-
 
         <!-- Add poll button  -->
         <a href="{{=URL('default', 'create_poll')}}"
+            v-on:click="add_poll()"
             class="btn btn-primary btn-lg btn-block"
             v-bind:class="{'disabled': !logged_in}">
             Add new poll

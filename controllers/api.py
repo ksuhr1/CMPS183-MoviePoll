@@ -52,6 +52,7 @@ def get_polls():
         has_more=has_more,
     ))
 
+
 # Note that we need the URL to be signed, as this changes the db.
 @auth.requires_signature()
 def add_poll():
@@ -68,9 +69,8 @@ def add_poll():
         is_public=p.is_public,
         name=name,
     )
+    print poll
     return response.json(dict(poll=poll))
-
-
 
 
 @auth.requires_signature()
@@ -78,8 +78,7 @@ def add_movie():
     """Received the metadata for a new track."""
     # Inserts the track information.
     user_email = auth.user.email or None
-
-    t_id = db.movie.insert(title=request.vars.title)
+    t_id = db.movie.insert(poll_id=request.vars.poll_id, title=request.vars.title)
     t = db.movie(t_id)
     movie = dict(
         id=t.id,

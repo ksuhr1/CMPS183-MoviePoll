@@ -87,11 +87,12 @@ var app = function() {
             });
     };
 
-    self.add_movie = function (poll_id) {
+    self.add_movie = function () {
         // The submit button to add a track has been added.
         $.post(add_movie_url,
             {
                 title: self.vue.form_title,
+                poll_id: poll_id,
             },
             function (data) {
                 $.web2py.enableElement($("#add_movie_submit"));
@@ -172,6 +173,7 @@ var app = function() {
         data: {
             polls: [],
             movies:[],
+            poll:[],
 
             get_more: false,
             has_more: false,

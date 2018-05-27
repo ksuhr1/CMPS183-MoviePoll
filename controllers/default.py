@@ -20,7 +20,22 @@ def create_poll():
     """
     This is your main controller.  Here you do almost nothing; you just cause create_poll.html to be served.
     """
-    return dict()
+
+    # Note that we need the URL to be signed, as this changes the db.
+
+    user_email = auth.user.email or None
+    p_id = db.poll.insert()
+    p = db.poll(p_id)
+    print p
+    # poll = dict(
+    #     #     id=p.id,
+    #     #     user_email=p.user_email,
+    #     #     content=p.poll_content,
+    #     #     created_on=p.created_on,
+    #     #     updated_on=p.updated_on,
+    #     #     is_public=p.is_public,
+    #     # )
+    return dict(poll=p)
 
 
 def user():

@@ -3,6 +3,7 @@
 {{block head}}
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 <script>
+    var poll_id="{{=poll.id}}";
     var add_movie_url = "{{=URL('api', 'add_movie', user_signature=True)}}";
     var polls_url = "{{=URL('api', 'get_polls')}}";
     var add_poll_url = "{{=URL('api', 'add_poll', user_signature=True)}}";
@@ -52,11 +53,6 @@
                         Add Movie
                     </a>
 
-                     <a
-                       v-on:click="add_poll()"
-                       class="btn btn-primary btn-sm">
-                        Submit Poll
-                    </a>
 
             </div>
 

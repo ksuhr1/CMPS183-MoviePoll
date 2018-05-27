@@ -94,7 +94,6 @@ def edit_poll():
     poll = db(db.poll.id == request.vars.id).select().first()
     poll.update_record(poll_content=request.vars.poll_content)
 
-    print poll
     return dict()
 
 
@@ -105,3 +104,25 @@ def del_poll():
     db(db.poll.id == request.vars.poll_id).delete()
     return "ok"
 
+
+
+def get_poll():
+    q = (db.poll.id == request.vars.poll_id)
+    poll = db(q).select().first()
+
+    if poll is not None:
+        name = get_name(poll.user_email)
+
+        t = dict(
+            id=poll.id,
+            user_email=poll.user_email,
+            content=poll.poll_content,
+            created_on=poll.created_on,
+            updated_on=poll.updated_on,
+            is_public=poll.is_public,
+            name=name,
+            movies=(db(db.movie.poll_id == poll.id).select(db.movie.ALL))
+        )
+    else:
+        t = None
+    return response.json(dict(poll=t))

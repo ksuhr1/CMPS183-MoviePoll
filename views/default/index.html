@@ -33,35 +33,16 @@
         <!-- https://sites.google.com/a/ucsc.edu/luca/classes/cmps-183-hypermedia-and-the-web/cmps-183-fall-2016/homework-3 -->
         
 
+
         <!-- Add poll button  -->
-        <button v-if="!is_adding_poll" 
+        <a href="{{=URL('default', 'create_poll')}}"
             class="btn btn-primary btn-lg btn-block"
-            v-on:click="add_poll_button()" 
             v-bind:class="{'disabled': !logged_in}">
             Add new poll
-        </button>
+        </a>
 
-        <!-- Form to add poll -->
-        <div v-if="is_adding_poll">
-            <div class="form-group">
-                <textarea v-model="form_content"
-                    class="form-control string" 
-                    id="no_table_content" 
-                    placeholder="Content" type="text">                        
-                </textarea>
-            </div>
-            <div class="form-group">
-                <button v-on:click="add_poll()" 
-                    class="btn btn-primary btn-sm">
-                    poll
-                </button>
-                <button v-if="is_adding_poll" 
-                    class="btn btn-warning btn-sm" 
-                    v-on:click="add_poll_button()">
-                    Cancel
-                </button>
-            </div>
-        </div>
+
+
 
 
         <!-- polls -->
@@ -86,7 +67,7 @@
                         v-on:click="edit_poll_submit(poll.id)" type="submit">
                         poll
                     </button>
-                    <button v-if="editing" 
+                    <button v-if="editing"
                         class="btn btn-warning btn-sm cancel-button" 
                         v-on:click="cancel_edit()" type="button">
                         Cancel

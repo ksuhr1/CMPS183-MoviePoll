@@ -16,6 +16,13 @@ def index():
     return dict()
 
 
+def create_poll():
+    """
+    This is your main controller.  Here you do almost nothing; you just cause create_poll.html to be served.
+    """
+    return dict()
+
+
 def user():
     """
     exposes:

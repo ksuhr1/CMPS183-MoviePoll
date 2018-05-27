@@ -1,0 +1,62 @@
+{{extend 'layout.html'}}
+
+{{block head}}
+<script src="{{=URL('static', 'js/vue.js')}}"></script>
+<script>
+    var polls_url = "{{=URL('api', 'get_polls')}}";
+    var add_poll_url = "{{=URL('api', 'add_poll', user_signature=True)}}";
+    var edit_poll_url = "{{=URL('api', 'edit_poll', user_signature=True)}}";
+    var del_poll_url = "{{=URL('api', 'del_poll', user_signature=True)}}";
+    var toggle_public_url = "{{=URL('api', 'toggle_public', user_signature=True)}}";
+</script>
+{{end}}
+
+
+<div class="main-content">
+
+
+    {{if auth.user is None:}}
+        <h1 class="main_title">Welcome!</h1>
+        <p class="explanation">
+            This site will help you organize your life by storing your checklists.
+            Please log in to create a memo.
+        </p>
+        <a href="{{=URL('default', 'user')}}" class="btn btn-default btn-lg">Login</a>
+    {{else:}}
+
+    <div id="vue-div" class="display:none">
+
+        <!-- Form to add poll -->
+            <div class="form-group">
+                <textarea v-model="form_content"
+                    class="form-control string"
+                    id="no_table_content"
+                    placeholder="Content" type="text">
+                </textarea>
+            </div>
+            <div class="form-group">
+
+                    <a href="{{=URL('default', 'index')}}"
+                       v-on:click="add_poll()"
+                       class="btn btn-primary btn-sm">
+                        Submit
+                    </a>
+                     <a href="{{=URL('default', 'index')}}"
+                        v-on:click="add_poll_button()"
+                        class="btn btn-warning btn-sm">
+                        Cancel
+                     </a>
+
+                </button>
+            </div>
+    </div>
+    {{pass}}
+
+
+</div>
+
+
+
+
+
+<script src="{{=URL('static', 'js/default_index.js')}}"></script>

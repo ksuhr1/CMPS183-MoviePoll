@@ -33,6 +33,7 @@
 
 
 
+
         <!-- Form to add poll -->
             <div class="form-group">
                 <form action="#" v-on:submit.prevent class="form-horizontal" enctype="multipart/form-data" method="post">
@@ -44,20 +45,27 @@
                     </div>
                   </form>
             </div>
-            <div class="form-group">
+        <div class="form-group">
                     <a
                        v-on:click="add_movie()"
                        class="btn btn-primary btn-sm">
-                        Submit
+                        Add Movie
+                    </a>
+
+                     <a
+                       v-on:click="add_poll()"
+                       class="btn btn-primary btn-sm">
+                        Submit Poll
                     </a>
 
             </div>
+
           <div v-for="poll in polls" class="poll text-left">
               <!-- Edit form -->
             <!-- poll content  -->
             <div v-if="!editing || (editing && edit_id != poll.id)">
                 <div>${poll.content}
-                    <p v-for="movie in poll.movies">Option: ${movie.title}</p>
+                    <p v-for="movie in movies"> ${movie.title}</p>
                 </div>
             </div>
             <!-- author and date info -->
@@ -66,6 +74,8 @@
                 <br>
                 Last updated: ${poll.updated_on}
             </small>
+
+
 
 
             <!-- Edit, Delete, Toggle buttons -->

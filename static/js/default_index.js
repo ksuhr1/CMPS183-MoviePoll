@@ -87,7 +87,7 @@ var app = function() {
             });
     };
 
-    self.add_movie = function () {
+    self.add_movie = function (poll_id) {
         // The submit button to add a track has been added.
         $.post(add_movie_url,
             {
@@ -134,8 +134,6 @@ var app = function() {
         self.vue.edit_id = 0;
     };
 
-
-
     // ######################### Delete polls
     self.delete_poll = function(poll_id) {
         $.post(del_poll_url,
@@ -174,6 +172,7 @@ var app = function() {
         data: {
             polls: [],
             movies:[],
+
             get_more: false,
             has_more: false,
 
@@ -201,6 +200,7 @@ var app = function() {
             add_movie: self.add_movie,
 
             getUberURL: self.getUberURL,
+
         }
 
 

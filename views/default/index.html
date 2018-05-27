@@ -42,13 +42,10 @@
         </a>
 
 
-
-
-
         <!-- polls -->
         <!-- create the div for each poll -->
         <div v-for="poll in polls" class="poll text-left">
-            
+
             <!-- Edit form -->
             <div v-if="editing && edit_id==poll.id">
                 <!-- Content that is being edited for a poll -->

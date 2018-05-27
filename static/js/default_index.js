@@ -87,6 +87,24 @@ var app = function() {
             });
     };
 
+    self.add_movie = function () {
+        // The submit button to add a track has been added.
+        $.post(add_movie_url,
+            {
+                title: self.vue.form_title,
+            },
+            function (data) {
+                $.web2py.enableElement($("#add_movie_submit"));
+                self.vue.movies.unshift(data.movie);
+                console.log(self.vue.movies.length);
+                // if polls length is greater than 4 has_more is true
+                if (self.vue.movies.length > 4) {
+                    self.vue.has_more = true;
+                }
+                self.vue.form_title="";
+            });
+    };
+
 
 
     // ######################### Edit polls
@@ -155,14 +173,16 @@ var app = function() {
         unsafeDelimiters: ['!{', '}'],
         data: {
             polls: [],
+            movies:[],
             get_more: false,
             has_more: false,
-            
+
             logged_in: false,
-            
+
             editing: false,
             is_adding_poll: false,
 
+            form_title: null,
             form_content: null,
             edit_content: null,
             edit_id: 0,
@@ -178,8 +198,9 @@ var app = function() {
             edit_poll_submit: self.edit_poll_submit,
             cancel_edit: self.cancel_edit,
             toggle_public: self.toggle_public,
+            add_movie: self.add_movie,
 
-            getUberURL: self.getUberURL, 
+            getUberURL: self.getUberURL,
         }
 
 

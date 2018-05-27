@@ -39,7 +39,10 @@ def get_polls():
             # returns all movies that belong to this poll 
             movies = db(db.movie.poll_id == r.id).select(db.movie.ALL)
             t['movies'] = movies
+            print movies
+
             polls.append(t)
+
         else:
             has_more = True
     logged_in = auth.user_id is not None
@@ -67,6 +70,24 @@ def add_poll():
             name=name,
     )
     return response.json(dict(poll=poll))
+
+
+@auth.requires_signature()
+def add_movie():
+    """Received the metadata for a new track."""
+    # Inserts the track information.
+    user_email = auth.user.email or None
+    t_id = db.movie.insert(title=request.vars.title)
+    t = db.movie(t_id)
+    p = db.poll(t)
+
+    movie = dict(
+        id=t.id,
+        title=t.title,
+    )
+    print movie
+    return response.json(dict(movie=movie))
+
 
 
 @auth.requires_signature()

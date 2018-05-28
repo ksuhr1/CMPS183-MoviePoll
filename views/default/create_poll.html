@@ -3,7 +3,7 @@
 {{block head}}
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 <script>
-    var poll_id="{{=poll.id}}";
+
     var add_movie_url = "{{=URL('api', 'add_movie', user_signature=True)}}";
     var polls_url = "{{=URL('api', 'get_polls')}}";
     var add_poll_url = "{{=URL('api', 'add_poll', user_signature=True)}}";
@@ -30,11 +30,6 @@
 
 
          <!-- polls -->
-        <!-- create the div for each poll -->
-
-
-
-
         <!-- Form to add poll -->
             <div class="form-group">
                 <form action="#" v-on:submit.prevent class="form-horizontal" enctype="multipart/form-data" method="post">
@@ -52,6 +47,14 @@
                        class="btn btn-primary btn-sm">
                         Add Movie
                     </a>
+
+                    <a
+                       v-on:click="add_poll()"
+                       class="btn btn-primary btn-sm">
+                        Add Poll
+                    </a>
+
+
 
 
             </div>

@@ -35,7 +35,6 @@
 
         <!-- Add poll button  -->
         <a href="{{=URL('default', 'create_poll')}}"
-            v-on:click="add_poll()"
             class="btn btn-primary btn-lg btn-block"
             v-bind:class="{'disabled': !logged_in}">
             Add new poll

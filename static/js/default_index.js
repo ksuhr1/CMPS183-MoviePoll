@@ -11,7 +11,7 @@ var app = function() {
             a.push(b[i]);
         }
     };
-    
+
     self.getUberURL = function () {
         var pp = {
             client_id: "<CLIENT_ID>",
@@ -70,43 +70,48 @@ var app = function() {
 
     self.add_poll = function () {
         // The submit button to add a track has been added.
-        $.post(add_poll_url,
-            {
-                content: self.vue.form_content,
-            },
-            function (data) {
-                $.web2py.enableElement($("#add_poll_submit"));
-                self.vue.polls.unshift(data.poll);
-                console.log(self.vue.polls.length);
-                // if polls length is greater than 4 has_more is true
-                if (self.vue.polls.length > 4) {
-                    self.vue.has_more = true;
-                }
-                self.vue.is_adding_poll = !self.vue.is_adding_poll;
-                self.vue.form_content = "";
-            });
+        $.ajax({
+            type: 'POST',
+            url: add_poll_url,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({content: self.vue.form_content, movies: self.vue.movies,}),
+            dataType: 'json',
+            success: function (data) {
+                alert('Data sent');
+            }
+        });
     };
 
+
+        // $.post(add_poll_url,
+        //     {
+        //         content: self.vue.form_content,
+        //         movies: self.vue.movies,
+        //     },
+        //     function (data) {
+        //         $.web2py.enableElement($("#add_poll_submit"));
+        //         self.vue.polls.unshift(data.poll);
+        //         console.log(self.vue.polls.length);
+        //         // if polls length is greater than 4 has_more is true
+        //         if (self.vue.polls.length > 4) {
+        //             self.vue.has_more = true;
+        //         }
+        //         self.vue.is_adding_poll = !self.vue.is_adding_poll;
+        //         self.vue.form_content = "";
+        //     });
+
+
+    //Add movies to an array
     self.add_movie = function () {
         // The submit button to add a track has been added.
-        $.post(add_movie_url,
-            {
-                title: self.vue.form_title,
-                poll_id: poll_id,
-            },
-            function (data) {
-                $.web2py.enableElement($("#add_movie_submit"));
-                self.vue.movies.unshift(data.movie);
-                console.log(self.vue.movies.length);
-                // if polls length is greater than 4 has_more is true
-                if (self.vue.movies.length > 4) {
-                    self.vue.has_more = true;
-                }
-                self.vue.form_title="";
-            });
+        var movie = {
+            title: self.vue.form_title
+        };
+
+        self.vue.movies.push(movie);
+        self.vue.form_title="";
+
     };
-
-
 
     // ######################### Edit polls
     self.edit_poll_submit = function (poll_id) {

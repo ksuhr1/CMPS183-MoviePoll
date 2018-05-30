@@ -95,11 +95,11 @@ def add_movie():
         id=t.id,
         title=t.title,
     )
+    newmovie = db(db.movie.poll_id).select()
+    print newmovie
+
 
     return response.json(dict(movie=movie))
-
-
-
 
 
 @auth.requires_signature()

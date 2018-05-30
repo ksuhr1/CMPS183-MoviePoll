@@ -2,6 +2,7 @@
 
 {{block head}}
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
+
 <script>
 
     var add_movie_url = "{{=URL('api', 'add_movie', user_signature=True)}}";
@@ -10,110 +11,66 @@
     var edit_poll_url = "{{=URL('api', 'edit_poll', user_signature=True)}}";
     var del_poll_url = "{{=URL('api', 'del_poll', user_signature=True)}}";
     var toggle_public_url = "{{=URL('api', 'toggle_public', user_signature=True)}}";
+
 </script>
 {{end}}
 
-
 <div class="main-content">
 
-
-    {{if auth.user is None:}}
-        <h1 class="main_title">Welcome!</h1>
-        <p class="explanation">
-            This site will help you organize your life by storing your checklists.
-            Please log in to create a memo.
-        </p>
-        <a href="{{=URL('default', 'user')}}" class="btn btn-default btn-lg">Login</a>
-    {{else:}}
-
     <div id="vue-div" class="display:none">
-
-
-         <!-- polls -->
         <!-- Form to add poll -->
-            <div class="form-group">
-                <form action="#" v-on:submit.prevent class="form-horizontal" enctype="multipart/form-data" method="post">
-                    <div class="form-group" id="no_table_artist__row">
-                      <div>
-                        <input class="form-control string" id="no_table_artist" v-model="form_title" placeholder="Movie" type="text" />
-                        <span class="help-block"></span>
-                      </div>
-                    </div>
-                  </form>
-            </div>
         <div class="form-group">
-                    <a
-                       v-on:click="add_movie()"
-                       class="btn btn-primary btn-sm">
-                        Add Movie
-                    </a>
-
-                    <a
-                       v-on:click="add_poll()"
-                       class="btn btn-primary btn-sm">
-                        Add Poll
-                    </a>
-
-
-
-
-            </div>
-
-          <div v-for="poll in polls" class="poll text-left">
-              <!-- Edit form -->
-            <!-- poll content  -->
-            <div v-if="!editing || (editing && edit_id != poll.id)">
-                <div>${poll.content}
-                    <p v-for="movie in movies"> ${movie.title}</p>
+            <form action="#" v-on:submit.prevent class="form-horizontal" enctype="multipart/form-data" method="post">
+                <div class="form-group" id="no_table_artist__row">
+                  <div>
+                    <input class="form-control string" id="no_table_artist" v-model="form_title" placeholder="Movie" type="text" />
+                    <span class="help-block"></span>
+                  </div>
                 </div>
-            </div>
-            <!-- author and date info -->
-            <small>
-                Submitted at: ${poll.created_on} by ${poll.name}
-                <br>
-                Last updated: ${poll.updated_on}
-            </small>
-
-
-
-
-            <!-- Edit, Delete, Toggle buttons -->
-            {{if auth.user:}}
-                <div class="button-bar" v-if="poll.user_email == '{{=auth.user.email}}'">
-                    <button class="btn btn-default btn-sm"
-                        v-on:click="edit_poll(poll.id)">
-                        <i class="fa fa-pencil"></i>
-                    </button>
-                    <button class="btn btn-default btn-sm"
-                        v-on:click="delete_poll(poll.id)">
-                        <i class="fa fa-trash-o"></i>
-                    </button>
-                    <button v-if="!poll.is_public"
-                            class="btn btn-default btn-sm"
-                            v-on:click="toggle_public(poll.id)">
-                            <i class="fa fa-user"></i>
-                    </button>
-                    <button v-if="poll.is_public"
-                            class="btn btn-default btn-sm"
-                            v-on:click="toggle_public(poll.id)">
-                            <i class="fa fa-users"></i>
-                    </button>
-                </div>
-            {{pass}}
+              </form>
         </div>
+        <div class="form-group">
+                    <a v-on:click="add_movie()" class="btn btn-primary btn-sm">Add Movie</a>
+                    <a v-on:click="add_poll()" class="btn btn-primary btn-sm">Add Poll</a>
+        </div>
+        <!--Displaying polls -->
+        <div v-for="poll in polls" class="poll text-left">
+            <!-- poll content  -->
+            <div class="movie row">
+                <div v-for="movie in poll.movies">
+                    <div class="movie-title col">${movie.title}</div>
+                    <div class="movie-thumbnail col">${movie.title}</div>
 
+                </div>
 
-
-
-
+            </div>
+             <!-- author and date info -->
+                <small>
+                    Submitted at: ${poll.created_on} by ${poll.name}
+                    <br>
+                    Last updated: ${poll.updated_on}
+                </small>
+        <!-- Edit, Delete, Toggle buttons -->
+        {{if auth.user:}}
+            <div class="button-bar" v-if="poll.user_email == '{{=auth.user.email}}'">
+                <button class="btn btn-default btn-sm"
+                    v-on:click="delete_poll(poll.id)">
+                    <i class="fa fa-trash-o"></i>
+                </button>
+                <button v-if="!poll.is_public"
+                        class="btn btn-default btn-sm"
+                        v-on:click="toggle_public(poll.id)">
+                        <i class="fa fa-user"></i>
+                </button>
+                <button v-if="poll.is_public"
+                        class="btn btn-default btn-sm"
+                        v-on:click="toggle_public(poll.id)">
+                        <i class="fa fa-users"></i>
+                </button>
+            </div>
+        {{pass}}
+        </div>
     </div>
-    {{pass}}
-
-
 </div>
 
-
-
-
-
-<script src="{{=URL('static', 'js/default_index.js')}}"></script>
+<script src="{{=URL('static', 'js/create_poll.js')}}"></script>

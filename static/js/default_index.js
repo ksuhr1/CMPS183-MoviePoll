@@ -30,8 +30,6 @@ var app = function() {
         self.vue.uberURL = "https://m.uber.com/ul/" + "?" + $.param(pp);
     }
 
-
-
     // ######################### Get polls
     function get_polls_url(start_idx, end_idx) {
         var pp = {
@@ -59,8 +57,6 @@ var app = function() {
     };
 
 
-
-
     // ######################### Add polls
     self.add_poll_button = function () {
         // The button to add a track has been pressed.
@@ -82,36 +78,6 @@ var app = function() {
         });
     };
 
-
-        // $.post(add_poll_url,
-        //     {
-        //         content: self.vue.form_content,
-        //         movies: self.vue.movies,
-        //     },
-        //     function (data) {
-        //         $.web2py.enableElement($("#add_poll_submit"));
-        //         self.vue.polls.unshift(data.poll);
-        //         console.log(self.vue.polls.length);
-        //         // if polls length is greater than 4 has_more is true
-        //         if (self.vue.polls.length > 4) {
-        //             self.vue.has_more = true;
-        //         }
-        //         self.vue.is_adding_poll = !self.vue.is_adding_poll;
-        //         self.vue.form_content = "";
-        //     });
-
-
-    //Add movies to an array
-    self.add_movie = function () {
-        // The submit button to add a track has been added.
-        var movie = {
-            title: self.vue.form_title
-        };
-
-        self.vue.movies.push(movie);
-        self.vue.form_title="";
-
-    };
 
     // ######################### Edit polls
     self.edit_poll_submit = function (poll_id) {
@@ -154,9 +120,6 @@ var app = function() {
         )
     };
 
-
-
-    
     // ######################### Toggle PUblic
     self.toggle_public = function(poll_id) {
         $.post(toggle_public_url,
@@ -168,7 +131,7 @@ var app = function() {
                 poll.is_public = data.poll.is_public;
             }
         )
-    }
+    };
 
     // Complete as needed.
     self.vue = new Vue({
@@ -204,8 +167,6 @@ var app = function() {
             edit_poll_submit: self.edit_poll_submit,
             cancel_edit: self.cancel_edit,
             toggle_public: self.toggle_public,
-            add_movie: self.add_movie,
-
             getUberURL: self.getUberURL,
 
         }

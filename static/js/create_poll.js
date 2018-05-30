@@ -1,0 +1,148 @@
+// This is the js for the default/index.html view.
+
+var app = function() {
+
+    var self = {};
+    Vue.config.silent = false; // show all warnings
+
+    // Extends an array
+    self.extend = function(a, b) {
+        for (var i = 0; i < b.length; i++) {
+            a.push(b[i]);
+        }
+    };
+
+    // ######################### Get polls
+    function get_polls_url(start_idx, end_idx) {
+        var pp = {
+            start_idx: start_idx,
+            end_idx: end_idx
+        };
+        return polls_url + "?" + $.param(pp);
+    }
+
+    self.get_polls = function () {
+        var poll_len = self.vue.polls.length;
+        $.getJSON(get_polls_url(poll_len, poll_len+4), function (data) {
+            self.vue.polls = data.polls;
+            self.vue.has_more = data.has_more;
+            self.vue.logged_in = data.logged_in;
+        })
+    };
+
+    // ######################### Add polls
+    self.add_poll_button = function () {
+        // The button to add a track has been pressed.
+        if(self.vue.logged_in)
+          self.vue.is_adding_poll = !self.vue.is_adding_poll;
+    };
+
+    self.add_poll = function () {
+        // The submit button to add a track has been added.
+        $.ajax({
+            type: 'POST',
+            url: add_poll_url,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({content: self.vue.form_content, movies: self.vue.movies,}),
+            dataType: 'json',
+            success: function (data) {
+                // alert('Data sent');
+            }
+        });
+    };
+
+    //Add movies to an array
+    self.add_movie = function () {
+        // The submit button to add a track has been added.
+        var movie = {
+            title: self.vue.form_title
+        };
+
+        self.vue.movies.push(movie);
+        self.vue.form_title="";
+
+    };
+
+
+    self.cancel_edit = function () {
+        self.vue.editing = !self.vue.editing;
+        self.vue.edit_id = 0;
+    };
+
+    // ######################### Delete polls
+    self.delete_poll = function(poll_id) {
+        $.post(del_poll_url,
+
+            {
+                poll_id: poll_id
+            },
+            function () {
+                pollIndex = self.vue.polls.findIndex(poll => poll.id === poll_id);
+                self.vue.polls.splice(pollIndex, 1);
+            }
+        )
+    };
+
+    // ######################### Toggle PUblic
+    self.toggle_public = function(poll_id) {
+        $.post(toggle_public_url,
+            {
+                poll_id: poll_id
+            },
+            function (data) {
+                poll = self.vue.polls.find(poll => poll.id === poll_id);
+                poll.is_public = data.poll.is_public;
+            }
+        )
+    }
+
+    // Complete as needed.
+    self.vue = new Vue({
+        el: "#vue-div",
+        delimiters: ['${', '}'],
+        unsafeDelimiters: ['!{', '}'],
+        data: {
+            polls: [],
+            movies:[],
+            poll:[],
+
+            get_more: false,
+            has_more: false,
+
+            logged_in: false,
+
+            editing: false,
+            is_adding_poll: false,
+
+            form_title: null,
+            form_content: null,
+            edit_content: null,
+            edit_id: 0,
+
+        },
+        methods: {
+            add_poll_button: self.add_poll_button,
+            add_poll: self.add_poll,
+            delete_poll: self.delete_poll,
+            cancel_edit: self.cancel_edit,
+            toggle_public: self.toggle_public,
+            add_movie: self.add_movie,
+
+        }
+
+
+    });
+    self.get_polls();
+    $("#vue-div").show();
+    return self;
+};
+
+var APP = null;
+
+// This will make everything accessible from the js console;
+// for instance, self.x above would be accessible as APP.x
+jQuery(function(){APP = app();});
+
+
+
+

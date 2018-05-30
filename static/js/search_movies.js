@@ -1,6 +1,10 @@
 // This is the js for the default/index.html view.
 
-Vue.config.silent = false; // show all warnings
+
+
+var btn = document.getElementById("btn");
+
+    Vue.config.silent = false; // show all warnings
 
         jQuery.ajax({
             url: "https://api.internationalshowtimes.com/v4/movies/",
@@ -22,9 +26,6 @@ Vue.config.silent = false; // show all warnings
         })
         .always(function() {
         });
-
-
-
 
 
 

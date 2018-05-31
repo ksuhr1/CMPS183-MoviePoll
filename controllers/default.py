@@ -15,6 +15,20 @@ def index():
     """
     return dict()
 
+def results():
+    if request.args(0) is None:
+        # We send you back to the general index.
+        redirect(URL('default', 'index'))
+    else:
+        q = (db.poll.id == request.args(0))
+        poll = db(q).select().first()
+
+        if poll is None: 
+            raise HTTP(404)
+
+        # poll = response.json(dict(poll=poll))
+        # poll = response.json(poll)
+    return dict(poll=poll)
 
 def create_poll():
     """

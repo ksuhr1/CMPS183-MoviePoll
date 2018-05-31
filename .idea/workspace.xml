@@ -2,8 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="255e4332-6fa3-4026-8c2e-d11ad5a04751" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/static/js/default_create_poll.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/default_results.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/default/results.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/cs183moviepoll.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/R_User_Library.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Web2Py_Library.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/search_movies.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/search_movies.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/default.py" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/default.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/languages/plural-en.py" beforeDir="false" afterPath="$PROJECT_DIR$/languages/plural-en.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/myapp.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/myapp.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/create_poll.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/sass/_main.scss" beforeDir="false" afterPath="$PROJECT_DIR$/static/sass/_main.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/default/create_poll.html" beforeDir="false" afterPath="$PROJECT_DIR$/views/default/create_poll.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/default/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/views/default/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/default/search_movies.html" beforeDir="false" afterPath="$PROJECT_DIR$/views/default/search_movies.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -34,8 +52,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/default/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="206">
-              <caret line="51" column="22" lean-forward="true" selection-start-line="51" selection-start-column="22" selection-end-line="51" selection-end-column="22" />
+            <state relative-caret-position="161">
+              <caret line="48" column="22" selection-start-line="48" selection-start-column="22" selection-end-line="48" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -44,7 +62,7 @@
         <entry file="file://$PROJECT_DIR$/views/layout.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="360">
-              <caret line="24" column="3" lean-forward="true" selection-start-line="24" selection-start-column="3" selection-end-line="24" selection-end-column="82" />
+              <caret line="24" column="3" selection-start-line="24" selection-start-column="3" selection-end-line="24" selection-end-column="82" />
             </state>
           </provider>
         </entry>
@@ -53,7 +71,7 @@
         <entry file="file://$PROJECT_DIR$/controllers/default.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="163">
-              <caret line="27" selection-start-line="27" selection-end-line="27" />
+              <caret line="41" selection-start-line="41" selection-end-line="41" />
             </state>
           </provider>
         </entry>
@@ -62,7 +80,7 @@
         <entry file="file://$PROJECT_DIR$/controllers/appadmin.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="48">
-              <caret line="22" column="33" lean-forward="true" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="33" />
+              <caret line="22" column="33" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -80,7 +98,7 @@
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="150">
-              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+              <caret line="10" selection-start-line="10" selection-end-line="10" />
             </state>
           </provider>
         </entry>
@@ -89,7 +107,7 @@
         <entry file="file://$PROJECT_DIR$/static/js/default_index.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="75">
-              <caret line="5" column="51" lean-forward="true" selection-start-line="5" selection-start-column="51" selection-end-line="5" selection-end-column="51" />
+              <caret line="5" column="51" selection-start-line="5" selection-start-column="51" selection-end-line="5" selection-end-column="51" />
             </state>
           </provider>
         </entry>
@@ -97,8 +115,8 @@
       <file leaf-file-name="create_poll.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/default/create_poll.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="163">
-              <caret line="57" column="38" lean-forward="true" selection-start-line="57" selection-start-column="38" selection-end-line="57" selection-end-column="38" />
+            <state relative-caret-position="88">
+              <caret line="52" column="38" selection-start-line="52" selection-start-column="38" selection-end-line="52" selection-end-column="38" />
             </state>
           </provider>
         </entry>
@@ -106,8 +124,8 @@
       <file leaf-file-name="search_movies.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/default/search_movies.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="645">
-              <caret line="43" column="6" lean-forward="true" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
+            <state relative-caret-position="630">
+              <caret line="42" column="6" selection-start-line="42" selection-start-column="6" selection-end-line="42" selection-end-column="6" />
             </state>
           </provider>
         </entry>
@@ -193,12 +211,13 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="69" />
+  <component name="ProjectFrameBounds" extendedState="1">
+    <option name="x" value="20" />
     <option name="y" value="23" />
     <option name="width" value="1211" />
     <option name="height" value="738" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -327,14 +346,13 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="69" y="23" width="1211" height="738" extended-state="0" />
-    <editor active="true" />
+    <frame x="20" y="23" width="1211" height="738" extended-state="1" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.054602183" />
-      <window_info anchor="bottom" id="Version Control" order="7" visible="true" weight="0.0" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.0" />
       <window_info anchor="bottom" id="Python Console" order="7" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22155689" />
@@ -571,35 +589,35 @@
     <entry file="file://$PROJECT_DIR$/controllers/default.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="163">
-          <caret line="27" selection-start-line="27" selection-end-line="27" />
+          <caret line="41" selection-start-line="41" selection-end-line="41" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/views/layout.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
-          <caret line="24" column="3" lean-forward="true" selection-start-line="24" selection-start-column="3" selection-end-line="24" selection-end-column="82" />
+          <caret line="24" column="3" selection-start-line="24" selection-start-column="3" selection-end-line="24" selection-end-column="82" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/views/default/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="51" column="22" lean-forward="true" selection-start-line="51" selection-start-column="22" selection-end-line="51" selection-end-column="22" />
+        <state relative-caret-position="161">
+          <caret line="48" column="22" selection-start-line="48" selection-start-column="22" selection-end-line="48" selection-end-column="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/controllers/appadmin.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="48">
-          <caret line="22" column="33" lean-forward="true" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="33" />
+          <caret line="22" column="33" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="33" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
-          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
         </state>
       </provider>
     </entry>
@@ -612,8 +630,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/views/default/search_movies.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="645">
-          <caret line="43" column="6" lean-forward="true" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
+        <state relative-caret-position="630">
+          <caret line="42" column="6" selection-start-line="42" selection-start-column="6" selection-end-line="42" selection-end-column="6" />
         </state>
       </provider>
     </entry>
@@ -626,15 +644,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/views/default/create_poll.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="163">
-          <caret line="57" column="38" lean-forward="true" selection-start-line="57" selection-start-column="38" selection-end-line="57" selection-end-column="38" />
+        <state relative-caret-position="88">
+          <caret line="52" column="38" selection-start-line="52" selection-start-column="38" selection-end-line="52" selection-end-column="38" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/static/js/default_index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
-          <caret line="5" column="51" lean-forward="true" selection-start-line="5" selection-start-column="51" selection-end-line="5" selection-end-column="51" />
+          <caret line="5" column="51" selection-start-line="5" selection-start-column="51" selection-end-line="5" selection-end-column="51" />
         </state>
       </provider>
     </entry>

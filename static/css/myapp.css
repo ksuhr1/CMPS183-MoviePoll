@@ -24,8 +24,8 @@
 
 /* line 21, ../sass/_main.scss */
 .main-content {
-  padding-left: 5%;
-  padding-right: 5%;
+  padding-left: 10%;
+  padding-right: 10%;
   padding-bottom: 50px;
 }
 
@@ -34,12 +34,15 @@
   padding: 10px 0px;
 }
 
+/* line 33, ../sass/_main.scss */
 .movie-thumbnail {
-  width:200px;
-  height:200px;
-  border:1px solid #9E9E9E;
+  width: 200px;
+  height: 200px;
+  border: 1px solid #9E9E9E;
   margin: 10px;
 }
-.movie-title{
-  text-align:center;
+
+/* line 40, ../sass/_main.scss */
+.movie-title {
+  text-align: center;
 }

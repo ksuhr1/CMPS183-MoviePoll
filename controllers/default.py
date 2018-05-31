@@ -25,6 +25,7 @@ def create_poll():
 
     return dict()
 
+
 def search_movies():
     """
     This is your main controller.  Here you do almost nothing; you just cause create_poll.html to be served.

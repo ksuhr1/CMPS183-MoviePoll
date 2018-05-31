@@ -1,5 +1,18 @@
-// This is the js for the default/index.html view.
+///This is the js for the default/index.html view.
 
+
+$(document).ready(() => {
+    $('#searchForm').on('submit', (e) => {
+        let searchText = ('#searchText').val();
+        getMovies(searchText);
+        e.preventDefault();
+    });
+
+});
+
+function getMovies(searchText) {
+    console.log(searchText);
+}
 
 
 var btn = document.getElementById("btn");
@@ -31,7 +44,7 @@ var btn = document.getElementById("btn");
 
 // This will make everything accessible from the js console;
 // for instance, self.x above would be accessible as APP.x
-jQuery(function(){APP = app();});
+
 
 
 

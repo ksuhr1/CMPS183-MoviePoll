@@ -29,11 +29,12 @@ response.google_analytics_id = None
 # ----------------------------------------------------------------------------------------------------------------------
 
 response.menu = [
-    (T('Home'), False, URL('default', 'index'), [(T('Design'), False, URL('admin', 'default', 'design/%s' % request.application))]),
-    (T('About'), False, "", [])
+    (T('Home'), URL('default','index')==URL(), URL('default', 'index'), []),
+    (T('My Polls'), URL('default','')==URL(), "", []),
+    (T('About'), URL('default','')==URL(), "", []),
 ]
 
-DEVELOPMENT_MENU = False
+DEVELOPMENT_MENU = True
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -53,7 +54,6 @@ def _():
         (T('My Sites'), False, URL('admin', 'default', 'site')),
         (T('This App'), False, '#', [
             (T('Design'), False, URL('admin', 'default', 'design/%s' % app)),
-            LI(_class="divider"),
             (T('Controller'), False,
              URL(
                  'admin', 'default', 'edit/%s/controllers/%s.py' % (app, ctr))),
@@ -83,7 +83,6 @@ def _():
         ]),
         (T('Documentation'), False, '#', [
             (T('Online book'), False, 'http://www.web2py.com/book'),
-            LI(_class="divider"),
             (T('Preface'), False,
              'http://www.web2py.com/book/default/chapter/00'),
             (T('Introduction'), False,

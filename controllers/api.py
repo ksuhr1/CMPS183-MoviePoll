@@ -1,6 +1,10 @@
 # These are the controllers for your ajax api.
 
-# returns the name (first and last) of the user as a string 
+# returns the name (first and last) of the user as a string
+
+import gluon.contrib.simplejson
+import json
+
 def get_name(email):
     u = db(db.auth_user.email == email).select().first()
     if u is None:
@@ -9,19 +13,19 @@ def get_name(email):
         return ' '.join([u.first_name, u.last_name])
 
 
-def get_posts():
+def get_polls():
     start_idx = int(request.vars.start_idx) if request.vars.start_idx is not None else 0
     end_idx = int(request.vars.end_idx) if request.vars.end_idx is not None else 0
 
-    posts = []
+    polls = []
     has_more = False
 
     if auth.user is not None:
-        q = db((db.post.user_email == auth.user.email) | (db.post.is_public == True))
-        rows = q.select(db.post.ALL, orderby=~db.post.created_on, limitby=(start_idx, end_idx + 1))
+        q = db((db.poll.user_email == auth.user.email) | (db.poll.is_public == True))
+        rows = q.select(db.poll.ALL, orderby=~db.poll.created_on, limitby=(start_idx, end_idx + 1))
     else:         
-        q = db(db.post.is_public == True)
-        rows = q.select(db.post.ALL, orderby=~db.post.created_on, limitby=(start_idx, end_idx + 1))
+        q = db(db.poll.is_public == True)
+        rows = q.select(db.poll.ALL, orderby=~db.poll.created_on, limitby=(start_idx, end_idx + 1))
 
     for i, r in enumerate(rows):
         name = get_name(r.user_email)
@@ -29,18 +33,25 @@ def get_posts():
             t = dict(
                 id=r.id,
                 user_email=r.user_email,
-                content=r.post_content,
+                content=r.poll_content,
                 created_on=r.created_on,
                 updated_on=r.updated_on,
                 is_public=r.is_public,
                 name=name,
             )
-            posts.append(t)
+
+            # returns all movies that belong to this poll 
+            movies = db(db.movie.poll_id == r.id).select(db.movie.ALL)
+            t['movies'] = movies
+            print movies
+
+            polls.append(t)
+
         else:
             has_more = True
     logged_in = auth.user_id is not None
     return response.json(dict(
-        posts=posts,
+        polls=polls,
         logged_in=logged_in,
         has_more=has_more,
     ))
@@ -48,21 +59,47 @@ def get_posts():
 
 # Note that we need the URL to be signed, as this changes the db.
 @auth.requires_signature()
-def add_post():
+def add_poll():
+    data = gluon.contrib.simplejson.loads(request.body.read())
     user_email = auth.user.email or None
-    p_id = db.post.insert(post_content=request.vars.content)
-    p = db.post(p_id)
+    p_id = db.poll.insert(poll_content=request.vars.content)
+    p = db.poll(p_id)
+
+    for r in data['movies']:
+        movie_title = r['title']
+        db.movie.insert(poll_id=p_id, title=movie_title)
     name = get_name(p.user_email)
-    post = dict(
-            id=p.id,
-            user_email=p.user_email,
-            content=p.post_content,
-            created_on=p.created_on,
-            updated_on=p.updated_on,
-            is_public=p.is_public,
-            name=name,
+    poll = dict(
+        id=p.id,
+        user_email=p.user_email,
+        content=p.poll_content,
+        created_on=p.created_on,
+        updated_on=p.updated_on,
+        is_public=p.is_public,
+        name=name,
+        movies=(db(db.movie.poll_id == p_id).select(db.movie.ALL)),
     )
-    return response.json(dict(post=post))
+
+
+    return response.json(dict(poll=poll))
+
+
+@auth.requires_signature()
+def add_movie():
+    """Received the metadata for a new track."""
+    # Inserts the track information.
+    user_email = auth.user.email or None
+    t_id = db.movie.insert(title=request.vars.title)
+    t = db.movie(t_id)
+    movie = dict(
+        id=t.id,
+        title=t.title,
+    )
+    newmovie = db(db.movie.poll_id).select()
+    print newmovie
+
+
+    return response.json(dict(movie=movie))
 
 
 @auth.requires_signature()
@@ -70,34 +107,34 @@ def toggle_public():
     if auth.user == None:
         return "Not Authorized"
 
-    q = ((db.post.user_email == auth.user.email) &
-         (db.post.id == request.vars.post_id))
+    q = ((db.poll.user_email == auth.user.email) &
+         (db.poll.id == request.vars.poll_id))
 
-    post = db(q).select().first()
+    poll = db(q).select().first()
 
-    if post is None:
+    if poll is None:
         return "Not Authorized"
     else:
-        if (post.is_public):
-            post.update_record(is_public=False)
+        if (poll.is_public):
+            poll.update_record(is_public=False)
         else:
-            post.update_record(is_public=True)
-    # return post
-    return response.json(dict(post=post))
+            poll.update_record(is_public=True)
+    # return poll
+    return response.json(dict(poll=poll))
 
 @auth.requires_signature()
-def edit_post():
-    post = db(db.post.id == request.vars.id).select().first()
-    post.update_record(post_content=request.vars.post_content)
+def edit_poll():
+    poll = db(db.poll.id == request.vars.id).select().first()
+    poll.update_record(poll_content=request.vars.poll_content)
 
-    print post
+    print poll
     return dict()
 
 
 @auth.requires_signature()
-def del_post():
-    """Used to delete a post."""
+def del_poll():
+    """Used to delete a poll."""
     # Implement me!
-    db(db.post.id == request.vars.post_id).delete()
+    db(db.poll.id == request.vars.poll_id).delete()
     return "ok"
 

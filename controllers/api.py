@@ -132,9 +132,18 @@ def edit_poll():
 
 @auth.requires_signature()
 def del_poll():
-    """Used to delete a poll."""
-    # Implement me!
-    db(db.poll.id == request.vars.poll_id).delete()
+    if auth.user == None:
+        return "Not Authorized"
+
+    q = ((db.poll.user_email == auth.user.email) &
+         (db.poll.id == request.vars.poll_id))
+
+    poll = db(q).select().first()
+
+    if poll is None:
+        return "Not Authorized"
+    else: 
+        poll.delete()
     return "ok"
 
 

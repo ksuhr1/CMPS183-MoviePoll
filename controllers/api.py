@@ -1,6 +1,10 @@
 # These are the controllers for your ajax api.
 
-# returns the name (first and last) of the user as a string 
+# returns the name (first and last) of the user as a string
+
+import gluon.contrib.simplejson
+import json
+
 def get_name(email):
     u = db(db.auth_user.email == email).select().first()
     if u is None:
@@ -39,7 +43,10 @@ def get_polls():
             # returns all movies that belong to this poll 
             movies = db(db.movie.poll_id == r.id).select(db.movie.ALL)
             t['movies'] = movies
+            print movies
+
             polls.append(t)
+
         else:
             has_more = True
     logged_in = auth.user_id is not None
@@ -73,20 +80,46 @@ def get_poll():
 # Note that we need the URL to be signed, as this changes the db.
 @auth.requires_signature()
 def add_poll():
+    data = gluon.contrib.simplejson.loads(request.body.read())
     user_email = auth.user.email or None
     p_id = db.poll.insert(poll_content=request.vars.content)
     p = db.poll(p_id)
+
+    for r in data['movies']:
+        movie_title = r['title']
+        db.movie.insert(poll_id=p_id, title=movie_title)
     name = get_name(p.user_email)
     poll = dict(
-            id=p.id,
-            user_email=p.user_email,
-            content=p.poll_content,
-            created_on=p.created_on,
-            updated_on=p.updated_on,
-            is_public=p.is_public,
-            name=name,
+        id=p.id,
+        user_email=p.user_email,
+        content=p.poll_content,
+        created_on=p.created_on,
+        updated_on=p.updated_on,
+        is_public=p.is_public,
+        name=name,
+        movies=(db(db.movie.poll_id == p_id).select(db.movie.ALL)),
     )
+
+
     return response.json(dict(poll=poll))
+
+
+@auth.requires_signature()
+def add_movie():
+    """Received the metadata for a new track."""
+    # Inserts the track information.
+    user_email = auth.user.email or None
+    t_id = db.movie.insert(title=request.vars.title)
+    t = db.movie(t_id)
+    movie = dict(
+        id=t.id,
+        title=t.title,
+    )
+    newmovie = db(db.movie.poll_id).select()
+    print newmovie
+
+
+    return response.json(dict(movie=movie))
 
 
 @auth.requires_signature()

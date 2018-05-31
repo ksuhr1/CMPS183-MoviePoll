@@ -12,24 +12,6 @@ var app = function() {
         }
     };
 
-    self.getUberURL = function () {
-        var pp = {
-            client_id: "<CLIENT_ID>",
-            action: "setPickup",
-            
-            pickup: "my_location",
-            
-            dropoff: {
-                latitude: 37.802374,
-                longitude: -122.405818,
-                nickname: "Coit Tower",
-            },            
-
-            product_id: "a1111c8c-c720-46c3-8534-2fcdd730040d",
-        }
-        self.vue.uberURL = "https://m.uber.com/ul/" + "?" + $.param(pp);
-    }
-
     // ######################### Get polls
     function get_polls_url(start_idx, end_idx) {
         var pp = {
@@ -48,15 +30,6 @@ var app = function() {
         })
     };
 
-    self.get_more = function () {
-        var num_polls = self.vue.polls.length;
-        $.getJSON(get_polls_url(num_polls, num_polls + 4), function (data) {
-            self.vue.has_more = data.has_more;
-            self.extend(self.vue.polls, data.polls);
-        });
-    };
-
-
     // ######################### Add polls
     self.add_poll_button = function () {
         // The button to add a track has been pressed.
@@ -73,44 +46,33 @@ var app = function() {
             data: JSON.stringify({content: self.vue.form_content, movies: self.vue.movies,}),
             dataType: 'json',
             success: function (data) {
-                alert('Data sent');
+                // alert('Data sent');
             }
         });
     };
 
+    //Add movies to an array
+    self.add_movie = function () {
+        // The submit button to add a track has been added.
+        var movie = {
+            title: self.vue.form_title
+        };
 
-    // ######################### Edit polls
-    self.edit_poll_submit = function (poll_id) {
-        poll = self.vue.polls.find(poll => poll.id === poll_id);
-        poll.content = self.vue.edit_content;
-        $.post(edit_poll_url,
-            {
-                poll_content: self.vue.edit_content,
-                id: self.vue.edit_id
-            },
-            function (data) {
-                $.web2py.enableElement($("#edit_poll_submit"));
-                self.vue.editing = !self.vue.editing; 
-            });
+        self.vue.movies.push(movie);
+        self.vue.form_title="";
+
     };
 
-    self.edit_poll = function(poll_id) {
-        self.vue.editing = !self.vue.editing;
-        self.vue.edit_id = poll_id;
-        poll = self.vue.polls.find(poll => poll.id === poll_id);
-        self.vue.edit_content = poll.content;
-    };
 
     self.cancel_edit = function () {
         self.vue.editing = !self.vue.editing;
         self.vue.edit_id = 0;
     };
 
-
     // ######################### Delete polls
     self.delete_poll = function(poll_id) {
         $.post(del_poll_url,
-    
+
             {
                 poll_id: poll_id
             },
@@ -132,7 +94,7 @@ var app = function() {
                 poll.is_public = data.poll.is_public;
             }
         )
-    };
+    }
 
     // Complete as needed.
     self.vue = new Vue({
@@ -157,26 +119,20 @@ var app = function() {
             edit_content: null,
             edit_id: 0,
 
-            uberURL: null,
         },
         methods: {
-            get_more: self.get_more,
             add_poll_button: self.add_poll_button,
             add_poll: self.add_poll,
             delete_poll: self.delete_poll,
-            edit_poll: self.edit_poll,
-            edit_poll_submit: self.edit_poll_submit,
             cancel_edit: self.cancel_edit,
             toggle_public: self.toggle_public,
-            getUberURL: self.getUberURL,
+            add_movie: self.add_movie,
 
         }
 
 
     });
-
     self.get_polls();
-    self.getUberURL();
     $("#vue-div").show();
     return self;
 };

@@ -16,6 +16,25 @@ def index():
     return dict()
 
 
+def create_poll():
+    """
+    This is your main controller.  Here you do almost nothing; you just cause create_poll.html to be served.
+    """
+
+    # Note that we need the URL to be signed, as this changes the db.
+
+    return dict()
+
+
+def search_movies():
+    """
+    This is your main controller.  Here you do almost nothing; you just cause create_poll.html to be served.
+    """
+
+    # Note that we need the URL to be signed, as this changes the db.
+
+    return dict()
+
 def user():
     """
     exposes:

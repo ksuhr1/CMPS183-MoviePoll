@@ -1,0 +1,60 @@
+{{extend 'layout.html'}}
+
+{{block head}}
+<script src="{{=URL('static', 'js/vue.js')}}"></script>
+<script>
+    var poll_id = "{{=poll.id}}";
+    var poll_url = "{{=URL('api', 'get_poll')}}";
+    var polls_url = "{{=URL('api', 'get_polls')}}";
+</script>
+{{end}}
+
+
+<div class="main-content">
+
+    <div id="vue-div" class="display:none">
+
+
+
+        <div v-for="movie in poll.movies" class="card">
+            
+            <div class="card-header">
+                Movie
+            </div>
+
+            <div class="card-body">
+                <h5 class="card-title">${movie.title}</h5>
+                <p class="card-text">
+                    ${poll.content}
+                    <br>
+                    <small>
+                        Submitted at: ${poll.created_on} by ${poll.name}
+                        <br>
+                        Last updated: ${poll.updated_on}
+                    </small>       
+                </p>
+
+                <button class="btn btn-default" 
+                    v-on:click="">
+                    Button
+                </button>
+                <a href="#" class="btn btn-primary">Book an Uber</a>
+                <a href="#" class="btn btn-primary">Buy Tickets</a>            
+            </div>
+
+        </div>
+
+
+
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+<script src="{{=URL('static', 'js/default_results.js')}}"></script>

@@ -16,6 +16,7 @@ var app = function() {
         var pp = {
             client_id: "<CLIENT_ID>",
             action: "setPickup",
+
             
             pickup: "my_location",
             
@@ -47,6 +48,20 @@ var app = function() {
             self.vue.polls = data.polls;
             self.vue.has_more = data.has_more;
             self.vue.logged_in = data.logged_in;
+        })
+    };
+
+    function get_poll_url(poll_id) {
+        var pp = {
+            poll_id: poll_id
+        };
+        return poll_url + "?" + $.param(pp);
+    }
+
+    self.get_poll = function () {
+        $.getJSON(get_poll_url(poll_id), function (data) {
+            console.log(data);
+            self.vue.poll = data.poll;
         })
     };
 
@@ -100,7 +115,7 @@ var app = function() {
             },
             function (data) {
                 $.web2py.enableElement($("#edit_poll_submit"));
-                self.vue.editing = !self.vue.editing; 
+                self.vue.editing = !self.vue.editing;
             });
     };
 
@@ -117,10 +132,10 @@ var app = function() {
     };
 
 
+
     // ######################### Delete polls
     self.delete_poll = function(poll_id) {
         $.post(del_poll_url,
-    
             {
                 poll_id: poll_id
             },
@@ -130,6 +145,8 @@ var app = function() {
             }
         )
     };
+
+
 
     
     // ######################### Toggle PUblic
@@ -151,6 +168,7 @@ var app = function() {
         delimiters: ['${', '}'],
         unsafeDelimiters: ['!{', '}'],
         data: {
+            poll: {},
             polls: [],
             get_more: false,
             has_more: false,
@@ -182,7 +200,8 @@ var app = function() {
 
     });
 
-    self.get_polls();
+    // self.get_polls();
+    self.get_poll();
     self.getUberURL();
     $("#vue-div").show();
     return self;

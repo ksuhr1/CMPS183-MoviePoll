@@ -1,0 +1,52 @@
+{{extend 'layout.html'}}
+
+{{block head}}
+<script src="{{=URL('static', 'js/vue.js')}}"></script>
+<script>
+    var poll_id = "{{=poll.id}}";
+    var poll_url = "{{=URL('api', 'get_poll')}}";
+    var polls_url = "{{=URL('api', 'get_polls')}}";
+    var add_poll_url = "{{=URL('api', 'add_poll', user_signature=True)}}";
+    var edit_poll_url = "{{=URL('api', 'edit_poll', user_signature=True)}}";
+    var del_poll_url = "{{=URL('api', 'del_poll', user_signature=True)}}";
+    var toggle_public_url = "{{=URL('api', 'toggle_public', user_signature=True)}}";
+</script>
+{{end}}
+
+
+<div class="main-content">
+
+
+    <div id="vue-div" class="display:none">
+        
+
+        <!-- poll content  -->
+        <div v-if="!editing || (editing && edit_id != poll.id)">
+            <p>${poll.content}</p>
+
+            <div v-for="movie in poll.movies">Option: ${movie.title}</p>
+               <button class="btn btn-primary btn-sm poll-edit-button" 
+                        v-on:click="edit_poll_submit(poll.id)" type="submit">
+                        Vote
+                    </button>
+            </div>
+        </div>
+        <!-- author and date info -->
+        <small>
+            Submitted at: ${poll.created_on} by ${poll.name}
+            <br>
+            Last updated: ${poll.updated_on}
+        </small>
+
+    </div>
+    {{pass}}
+
+
+</div>
+
+
+
+
+
+<script src="{{=URL('static', 'js/default_vote.js')}}"></script>
+

@@ -3,6 +3,7 @@
 # returns the name (first and last) of the user as a string
 
 import gluon.contrib.simplejson
+
 import json
 
 def get_name(email):

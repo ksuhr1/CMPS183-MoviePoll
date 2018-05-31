@@ -15,7 +15,6 @@ function getMovies(searchText) {
 }
 
 
-var btn = document.getElementById("btn");
 
     Vue.config.silent = false; // show all warnings
 

@@ -6,73 +6,59 @@
 <script>
 
     var add_movie_url = "{{=URL('api', 'add_movie', user_signature=True)}}";
-    var polls_url = "{{=URL('api', 'get_polls')}}";
     var add_poll_url = "{{=URL('api', 'add_poll', user_signature=True)}}";
-    var edit_poll_url = "{{=URL('api', 'edit_poll', user_signature=True)}}";
-    var del_poll_url = "{{=URL('api', 'del_poll', user_signature=True)}}";
-    var toggle_public_url = "{{=URL('api', 'toggle_public', user_signature=True)}}";
 
 </script>
 {{end}}
 
 <div class="main-content">
-    <link rel="stylesheet" href="https://bootswatch.com/4/lux/bootstrap.min.css">
 
 
     <div id="vue-div" class="display:none">
-        <!-- Form to add poll -->
-        <div class="form-group">
-            <form action="#" v-on:submit.prevent class="form-horizontal" enctype="multipart/form-data" method="post">
-                <div class="form-group" id="no_table_artist__row">
-                  <div>
-                    <input class="form-control string" id="no_table_artist" v-model="form_title" placeholder="Movie" type="text" />
-                    <span class="help-block"></span>
-                  </div>
-                </div>
-              </form>
-        </div>
-        <div class="form-group">
-                    <a v-on:click="add_movie()" class="btn btn-primary btn-sm">Add Movie</a>
-                    <a v-on:click="add_poll()" class="btn btn-primary btn-sm">Add Poll</a>
-        </div>
-        <!--Displaying polls -->
-        <div v-for="poll in polls" class="poll text-left">
-            <!-- poll content  -->
-            <div class="movie row">
-                <div v-for="movie in poll.movies">
-                    <div class="movie-title col">${movie.title}</div>
-                    <div class="movie-thumbnail col">${movie.title}</div>
+        
+        <div class="container">
+            <div class="jumbotron">
+                <h3 class="text-center">Search For Any Movie</h3>
+                
+<!--                 <form id="searchForm">
+                    <input type="text" class="form-control" id="searchText" placeholder="Search Movies...">
+                </form> -->
 
-                </div>
+                <!-- search form  -->
+                <form action="#" v-on:submit.prevent="search_movies">
+                    <div class="form-group">
+                        <input 
+                            class="form-control"
+                            name="Search movies..."
+                            type="text" 
+                            v-model="form_title" 
+                            placeholder="Just click search because the API won't search for some reason"/>
+                    </div>
+                    <div class="form-group">
+                        <input class="btn btn-primary" type="submit" value="Search" />
+                    </div>
+                </form>
+
 
             </div>
-             <!-- author and date info -->
-                <small>
-                    Submitted at: ${poll.created_on} by ${poll.name}
-                    <br>
-                    Last updated: ${poll.updated_on}
-                </small>
-        <!-- Edit, Delete, Toggle buttons -->
-        {{if auth.user:}}
-            <div class="button-bar" v-if="poll.user_email == '{{=auth.user.email}}'">
-                <button class="btn btn-default btn-sm"
-                    v-on:click="delete_poll(poll.id)">
-                    <i class="fa fa-trash-o"></i>
-                </button>
-                <button v-if="!poll.is_public"
-                        class="btn btn-default btn-sm"
-                        v-on:click="toggle_public(poll.id)">
-                        <i class="fa fa-user"></i>
-                </button>
-                <button v-if="poll.is_public"
-                        class="btn btn-default btn-sm"
-                        v-on:click="toggle_public(poll.id)">
-                        <i class="fa fa-users"></i>
-                </button>
-            </div>
-        {{pass}}
         </div>
+
+        <div v-for="movie in movies" class="card">
+            <div class="card-body">
+                <h5 class="card-title">${movie.title}</h5>
+                <img v-bind:src="movie.poster_image_thumbnail" class="padded"/>
+
+                <p class="card-text">${movie.slug}</p>
+
+                <button class="btn btn-default" 
+                    v-on:click="add_movie()">
+                    Add to poll
+                </button>
+                <a href="#" class="btn btn-primary">More info</a>
+            </div>
+        </div>
+
     </div>
 </div>
-<script src="{{=URL('static', 'js/create_poll.js')}}"></script>
+<script src="{{=URL('static', 'js/default_create_poll.js')}}"></script>
 

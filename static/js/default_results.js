@@ -50,6 +50,25 @@ var app = function() {
         )
     };
 
+    // ##############################################################
+    // Get Uber url
+    self.getUberURL = function () {
+        var pp = {
+            client_id: "<CLIENT_ID>",
+            action: "setPickup",
+            
+            pickup: "my_location",
+            
+            dropoff: {
+                latitude: 37.802374,
+                longitude: -122.405818,
+                nickname: "Coit Tower",
+            },            
+
+            product_id: "a1111c8c-c720-46c3-8534-2fcdd730040d",
+        }
+        self.vue.uberURL = "https://m.uber.com/ul/" + "?" + $.param(pp);
+    }
 
 
 
@@ -69,6 +88,7 @@ var app = function() {
         methods: {
             get_polls: self.get_polls,
             get_poll: self.get_poll,
+            getUberURL: self.getUberURL,            
         }
 
 
@@ -76,6 +96,7 @@ var app = function() {
 
     // self.get_polls();
     self.get_poll(poll_id);
+    self.getUberURL();
     $("#vue-div").show();
     return self;
 };

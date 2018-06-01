@@ -17,6 +17,7 @@
 
 
     {{if auth.user is None:}}
+    <!-- Should be a Landing page if auth.user is None -->
     <div class="mx-auto text-center">
         <h1>Welcome!</h1>
         <p>
@@ -27,8 +28,6 @@
     {{else:}}
 
     <div id="vue-div" class="display:none">
-
-        <a v-bind:href="uberURL">Book an Uber</a>
 
         <!-- Add poll button  -->
         <a href="{{=URL('default', 'create_poll')}}"

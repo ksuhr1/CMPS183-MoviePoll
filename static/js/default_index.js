@@ -12,25 +12,10 @@ var app = function() {
         }
     };
 
-    self.getUberURL = function () {
-        var pp = {
-            client_id: "<CLIENT_ID>",
-            action: "setPickup",
-            
-            pickup: "my_location",
-            
-            dropoff: {
-                latitude: 37.802374,
-                longitude: -122.405818,
-                nickname: "Coit Tower",
-            },            
 
-            product_id: "a1111c8c-c720-46c3-8534-2fcdd730040d",
-        }
-        self.vue.uberURL = "https://m.uber.com/ul/" + "?" + $.param(pp);
-    }
 
-    // ######################### Get polls
+    // ##############################################################
+    // Get polls
     function get_polls_url(start_idx, end_idx) {
         var pp = {
             start_idx: start_idx,
@@ -57,7 +42,9 @@ var app = function() {
     };
 
 
-    // ######################### Add polls
+
+    // ##############################################################
+    // Add poll
     self.add_poll_button = function () {
         // The button to add a track has been pressed.
         if(self.vue.logged_in)
@@ -79,7 +66,9 @@ var app = function() {
     };
 
 
-    // ######################### Edit polls
+
+    // ##############################################################
+    // Edit poll
     self.edit_poll_submit = function (poll_id) {
         poll = self.vue.polls.find(poll => poll.id === poll_id);
         poll.content = self.vue.edit_content;
@@ -106,7 +95,10 @@ var app = function() {
         self.vue.edit_id = 0;
     };
 
-    // ######################### Delete polls
+
+
+    // ##############################################################
+    // Delete poll
     self.delete_poll = function(poll_id) {
         $.post(del_poll_url,
     
@@ -120,7 +112,10 @@ var app = function() {
         )
     };
 
-    // ######################### Toggle PUblic
+
+
+    // ##############################################################
+    // Toggle poll
     self.toggle_public = function(poll_id) {
         $.post(toggle_public_url,
             {
@@ -133,7 +128,10 @@ var app = function() {
         )
     };
 
-    // Complete as needed.
+
+
+
+
     self.vue = new Vue({
         el: "#vue-div",
         delimiters: ['${', '}'],
@@ -155,8 +153,6 @@ var app = function() {
             form_content: null,
             edit_content: null,
             edit_id: 0,
-
-            uberURL: null,
         },
         methods: {
             get_more: self.get_more,
@@ -167,15 +163,10 @@ var app = function() {
             edit_poll_submit: self.edit_poll_submit,
             cancel_edit: self.cancel_edit,
             toggle_public: self.toggle_public,
-            getUberURL: self.getUberURL,
-
         }
-
-
     });
 
     self.get_polls();
-    self.getUberURL();
     $("#vue-div").show();
     return self;
 };

@@ -171,6 +171,7 @@ def get_poll():
         t = None
     return response.json(dict(poll=t))
 
+
 def search_movies():
     try:
         response_from_api = requests.get(
@@ -178,6 +179,8 @@ def search_movies():
             params={
                 "countries": "US",
                 "limit": 20,
+                "search_query":request.vars.title,
+                "search_field":"title",
             },
             headers={
                 "X-API-Key": "Y8YxMBHwe7EPYnIVnKgPYlznt4Yiap6u",
@@ -187,13 +190,12 @@ def search_movies():
         #     status_code=response.status_code))
         # print('Response HTTP Response Body: {content}'.format(
         #     content=response.content))
-        movies = response_from_api.content
+        response_content = response_from_api.content
     except requests.exceptions.RequestException:
         print('HTTP Request failed')
 
     return response.json(dict(
-        movies=movies,
-        goals="hi",
+        response_content=response_content,
     ))
 
 

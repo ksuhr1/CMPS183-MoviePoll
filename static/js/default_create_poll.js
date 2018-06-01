@@ -47,43 +47,18 @@ var app = function() {
     };
 
 
-    self.search_movies = function () {
-        console.log(self.vue.form_title);
-        $.ajax({
-            url: "https://api.internationalshowtimes.com/v4/movies/",
-            type: "GET",
-            data: {
-                "countries": "US",
-                "limit": 20,
-                "search_query":self.vue.form_title,
-                "search_field":"title",
-
-            },
-            headers: {
-                "X-API-Key": "Y8YxMBHwe7EPYnIVnKgPYlznt4Yiap6u",
-            },
-        })
-        .done(function(data, textStatus, jqXHR) {
-            console.log(jqXHR);
-            $('#monitor_data').append(JSON.stringify(data));
-            console.log(data);
-            self.vue.movies = data.movies;
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-            console.log("HTTP Request Failed");
-        })
-        .always(function() {
-        });
-    }
-
-
     self.search_movies2 = function () {
-        $.getJSON(search_movies_url, 
+        console.log(self.vue.form_title);
+        //get_show_times();
+        $.getJSON(search_movies_url,
             {
                 movie: "",
+                title: self.vue.form_title,
             },
             function (data) {
-                console.log(data.movies);
+                jsonData = JSON.parse(data.response_content);
+                console.log(jsonData);
+                self.vue.movies= jsonData.movies;
             }
         )
     };
@@ -111,14 +86,12 @@ var app = function() {
         methods: {
             add_poll: self.add_poll,
             add_movie: self.add_movie,
-            search_movies: self.search_movies,
             search_movies2: self.search_movies2,
         }
 
 
     });
 
-    self.vue.search_movies2();
     $("#vue-div").show();
     return self;
 };

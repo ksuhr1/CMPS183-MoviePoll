@@ -55,13 +55,16 @@ var app = function() {
             data: {
                 "countries": "US",
                 "limit": 20,
+                "search_query":self.vue.form_title,
+                "search_field":"title",
+
             },
             headers: {
                 "X-API-Key": "Y8YxMBHwe7EPYnIVnKgPYlznt4Yiap6u",
             },
         })
         .done(function(data, textStatus, jqXHR) {
-            console.log("HTTP Request Succeeded: " + jqXHR.status);
+            console.log(jqXHR);
             $('#monitor_data').append(JSON.stringify(data));
             console.log(data);
             self.vue.movies = data.movies;

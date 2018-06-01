@@ -4,6 +4,7 @@
 
 import gluon.contrib.simplejson
 import json
+import requests
 
 def get_name(email):
     u = db(db.auth_user.email == email).select().first()
@@ -168,3 +169,31 @@ def get_poll():
     else:
         t = None
     return response.json(dict(poll=t))
+
+def search_movies():
+    try:
+        response_from_api = requests.get(
+            url="https://api.internationalshowtimes.com/v4/movies/",
+            params={
+                "countries": "US",
+                "limit": 20,
+            },
+            headers={
+                "X-API-Key": "Y8YxMBHwe7EPYnIVnKgPYlznt4Yiap6u",
+            },
+        )
+        # print('Response HTTP Status Code: {status_code}'.format(
+        #     status_code=response.status_code))
+        # print('Response HTTP Response Body: {content}'.format(
+        #     content=response.content))
+        movies = response_from_api.content
+    except requests.exceptions.RequestException:
+        print('HTTP Request failed')
+
+    return response.json(dict(
+        movies=movies,
+        goals="hi",
+    ))
+
+
+

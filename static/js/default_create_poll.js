@@ -70,9 +70,20 @@ var app = function() {
             console.log("HTTP Request Failed");
         })
         .always(function() {
-        });        
+        });
     }
 
+
+    self.search_movies2 = function () {
+        $.getJSON(search_movies_url, 
+            {
+                movie: "",
+            },
+            function (data) {
+                console.log(data.movies);
+            }
+        )
+    };
 
 
 
@@ -98,11 +109,13 @@ var app = function() {
             add_poll: self.add_poll,
             add_movie: self.add_movie,
             search_movies: self.search_movies,
+            search_movies2: self.search_movies2,
         }
 
 
     });
 
+    self.vue.search_movies2();
     $("#vue-div").show();
     return self;
 };

@@ -8,6 +8,9 @@
     var add_movie_url = "{{=URL('api', 'add_movie', user_signature=True)}}";
     var add_poll_url = "{{=URL('api', 'add_poll', user_signature=True)}}";
     var search_movies_url = "{{=URL('api', 'search_movies')}}";
+    var get_cities_url = "{{=URL('api', 'get_cities')}}";
+    var get_showtimes_url = "{{=URL('api', 'get_showtimes')}}";
+    var get_cinemas_url = "{{=URL('api', 'get_cinemas')}}";
 
 </script>
 {{end}}
@@ -25,38 +28,83 @@
                     <input type="text" class="form-control" id="searchText" placeholder="Search Movies...">
                 </form> -->
 
+
+
+
                 <!-- search form  -->
-                <form action="#" v-on:submit.prevent="search_movies2">
-                    <div class="form-group">
-                        <input 
-                            class="form-control"
-                            name="Search movies..."
-                            type="text" 
-                            v-model="form_title" 
-                            placeholder="Just click search because the API won't search for some reason"/>
+                <form class ="form-horizontal"
+                      action="#" v-on:submit.prevent="search_movies">
+                    <div class="row">
+                        <div class="col-md-8 col-xs-12">
+                            <div class="form-group ">
+
+                                <input
+                                    class="form-control"
+                                    name="Search movies..."
+                                    type="text"
+                                    v-model="form_title"
+                                    placeholder="Search a Movie..."/>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="form-group ">
+                                <input
+                                    class="form-control"
+                                    name="City"
+                                    type="text"
+                                    v-model="form_city"
+                                    placeholder="Search a City..." required/>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <input class="btn btn-primary" type="submit" value="Search" />
                     </div>
                 </form>
-
-
             </div>
         </div>
+        <div class="card">
 
-        <div v-for="movie in movies" class="card">
-            <div class="card-body">
-                <h5 class="card-title">${movie.title}</h5>
-                <img v-bind:src="movie.poster_image_thumbnail" class="padded"/>
+            <div v-for="movie in movies" class="card">
 
-                <p class="card-text">${movie.slug}</p>
+                <div class="card-body">
+                    <h5 class="card-title">${movie.title}</h5>
+                    <img v-bind:src="movie.poster_image_thumbnail" class="padded"/>
 
-                <button class="btn btn-default" 
-                    v-on:click="add_movie()">
-                    Add to poll
-                </button>
-                <a href="#" class="btn btn-primary">More info</a>
+                    <p class="card-text">${movie.slug}</p>
+
+                    <button class="btn btn-default"
+                        v-on:click="add_movie()">
+                        Add to poll
+                    </button>
+                    <a action="#" class="btn btn-primary">More info</a>
+                </div>
             </div>
+        </div>
+             <div class="card">
+                <div v-for="time in showtimes" class="card">
+                    <div v-for="cinema in cinemas">
+                                <div class="card-header">${cinema.name}</div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">Showtimes</h5>
+                                        <p class="card-text">TEST: movie theater id from showtimes ${time.cinema_id}</p>
+                                        <p class="card-text">TEST: Cinema id: ${cinema.id}</p>
+                                        <button>${time.start_at}</button>
+                                </div>
+
+                    </div>
+                     <button class="btn btn-default"
+                                v-on:click="add_movie()">
+                                Add to poll
+                     </button>
+                    <a action="#" class="btn btn-primary">More info</a>
+                </div>
+             </div>
+
+
+        </div>
+
+
         </div>
 
     </div>

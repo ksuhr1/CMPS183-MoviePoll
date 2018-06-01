@@ -1,6 +1,7 @@
 {{extend 'layout.html'}}
 
 {{block head}}
+<title>Poll it Dude</title>
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 <script>
     var polls_url = "{{=URL('api', 'get_polls')}}";
@@ -8,7 +9,6 @@
     var edit_poll_url = "{{=URL('api', 'edit_poll', user_signature=True)}}";
     var del_poll_url = "{{=URL('api', 'del_poll', user_signature=True)}}";
     var toggle_public_url = "{{=URL('api', 'toggle_public', user_signature=True)}}";
-
 </script>
 {{end}}
 

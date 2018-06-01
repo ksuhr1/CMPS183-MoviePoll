@@ -12,8 +12,19 @@ var app = function() {
         }
     };
     
-    //Write a function that will save the vote to the database
+    //Vote polls
+    self.vote_poll = function(movieId) {
+        $.post(del_poll_url,
     
+            {
+                movie_id: movieId
+            },
+            function () {
+                
+                
+            }
+        )
+    };
 
     // ##############################################################
     // Get polls
@@ -66,6 +77,7 @@ var app = function() {
         methods: {
             get_polls: self.get_polls,
             get_poll: self.get_poll,
+            vote_poll: self.vote_poll,
         }
 
 

@@ -123,6 +123,22 @@ def add_movie():
 
 
 @auth.requires_signature()
+def vote_movie():
+    
+    q = (db.movie.id == request.vars.movie_id)
+
+    movie = db(q).select().first()
+
+    if movie is None:
+        return "Not Authorized"
+    else:
+        movie.update_record(vote=vote+1)
+
+    return response.json(dict(movie=movie))
+
+
+
+@auth.requires_signature()
 def toggle_public():
     if auth.user == None:
         return "Not Authorized"

@@ -13,20 +13,13 @@
 {{end}}
 
 
+{{if auth.user is None:}}
+    {{include 'landing.html'}}
+{{else:}}
+
+
+
 <div class="main-content">
-
-
-    {{if auth.user is None:}}
-    <!-- Should be a Landing page if auth.user is None -->
-    <div class="mx-auto text-center">
-        <h1>Welcome!</h1>
-        <p>
-            Login to create a poll and go to the movies!
-        </p>
-        <a href="{{=URL('default', 'user')}}" class="btn btn-primary">Login</a>
-    </div>
-    {{else:}}
-
     <div id="vue-div" class="display:none">
 
         <!-- Add poll button  -->
@@ -79,8 +72,8 @@
                 Load more
             </button>
     </div>
-    {{pass}}
 </div>
 
 
 <script src="{{=URL('static', 'js/default_index.js')}}"></script>
+{{pass}}

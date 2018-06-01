@@ -2,6 +2,7 @@
 
 {{block head}}
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
+
 <script>
     var poll_id = "{{=poll.id}}";
     var poll_url = "{{=URL('api', 'get_poll')}}";
@@ -18,18 +19,39 @@
 
 
     <div id="vue-div" class="display:none">
-        
-
         <!-- poll content  -->
         <div v-if="!editing || (editing && edit_id != poll.id)">
             <p>${poll.content}</p>
+            
 
-            <div v-for="movie in poll.movies">Option: ${movie.title}</p>
-               <button class="btn btn-primary btn-sm poll-edit-button" 
-                        v-on:click="edit_poll_submit(poll.id)" type="submit">
-                        Vote
-                    </button>
+            <div v-for="movie in poll.movies" class="card">
+            
+            <div class="card-header">
+                Movie
             </div>
+
+            <div class="card-deck">
+
+  <div class="card">
+    <img class="card-img-top movieroll" src="{{=URL('static', 'images/movieroll.png')}}" alt="Card image cap">
+    <div class="card-block">
+      <h4 class="card-title">Pick 1</h4>
+      <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+    </div>
+  </div>
+
+                <button class="btn btn-default vote" 
+                    v-on:click="">
+                    <img class="votebutton" src="{{=URL('static', 'images/check.png')}}">
+                    Click to Vote
+                </button>     
+            </div>
+
+        </div>
+
+
+
         </div>
         <!-- author and date info -->
         <small>

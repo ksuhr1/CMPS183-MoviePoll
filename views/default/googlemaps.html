@@ -63,8 +63,7 @@
     <input id="origin-input" class="controls" type="text"
         placeholder="Enter an origin location">
 
-    <input id="destination-input" class="controls" type="text"
-        placeholder="Enter a destination location">
+    
 
     <div id="mode-selector" class="controls">
       <input type="radio" name="type" id="changemode-walking" checked="checked">
@@ -87,7 +86,7 @@
       function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
           mapTypeControl: false,
-          center: {lat: -33.8688, lng: 151.2195},
+          center: {lat: 37.000369, lng: -122.063237},
           zoom: 13
         });
 
@@ -157,14 +156,14 @@
       };
 
       AutocompleteDirectionsHandler.prototype.route = function() {
-        if (!this.originPlaceId || !this.destinationPlaceId) {
+        if (!this.originPlaceId) {
           return;
         }
         var me = this;
 
         this.directionsService.route({
           origin: {'placeId': this.originPlaceId},
-          destination: {'placeId': this.destinationPlaceId},
+          destination: {lat: 33.732909, lng: -117.827686},
           travelMode: this.travelMode
         }, function(response, status) {
           if (status === 'OK') {

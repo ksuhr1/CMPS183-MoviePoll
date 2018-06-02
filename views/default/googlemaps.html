@@ -63,7 +63,7 @@
     <input id="origin-input" class="controls" type="text"
         placeholder="Enter an origin location">
 
-    
+
 
     <div id="mode-selector" class="controls">
       <input type="radio" name="type" id="changemode-walking" checked="checked">
@@ -88,6 +88,11 @@
           mapTypeControl: false,
           center: {lat: 37.000369, lng: -122.063237},
           zoom: 13
+        });
+        var marker = new google.maps.Marker({
+            position: {lat: 37.000369, lng: -122.063237},
+            map: map,
+            
         });
 
         new AutocompleteDirectionsHandler(map);

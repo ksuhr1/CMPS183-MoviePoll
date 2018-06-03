@@ -37,6 +37,7 @@ var app = function() {
     // ##############################################################
     // Get single poll based on poll id
     self.get_poll = function (pollId) {
+        console.log("getting single poll with id: " + pollId)
         $.getJSON(poll_url,
             {
                 poll_id: poll_id,
@@ -46,6 +47,12 @@ var app = function() {
                 console.log(data);
                 self.vue.poll = data.poll;
                 self.vue.logged_in = data.logged_in;
+
+                // dummy votes data for testing 
+                self.vue.poll.movies.forEach(function (movie) {
+                    movie['votes'] = Math.floor(Math.random()*10);
+                    console.log(movie);
+                })
             }
         )
     };

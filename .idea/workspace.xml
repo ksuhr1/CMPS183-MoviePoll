@@ -4,6 +4,7 @@
     <list default="true" id="255e4332-6fa3-4026-8c2e-d11ad5a04751" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/default.py" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/default.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/js/default_create_poll.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/default_create_poll.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/default/create_poll.html" beforeDir="false" afterPath="$PROJECT_DIR$/views/default/create_poll.html" afterDir="false" />
     </list>
@@ -33,20 +34,29 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="create_poll.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/default/create_poll.html">
+      <file leaf-file-name="default.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/controllers/default.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4">
-              <caret line="20" column="35" lean-forward="true" selection-start-line="20" selection-start-column="35" selection-end-line="20" selection-end-column="35" />
+            <state relative-caret-position="600">
+              <caret line="40" selection-start-line="40" selection-end-line="40" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="api.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="create_poll.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/views/default/create_poll.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="192">
+              <caret line="65" column="24" selection-start-line="65" selection-start-column="24" selection-end-line="65" selection-end-column="24" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="api.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controllers/api.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="165" lean-forward="true" selection-start-line="165" selection-end-line="165" />
+            <state relative-caret-position="-757">
+              <caret line="144" column="20" lean-forward="true" selection-start-line="144" selection-start-column="20" selection-end-line="144" selection-end-column="20" />
               <folding>
                 <element signature="e#109#140#0" expanded="true" />
               </folding>
@@ -57,17 +67,17 @@
       <file leaf-file-name="default_create_poll.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/static/js/default_create_poll.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="51" column="10" selection-start-line="51" selection-start-column="10" selection-end-line="51" selection-end-column="10" />
+            <state relative-caret-position="230">
+              <caret line="26" column="33" lean-forward="true" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="default_index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/static/js/default_index.js">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/default/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1037">
-              <caret line="71" column="59" lean-forward="true" selection-start-line="71" selection-start-column="12" selection-end-line="71" selection-end-column="59" />
+            <state relative-caret-position="-117">
+              <caret line="33" column="51" selection-start-line="33" selection-start-column="11" selection-end-line="33" selection-end-column="51" />
             </state>
           </provider>
         </entry>
@@ -84,11 +94,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>$ poll</find>
-      <find>add_poll_but</find>
-      <find>poll_content</find>
-      <find>is_adding</find>
-      <find>add_mov</find>
       <find>uberURL</find>
       <find>polls</find>
       <find>update</find>
@@ -96,7 +101,6 @@
       <find>form_content</find>
       <find>poll_id</find>
       <find>print</find>
-      <find>movies</find>
       <find>edit</find>
       <find>ajax</find>
       <find>add</find>
@@ -106,10 +110,20 @@
       <find>add_poll_url</find>
       <find>edit_poll</find>
       <find>add_poll</find>
-      <find>content</find>
       <find>search_movie</find>
       <find>create_poll</find>
+      <find>search_movies</find>
+      <find>movie_info</find>
+      <find>title</find>
+      <find>response_content</find>
+      <find>content</find>
+      <find>search_movies2</find>
+      <find>response_city</find>
+      <find>location</find>
+      <find>cinema</find>
+      <find>t</find>
       <find>console.log</find>
+      <find>movies</find>
     </findStrings>
     <replaceStrings>
       <replace>poll</replace>
@@ -128,15 +142,17 @@
         <option value="$PROJECT_DIR$/static/css/myapp.css" />
         <option value="$PROJECT_DIR$/static/js/create_poll.js" />
         <option value="$PROJECT_DIR$/views/default/search_movies.js.html" />
-        <option value="$PROJECT_DIR$/views/layout.html" />
         <option value="$PROJECT_DIR$/views/default/search_movies.html" />
-        <option value="$PROJECT_DIR$/controllers/default.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/static/js/search_movies.js" />
         <option value="$PROJECT_DIR$/views/default/index.html" />
-        <option value="$PROJECT_DIR$/views/default/create_poll.html" />
+        <option value="$PROJECT_DIR$/static/js/default_movie_info.js" />
+        <option value="$PROJECT_DIR$/views/default/movie_info.html" />
+        <option value="$PROJECT_DIR$/controllers/default.py" />
+        <option value="$PROJECT_DIR$/views/layout.html" />
         <option value="$PROJECT_DIR$/controllers/api.py" />
         <option value="$PROJECT_DIR$/static/js/default_create_poll.js" />
+        <option value="$PROJECT_DIR$/views/default/create_poll.html" />
       </list>
     </option>
   </component>
@@ -147,10 +163,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="370" />
-    <option name="y" value="23" />
-    <option name="width" value="920" />
-    <option name="height" value="737" />
+    <option name="x" value="308" />
+    <option name="y" value="-1177" />
+    <option name="width" value="1263" />
+    <option name="height" value="806" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -164,11 +180,6 @@
             <path>
               <item name="cs183moviepoll" type="b2602c69:ProjectViewProjectNode" />
               <item name="cs183moviepoll" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="cs183moviepoll" type="b2602c69:ProjectViewProjectNode" />
-              <item name="cs183moviepoll" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="cs183moviepoll" type="b2602c69:ProjectViewProjectNode" />
@@ -190,6 +201,12 @@
               <item name="cs183moviepoll" type="462c0819:PsiDirectoryNode" />
               <item name="static" type="462c0819:PsiDirectoryNode" />
               <item name="css" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="cs183moviepoll" type="b2602c69:ProjectViewProjectNode" />
+              <item name="cs183moviepoll" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="font-awesome-4.6.3" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="cs183moviepoll" type="b2602c69:ProjectViewProjectNode" />
@@ -281,25 +298,25 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="370" y="23" width="920" height="737" extended-state="0" />
+    <frame x="308" y="-1177" width="1263" height="806" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.054602183" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.0" />
       <window_info anchor="bottom" id="Python Console" order="7" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.054602183" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2813212" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2063882" />
       <window_info anchor="right" id="R Packages" order="3" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="R Graphics" order="3" />
       <window_info anchor="right" id="Database" order="3" weight="0.0" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -309,10 +326,11 @@
       <window_info anchor="bottom" id="Find" order="1" weight="0.32917318" />
     </layout>
     <layout-to-restore>
-      <window_info anchor="bottom" id="Version Control" order="1" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="6" weight="0.25" />
       <window_info anchor="bottom" id="Docker" order="0" show_stripe_button="false" />
       <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="10" weight="0.25" />
+      <window_info id="Favorites" order="0" side_tool="true" />
       <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.0037082818" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="4" type="SLIDING" weight="0.4" />
@@ -321,17 +339,16 @@
       <window_info anchor="right" id="R Graphics" order="0" />
       <window_info anchor="bottom" id="Run" order="8" weight="0.054602183" />
       <window_info anchor="right" id="R Packages" order="1" />
-      <window_info anchor="bottom" id="Python Console" order="5" />
       <window_info anchor="bottom" id="Find" order="7" weight="0.32917318" />
       <window_info active="true" anchor="right" id="Database" order="2" visible="true" weight="0.0" />
       <window_info anchor="bottom" id="Terminal" order="3" />
       <window_info anchor="bottom" id="Event Log" order="4" side_tool="true" />
       <window_info anchor="bottom" id="Database Changes" order="2" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Cvs" order="10" weight="0.25" />
+      <window_info anchor="bottom" id="Version Control" order="1" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info anchor="bottom" id="Message" order="6" />
       <window_info anchor="bottom" id="Debug" order="9" weight="0.4" />
-      <window_info id="Favorites" order="0" side_tool="true" />
+      <window_info anchor="bottom" id="Python Console" order="5" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -341,6 +358,27 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/static/js/default_create_poll.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="37" lean-forward="true" selection-start-line="37" selection-end-line="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/default_index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2445">
+          <caret line="163" column="30" selection-start-line="163" selection-start-column="30" selection-end-line="163" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/default/create_poll.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1395">
+          <caret line="93" lean-forward="true" selection-start-line="93" selection-end-line="93" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/views/default/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="720">
@@ -393,20 +431,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/default/search_movies.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="42" column="6" selection-start-line="42" selection-start-column="6" selection-end-line="42" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/js/search_movies.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="63" selection-start-line="27" selection-start-column="63" selection-end-line="27" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/views/default/search_movies.html" />
+    <entry file="file://$PROJECT_DIR$/static/js/search_movies.js" />
     <entry file="file://$PROJECT_DIR$/views/default/create_poll.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
@@ -577,45 +603,12 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/static/js/create_poll.js" />
-    <entry file="file://$PROJECT_DIR$/controllers/default.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="41" selection-start-line="41" selection-end-line="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/layout.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="3" selection-start-line="24" selection-start-column="3" selection-end-line="24" selection-end-column="82" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/default/search_movies.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="42" column="6" selection-start-line="42" selection-start-column="6" selection-end-line="42" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/js/search_movies.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="403">
-          <caret line="27" column="63" selection-start-line="27" selection-start-column="63" selection-end-line="27" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/views/default/search_movies.html" />
+    <entry file="file://$PROJECT_DIR$/static/js/search_movies.js" />
     <entry file="file://$PROJECT_DIR$/controllers/appadmin.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="48">
           <caret line="22" column="33" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/default/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="417">
-          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
         </state>
       </provider>
     </entry>
@@ -626,34 +619,57 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/js/default_create_poll.js">
+    <entry file="file://$PROJECT_DIR$/static/js/default_movie_info.js" />
+    <entry file="file://$PROJECT_DIR$/views/default/movie_info.html" />
+    <entry file="file://$PROJECT_DIR$/views/layout.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="51" column="10" selection-start-line="51" selection-start-column="10" selection-end-line="51" selection-end-column="10" />
+        <state relative-caret-position="345">
+          <caret line="23" column="35" lean-forward="true" selection-start-line="23" selection-start-column="35" selection-end-line="23" selection-end-column="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/default.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="600">
+          <caret line="40" selection-start-line="40" selection-end-line="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/default/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-117">
+          <caret line="33" column="51" selection-start-line="33" selection-start-column="11" selection-end-line="33" selection-end-column="51" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/static/js/default_index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1037">
-          <caret line="71" column="59" lean-forward="true" selection-start-line="71" selection-start-column="12" selection-end-line="71" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/default/create_poll.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4">
-          <caret line="20" column="35" lean-forward="true" selection-start-line="20" selection-start-column="35" selection-end-line="20" selection-end-column="35" />
+        <state relative-caret-position="1218">
+          <caret line="163" column="30" selection-start-line="163" selection-start-column="30" selection-end-line="163" selection-end-column="30" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/controllers/api.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="165" lean-forward="true" selection-start-line="165" selection-end-line="165" />
+        <state relative-caret-position="-757">
+          <caret line="144" column="20" lean-forward="true" selection-start-line="144" selection-start-column="20" selection-end-line="144" selection-end-column="20" />
           <folding>
             <element signature="e#109#140#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/default_create_poll.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="26" column="33" lean-forward="true" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/default/create_poll.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="65" column="24" selection-start-line="65" selection-start-column="24" selection-end-line="65" selection-end-column="24" />
         </state>
       </provider>
     </entry>

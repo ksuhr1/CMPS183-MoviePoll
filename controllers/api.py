@@ -59,28 +59,6 @@ def get_polls():
     ))
 
 
-def get_poll():
-    q = (db.poll.id == request.vars.poll_id)
-    poll = db(q).select().first()
-
-    if poll is not None:
-        name = get_name(poll.user_email)
-
-        t = dict(
-            id=poll.id,
-            user_email=poll.user_email,
-            content=poll.poll_content,
-            created_on=poll.created_on,
-            updated_on=poll.updated_on,
-            is_public=poll.is_public,
-            name=name,
-            movies=(db(db.movie.poll_id == poll.id).select(db.movie.ALL))
-        )
-    else:
-        t = None
-    return response.json(dict(poll=t))
-
-    
 # Note that we need the URL to be signed, as this changes the db.
 @auth.requires_signature()
 def add_poll():
@@ -171,6 +149,29 @@ def del_poll():
     return "ok"
 
 
+
+def get_poll():
+    q = (db.poll.id == request.vars.poll_id)
+    poll = db(q).select().first()
+
+    if poll is not None:
+        name = get_name(poll.user_email)
+
+        t = dict(
+            id=poll.id,
+            user_email=poll.user_email,
+            content=poll.poll_content,
+            created_on=poll.created_on,
+            updated_on=poll.updated_on,
+            is_public=poll.is_public,
+            name=name,
+            movies=(db(db.movie.poll_id == poll.id).select(db.movie.ALL))
+        )
+    else:
+        t = None
+    return response.json(dict(poll=t))
+
+
 def search_movies():
     try:
         response_from_api = requests.get(
@@ -257,10 +258,8 @@ def get_cinemas():
         response_from_api = requests.get(
             url="https://api.internationalshowtimes.com/v4/cinemas/",
             params={
-                "cinema_id": request.vars.cinema_id,
                 "location": request.vars.location,
                 "limit": 10,
-
             },
             headers={
                 "X-API-Key": "Y8YxMBHwe7EPYnIVnKgPYlznt4Yiap6u",

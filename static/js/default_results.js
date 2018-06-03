@@ -53,9 +53,28 @@ var app = function() {
                     movie['votes'] = Math.floor(Math.random()*10);
                     console.log(movie);
                 })
+
+                if (!self.vue.pollActive) {
+                    winningMovie();
+                }
+
             }
         )
     };
+
+    // ##############################################################
+    // Determine winning movie
+    function winningMovie() {
+        console.log("determining winning movie");
+        var winningMovie = self.vue.poll.movies[0];
+        self.vue.poll.movies.forEach(function (movie) {            
+            if (movie.votes > winningMovie.votes) {
+                winningMovie = movie;
+            }
+        })
+        self.vue.winningMovie = winningMovie;
+    }
+
 
     // ##############################################################
     // Get Uber url
@@ -91,6 +110,9 @@ var app = function() {
 
 
             uberURL: null,
+
+            winningMovie: {},
+            pollActive: true,
         },
         methods: {
             get_polls: self.get_polls,

@@ -15,26 +15,50 @@
 
     <div id="vue-div" class="display:none">
 
+
+
     <h1>Results</h1>
-    <h5>${poll.content}</h5>
+    <p>${poll.content}</p>
 
 
+    <div v-if="pollActive">        
+        <p>Poll is still active until: TIME</p>
+        <div class="card-columns"> 
+            <div v-for="movie in poll.movies" class="card">
+                
+                <div class="card-header">
+                    ${movie.title}
+                </div>
 
+                <div class="card-body">
+                    <h5 class="card-title">Votes: ${movie.votes}</h5>
+                    <p class="card-text">
+                        <small>
+                            Submitted at: ${poll.created_on} by ${poll.name}
+                            <br>
+                            Last updated: ${poll.updated_on} by ${poll.name}
+                        </small>
+                    </p>
+                </div>
 
-    <div class="card-columns"> 
-        <div v-for="movie in poll.movies" class="card">
-            
+            </div>
+        </div>
+    </div>
+
+    <div v-if="!pollActive">
+        <p>Poll has ended! Here are final results</p>
+        <div class="card">                
             <div class="card-header">
-                ${movie.title}
+                ${winningMovie.title}
             </div>
 
             <div class="card-body">
-                <h5 class="card-title">Votes: ${movie.votes}</h5>
+                <h5 class="card-title">Votes: ${winningMovie.votes}</h5>
                 <p class="card-text">
                     <small>
                         Submitted at: ${poll.created_on} by ${poll.name}
                         <br>
-                        Last updated: ${poll.updated_on}
+                        Last updated: ${poll.updated_on} by ${poll.name}
                     </small>
                 </p>
 
@@ -48,7 +72,6 @@
 
         </div>
     </div>
-
 
 
 

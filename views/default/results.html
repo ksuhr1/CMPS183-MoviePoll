@@ -1,6 +1,7 @@
 {{extend 'layout.html'}}
 
 {{block head}}
+<title>Results - Poll it Dude</title>
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 <script>
     var poll_id = "{{=poll.id}}";
@@ -16,35 +17,61 @@
 
 
 
-        <div v-for="movie in poll.movies" class="card">
-            
+    <h1>Results</h1>
+    <p>${poll.content}</p>
+
+
+    <div v-if="pollActive">        
+        <p>Poll is still active until: TIME</p>
+        <div class="card-columns"> 
+            <div v-for="movie in poll.movies" class="card">
+                
+                <div class="card-header">
+                    ${movie.title}
+                </div>
+
+                <div class="card-body">
+                    <h5 class="card-title">Votes: ${movie.votes}</h5>
+                    <p class="card-text">
+                        <small>
+                            Submitted at: ${poll.created_on} by ${poll.name}
+                            <br>
+                            Last updated: ${poll.updated_on} by ${poll.name}
+                        </small>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div v-if="!pollActive">
+        <p>Poll has ended! Here are final results</p>
+        <div class="card">                
             <div class="card-header">
-                Movie
+                ${winningMovie.title}
             </div>
 
             <div class="card-body">
-                <h5 class="card-title">${movie.title}</h5>
+                <h5 class="card-title">Votes: ${winningMovie.votes}</h5>
                 <p class="card-text">
-                    ${poll.content}
-                    <br>
                     <small>
                         Submitted at: ${poll.created_on} by ${poll.name}
                         <br>
-                        Last updated: ${poll.updated_on}
-                    </small>       
+                        Last updated: ${poll.updated_on} by ${poll.name}
+                    </small>
                 </p>
 
                 <button class="btn btn-default" 
                     v-on:click="">
                     Button
                 </button>
-                <a href="#" class="btn btn-primary">Book an Uber</a>
-                <a href="#" class="btn btn-primary">Buy Tickets</a>            
+                <a v-bind:href="uberURL" class="btn btn-primary">Book an Uber</a>
+                <a href="#" class="btn btn-primary">Buy Tickets</a>
             </div>
 
         </div>
-
-
+    </div>
 
 
 

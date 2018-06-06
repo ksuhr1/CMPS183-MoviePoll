@@ -13,13 +13,13 @@ var app = function() {
     };
 
 
+    // not currently used, but we can, since I think it's faster than using find
     var enumerate = function(v) { var k=0; return v.map(function(e) {e._idx = k++;});};
 
 
     // ##############################################################
     // Add poll
     self.add_poll = function () {
-        // The submit button to add a track has been added.
         $.ajax({
             type: 'POST',
             url: add_poll_url,
@@ -39,7 +39,9 @@ var app = function() {
 
 
     // ##############################################################
-    //Add movies to array
+    // WIP
+    // Add movies to the a "cart" that will be sent to the server when
+    // the user clicks 'create poll'
     self.add_movie = function () {
         // The submit button to add a track has been added.
         var movie = {
@@ -51,97 +53,119 @@ var app = function() {
     };
 
 
-    self.search_movies = function () {
+
+    // ##############################################################
+    // searches the showtimes api for in-theater movies with the given name
+    self.searchMovies = function () {
+        console.log("in function searchMovies()");
         $.getJSON(search_movies_url,
             {
-                movie: "",
                 form_title: self.vue.form_title,
             },
             function (data) {
                 jsonData = JSON.parse(data.response_content);
                 console.log(jsonData);
-                self.vue.movies= jsonData.movies;
-
-                //Goes through the list of movies and gets the id
-                for(var i in self.vue.movies){
-                    var key = i;
-                    var movie_id = self.vue.movies[i].id;
-                    console.log(movie_id);
-                }
-
-                self.vue.get_cities(movie_id);
-
-
+                self.vue.movies = jsonData.movies;
             }
         )
-
     };
 
 
-    self.get_cities = function (movie_id) {
-        console.log("In method get_cities");
-       // console.log(form_city);
+    // ##############################################################
+    // Get showtimes of a movie in a given location
+    // location is specified by vue.form_city
+    self.getShowtimes = function (movieId) {
+        console.log("in function getShowtimes()");
+
+        self.getGeocoordsFromCity(function(data) {
+            var cinemaLocation = data; 
+            console.log(cinemaLocation)
+            // get the list of cinemas near geocoord location
+            
+            self.getShowtimesFromApi(movieId, cinemaLocation, function() {
+                self.getCinemas(cinemaLocation);
+            });
+        });
+    };
+
+    // WIP
+    // instead of getting geo coord lat/long from the showtimes api
+    // we can use google maps to get the lat/long from a given input of
+    // city, zip, address or whatever else is supported
+    self.getGeocoordsFromCity = function (callback) {
+        console.log("in function getGeocoordsFromCity()");
         $.getJSON(get_cities_url,
             {
                 form_city: self.vue.form_city,
-                movie_id:movie_id,
-
             },
             function (data) {
                 jsonData = JSON.parse(data.response_city);
                 console.log(jsonData);
-                self.vue.cities= jsonData.cities;
 
-                //Gets lat and lon of city
-                //might need to add error check for city like if they type
-                //'se' all cities with that beginning name pop up
-                var lat = self.vue.cities[0].lat;
-                var lon = self.vue.cities[0].lon;
-                var location = lat +','+lon;
-                self.vue.get_showtimes(movie_id, location);
+                // Gets lat and lon of city
+                // might need to add error check for city like if they type
+                // 'se' all cities with that beginning name pop up
+                var lat = jsonData.cities[0].lat;
+                var lon = jsonData.cities[0].lon;
+                var cinemaLocation = lat +','+lon;
+
+                // self.vue.getShowtimesFromApi(movieId, location);
+                callback(cinemaLocation);
             }
-        )
-
+        )        
     };
 
 
-
-    self.get_showtimes = function (movie_id,location) {
+    // the actual call to the showtimes api
+    self.getShowtimesFromApi = function (movieId, location, callback) {
         console.log("in get showtimes");
         $.getJSON(get_showtimes_url,
             {
-                movie_id:movie_id,
-                location:location,
-
+                movie_id: movieId,
+                location: location,
             },
             function (data) {
                 jsonData = JSON.parse(data.response_showtimes);
-                self.vue.showtimes= jsonData.showtimes;
-                console.log(self.vue.showtimes);
+                var movie = self.vue.movies.find(movie => movie.id === movieId);
+                console.log("movie: ");
+                console.log(movie);
+                
+                movie.showtimes = jsonData.showtimes;
+                self.vue.showtimes = jsonData.showtimes;
+                console.log("movie.showtimes");
+                console.log(movie.showtimes);
 
-                 //Goes through the list of movies and gets the id
-                for(var i in self.vue.showtimes){
-                    var cinema_id = self.vue.showtimes[i].cinema_id;
-                    //console.log(cinema_id);
 
-                }
-                self.vue.get_cinemas(cinema_id,location);
+                //  //Goes through the list of movies and gets the id
+                // for(var i in self.vue.showtimes){
+                //     var cinema_id = self.vue.showtimes[i].cinema_id;
+                //     //console.log(cinema_id);
+                // }
+                // self.vue.getCinemas(cinema_id,location);
+                callback();
             }
         )
     };
 
-    self.get_cinemas = function (cinema_id,location) {
-        console.log("in get_cinemas");
+    self.getCinemas = function (location) {
+        console.log("in getCinemas()");
         $.getJSON(get_cinemas_url,
             {
-                cinema_id:cinema_id,
-                location:location,
-
+                location: location,
             },
             function (data) {
                 jsonData = JSON.parse(data.response_cinemas);
-                self.vue.cinemas= jsonData.cinemas;
+                self.vue.cinemas = jsonData.cinemas;
+                console.log("cinemas:");
                 console.log(self.vue.cinemas);
+
+                // Work in progress
+                // match the showtime.cinema_id with the actual name
+                self.vue.showtimes.forEach(function (showtime) {
+                    var cinema = self.vue.cinemas.find(cinema => cinema.id === showtime.cinema_id);
+                    showtime.cinema_id = cinema.name; // lose the cinema id and get just the name 
+                    // right now we replace the id with the name                     
+                })  
             }
         )
     };
@@ -154,8 +178,11 @@ var app = function() {
         delimiters: ['${', '}'],
         unsafeDelimiters: ['!{', '}'],
         data: {
-            movies:[
-                {title: "dummy data movie"},
+            movies: [
+                {
+                    title: "lala",
+                    showtimes: [{start_at: "7:50PM",}, {start_at: "7:50PM",},],
+                },
             ],
             cities:[
                 {lat:"",lon:""},
@@ -169,9 +196,7 @@ var app = function() {
 
             logged_in: false,
 
-            movie_id:null,
-            lat:null,
-            lon:null,
+
             form_title: null,
             form_city:null,
             form_content: null,
@@ -180,10 +205,11 @@ var app = function() {
         methods: {
             add_poll: self.add_poll,
             add_movie: self.add_movie,
-            search_movies: self.search_movies,
-            get_cities: self.get_cities,
-            get_showtimes:self.get_showtimes,
-            get_cinemas:self.get_cinemas,
+            searchMovies: self.searchMovies,
+            getGeocoordsFromCity: self.getGeocoordsFromCity,
+            getShowtimesFromApi: self.getShowtimesFromApi,
+            getCinemas: self.getCinemas,
+            getShowtimes: self.getShowtimes,
         }
 
 

@@ -1,6 +1,7 @@
 {{extend 'layout.html'}}
 
 {{block head}}
+<title>Poll it Dude</title>
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 <script>
     var polls_url = "{{=URL('api', 'get_polls')}}";
@@ -8,27 +9,18 @@
     var edit_poll_url = "{{=URL('api', 'edit_poll', user_signature=True)}}";
     var del_poll_url = "{{=URL('api', 'del_poll', user_signature=True)}}";
     var toggle_public_url = "{{=URL('api', 'toggle_public', user_signature=True)}}";
-
 </script>
 {{end}}
 
 
+{{if auth.user is None:}}
+    {{include 'landing.html'}}
+{{else:}}
+
+
+
 <div class="main-content">
-
-
-    {{if auth.user is None:}}
-    <div class="mx-auto text-center">
-        <h1>Welcome!</h1>
-        <p>
-            Login to create a poll and go to the movies!
-        </p>
-        <a href="{{=URL('default', 'user')}}" class="btn btn-primary">Login</a>
-    </div>
-    {{else:}}
-
     <div id="vue-div" class="display:none">
-
-        <a v-bind:href="uberURL">Book an Uber</a>
 
         <!-- Add poll button  -->
         <a href="{{=URL('default', 'create_poll')}}"
@@ -80,8 +72,8 @@
                 Load more
             </button>
     </div>
-    {{pass}}
 </div>
 
 
 <script src="{{=URL('static', 'js/default_index.js')}}"></script>
+{{pass}}

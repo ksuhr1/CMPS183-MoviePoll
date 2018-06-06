@@ -258,10 +258,8 @@ def get_cinemas():
         response_from_api = requests.get(
             url="https://api.internationalshowtimes.com/v4/cinemas/",
             params={
-                "cinema_id": request.vars.cinema_id,
                 "location": request.vars.location,
                 "limit": 10,
-
             },
             headers={
                 "X-API-Key": "Y8YxMBHwe7EPYnIVnKgPYlznt4Yiap6u",

@@ -1,6 +1,7 @@
 {{extend 'layout.html'}}
 
 {{block head}}
+<title>Create Poll - Poll it Dude</title>
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 
 <script>
@@ -23,37 +24,29 @@
         <div class="container">
             <div class="jumbotron">
                 <h3 class="text-center">Search For Any Movie</h3>
-                
-<!--                 <form id="searchForm">
-                    <input type="text" class="form-control" id="searchText" placeholder="Search Movies...">
-                </form> -->
-
-
-
 
                 <!-- search form  -->
                 <form class ="form-horizontal"
-                      action="#" v-on:submit.prevent="search_movies">
+                      action="#" v-on:submit.prevent="searchMovies">
                     <div class="row">
                         <div class="col-md-8 col-xs-12">
-                            <div class="form-group ">
-
+                            <div class="form-group">
                                 <input
                                     class="form-control"
                                     name="Search movies..."
                                     type="text"
                                     v-model="form_title"
-                                    placeholder="Search a Movie..."/>
+                                    placeholder="Search a movie..."/>
                             </div>
                         </div>
                         <div class="col-md-4 col-xs-12">
-                            <div class="form-group ">
+                            <div class="form-group">
                                 <input
                                     class="form-control"
                                     name="City"
                                     type="text"
                                     v-model="form_city"
-                                    placeholder="Search a City..." required/>
+                                    placeholder="City" required/>
                             </div>
                         </div>
                     </div>
@@ -63,43 +56,36 @@
                 </form>
             </div>
         </div>
+
         <div class="card">
-
             <div v-for="movie in movies" class="card">
-
                 <div class="card-body">
+
                     <h5 class="card-title">${movie.title}</h5>
                     <img v-bind:src="movie.poster_image_thumbnail" class="padded"/>
 
                     <p class="card-text">${movie.slug}</p>
 
-                    <button class="btn btn-default"
-                        v-on:click="add_movie()">
-                        Add to poll
+                    <button class="btn btn-default" 
+                        v-on:click="getShowtimes(movie.id)">
+                        Showtimes
                     </button>
                     <a action="#" class="btn btn-primary">More info</a>
+                    
+                    <h5 class="card-title">Showtimes</h5>
+                    <div v-for="showtime in showtimes" class="card" style="width: 18rem">
+                        <div class="card-header">Cinema ID: ${showtime.cinema_id}</div>
+                            <div class="card-body">                                
+                                <p class="card-text">${showtime.start_at}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
-             <div class="card">
-                <div v-for="time in showtimes" class="card">
-                    <div v-for="cinema in cinemas">
-                                <div class="card-header">${cinema.name}</div>
-                                    <div class="card-body">
-                                        <h5 class="card-title">Showtimes</h5>
-                                        <p class="card-text">TEST: movie theater id from showtimes ${time.cinema_id}</p>
-                                        <p class="card-text">TEST: Cinema id: ${cinema.id}</p>
-                                        <button>${time.start_at}</button>
-                                </div>
 
-                    </div>
-                     <button class="btn btn-default"
-                                v-on:click="add_movie()">
-                                Add to poll
-                     </button>
-                    <a action="#" class="btn btn-primary">More info</a>
-                </div>
-             </div>
+             
 
 
         </div>

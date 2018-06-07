@@ -26,19 +26,35 @@
             <div v-for="movie in poll.movies" class="card">
             
             <div class="card-header">
-                Movie
+                 ${movie.title}
             </div>
 
-            <div class="card-deck">
+            <!-- <div class="card-deck"> -->
+           <div class="card-body">
+                    <h5 class="card-title">Movies: ${movie.title}</h5>
+                    <p class="card-text">
+                        <small>
+                            Submitted at: ${poll.created_on} by ${poll.name}
+                            <br>
+                            Last updated: ${poll.updated_on} by ${poll.name}
+                        </small>
+                    </p>
+                </div>
 
-  <div class="card">
+            </div>
+        </div>
+    </div>
+
+<!--   <div class="card">
     <img class="card-img-top movieroll" src="{{=URL('static', 'images/movieroll.png')}}" alt="Card image cap">
     <div class="card-block">
       <h4 class="card-title">Pick 1</h4>
       <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+      <p class="card-text"><small class="text-muted"></small></p>
     </div>
-  </div>
+  </div> -->
+
+
 
                 <button class="btn btn-default vote" 
                     v-on:click="">

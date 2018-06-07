@@ -172,6 +172,15 @@ var app = function() {
     };
 
 
+    self.convertDate = function (isoDate) {
+        var formattedDate;
+        var event = new Date(isoDate);        
+        var options = { hour: 'numeric', minute: 'numeric' };
+        formattedDate = event.toDateString() + " at " 
+            + event.toLocaleTimeString('en-US', options);
+        return formattedDate;
+    }
+
 
     // Complete as needed.
     self.vue = new Vue({
@@ -205,6 +214,7 @@ var app = function() {
             getShowtimesFromApi: self.getShowtimesFromApi,
             getCinemas: self.getCinemas,
             getShowtimes: self.getShowtimes,
+            convertDate: self.convertDate,
         }
 
 

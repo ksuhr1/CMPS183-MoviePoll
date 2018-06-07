@@ -61,6 +61,7 @@
             </div>
         </div>
 
+        <!-- loading spinner -->
         <div class="container">
             <i v-if="searching" class="fa fa-circle-o-notch fa-spin" style="font-size:56px"></i>
         </div>
@@ -73,7 +74,7 @@
 
                     <h5 class="card-title">${movie.title}</h5>
                     <img v-bind:src="movie.poster_image_thumbnail" class="padded"/>
-
+                    <p class="card-text">Movie ID: ${movie.id}</p>
                     <button class="btn btn-default" 
                         type="button" 
                         data-toggle="collapse"
@@ -95,7 +96,9 @@
                                         <div v-for="showtime in movie.showtimes" v-if="showtime.cinema_id == cinema.id" 
                                         class="card" style="width: 18rem">
                                             <div class="card-body">
-                                                <p class="card-text">${showtime.start_at}</p>
+                                                <p class="card-text" v-bind:title="showtime.start_at">
+                                                    ${convertDate(showtime.start_at)}
+                                                </p>
                                                 <a v-bind:href="showtime.booking_link">Booking Link</a>
                                                 <button class="btn btn-default" 
                                                     v-on:click="addMovie(showtime.id)">

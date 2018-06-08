@@ -32,6 +32,9 @@ var app = function() {
             dataType: 'json',
             success: function (data) {
                 console.log('Poll sent to server');
+                var pollId = data.poll.id;
+                // redirect to the voting page
+                window.location = results_url + '/' + pollId;
             }
         });
     };
@@ -42,6 +45,12 @@ var app = function() {
     // add poll option to the poll
     self.addMovie = function (showtimeId) {
         // should we add movies? or show times?
+        // should probably add showtime object, which means rewriting 
+        // the way showtimes are attached to movies 
+        // dont assign showtimes as a value
+        
+        console.log(showtimeId);
+
         self.vue.pollShowtimes.push(showtimeId);
         console.log("self.vue.pollShowtimes: ");
         console.log(self.vue.pollShowtimes);

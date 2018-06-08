@@ -27,6 +27,7 @@ var app = function() {
             data: JSON.stringify(
                 {
                     content: self.vue.form_content, 
+                    movies: self.vue.pollMovies,
                     showtimes: self.vue.pollShowtimes,
                 }),
             dataType: 'json',
@@ -43,17 +44,18 @@ var app = function() {
 
     // ##############################################################
     // add poll option to the poll
-    self.addMovie = function (showtimeId) {
-        // should we add movies? or show times?
-        // should probably add showtime object, which means rewriting 
-        // the way showtimes are attached to movies 
-        // dont assign showtimes as a value
-        
-        console.log(showtimeId);
+    self.addMovie = function (movieId, showtimeId) {
+        var movie = self.vue.movies.find( movie => movie.id === movieId );
+        var showtime = movie.showtimes.find( showtime => showtime.id === showtimeId );
 
-        self.vue.pollShowtimes.push(showtimeId);
-        console.log("self.vue.pollShowtimes: ");
-        console.log(self.vue.pollShowtimes);
+        var inCart = self.vue.pollShowtimes.find( showtime => showtime.id === showtimeId );
+
+        if (!(inCart)) {
+            self.vue.pollShowtimes.push(showtime);    
+        } else {
+            var shoppingCartIndex = self.vue.pollShowtimes.indexOf(showtime);
+            self.vue.pollShowtimes.splice(shoppingCartIndex, 1); // delete image from cart
+        }        
     };
 
 
@@ -197,6 +199,7 @@ var app = function() {
 
             poll: {},
             pollShowtimes: [],
+            pollMovies: [],
 
             logged_in: false,
 

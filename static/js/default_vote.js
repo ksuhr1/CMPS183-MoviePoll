@@ -14,17 +14,26 @@ var app = function() {
     
     //Vote polls
     self.vote_poll = function(movieId) {
-        $.post(del_poll_url,
+        console.log("Movie Id", movieId)
+        console.log("DEFAULT: In vote poll")
+        $.post(vote_poll_url,
     
             {
-                movie_id: movieId
+                movie_id: movieId,
+                vote: self.vue.vote,
             },
-            function () {
+            function (data) {
+                console.log("DATA",data)
+                self.vue.vote = data.vote;
+               // print(data)
+
                 
                 
             }
         )
     };
+
+
 
     // ##############################################################
     // Get polls
@@ -62,7 +71,6 @@ var app = function() {
     };
 
 
-
     self.vue = new Vue({
         el: "#vue-div",
         delimiters: ['${', '}'],
@@ -70,6 +78,7 @@ var app = function() {
         data: {
             poll: {},
             polls: [],
+            vote: 0,
 
 
             uberURL: null,

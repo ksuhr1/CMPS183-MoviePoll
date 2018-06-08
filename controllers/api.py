@@ -126,17 +126,27 @@ def add_movie():
 
 @auth.requires_signature()
 def vote_movie():
+
+     if auth.user == None:
+         return "Not Authorized"
     
-    q = (db.movie.id == request.vars.movie_id)
 
-    movie = db(q).select().first()
+     q = (db.movie.id == request.vars.movie_id) 
+     movie = db(q).select().first()
+     print("API MOVIE", movie.vote)
 
-    if movie is None:
+     if movie is None:
         return "Not Authorized"
-    else:
-        movie.update_record(vote=vote+1)
+     else:
+        vote = movie.vote
+        vote = vote+1
+        print(vote)
+        movie.update_record(vote=vote)
+        #vote = vote+1
+        # print(vote)
+          #movie.update_record(vote=vote)
 
-    return response.json(dict(movie=movie))
+     return response.json(dict(movie=movie))
 
 
 

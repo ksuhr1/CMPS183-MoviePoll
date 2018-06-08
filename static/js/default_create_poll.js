@@ -18,8 +18,8 @@ var app = function() {
 
 
     // ##############################################################
-    // Add poll
-    self.add_poll = function () {
+    // Create the poll
+    self.createPoll = function () {
         $.ajax({
             type: 'POST',
             url: add_poll_url,
@@ -27,7 +27,7 @@ var app = function() {
             data: JSON.stringify(
                 {
                     content: self.vue.form_content, 
-                    movies: self.vue.movies,
+                    showtimes: self.vue.pollShowtimes,
                 }),
             dataType: 'json',
             success: function (data) {
@@ -39,13 +39,12 @@ var app = function() {
 
 
     // ##############################################################
-    // WIP
-    // Add movies to the a "cart" that will be sent to the server when
-    // the user clicks 'create poll'
-    self.addMovie = function (movieId) {
+    // add poll option to the poll
+    self.addMovie = function (showtimeId) {
         // should we add movies? or show times?
-        alert("Added to poll:" + movieId);
-
+        self.vue.pollShowtimes.push(showtimeId);
+        console.log("self.vue.pollShowtimes: ");
+        console.log(self.vue.pollShowtimes);
     };
 
 
@@ -96,9 +95,10 @@ var app = function() {
         var movie = self.vue.movies.find(movie => movie.id === movieId);
         
         self.getShowtimesFromApi(movieId, cinemaLocation, function (data) {
-            movie.showtimes.forEach(function (showtime) {
-                showtime.cinema = {};
-            })
+
+            // movie.showtimes.forEach(function (showtime) {
+            //     showtime.cinema = {};
+            // })
             movie.showtimes = data;
             // self.getCinemas(cinemaLocation);
         });
@@ -159,14 +159,6 @@ var app = function() {
             function (data) {
                 jsonData = JSON.parse(data.response_cinemas);
                 self.vue.cinemas = jsonData.cinemas;
-
-                // // Work in progress
-                // // match the showtime.cinema_id with the actual name
-                // self.vue.showtimes.forEach(function (showtime) {
-                //     var cinema = self.vue.cinemas.find(cinema => cinema.id === showtime.cinema_id);
-                //     showtime.cinema_id = cinema.name; // lose the cinema id and get just the name 
-                //     // right now we replace the id with the name                     
-                // })
             }
         )
     };
@@ -195,7 +187,7 @@ var app = function() {
             cinemas:[],
 
             poll: {},
-            poll_movies: [],
+            pollShowtimes: [],
 
             logged_in: false,
 
@@ -207,7 +199,7 @@ var app = function() {
             searching: false,
         },
         methods: {
-            add_poll: self.add_poll,
+            createPoll: self.createPoll,
             addMovie: self.addMovie,
             searchMovies: self.searchMovies,
             getGeocoordsFromCity: self.getGeocoordsFromCity,

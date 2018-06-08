@@ -62,14 +62,21 @@ def get_polls():
 # Note that we need the URL to be signed, as this changes the db.
 @auth.requires_signature()
 def add_poll():
-    data = gluon.contrib.simplejson.loads(request.body.read())
+    
     user_email = auth.user.email or None
     p_id = db.poll.insert(poll_content=request.vars.content)
     p = db.poll(p_id)
 
-    for r in data['movies']:
-        movie_title = r['title']
-        db.movie.insert(poll_id=p_id, title=movie_title)
+    data = gluon.contrib.simplejson.loads(request.body.read())
+    print "####################################"
+    for r in data['showtimes']:
+        print r
+        # db.movie.insert(poll_id=p_id, title=movie_title)
+
+    # for r in data['movies']:
+    #     movie_title = r['title']
+    #     db.movie.insert(poll_id=p_id, title=movie_title)
+
     name = get_name(p.user_email)
     poll = dict(
         id=p.id,

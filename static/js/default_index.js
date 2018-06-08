@@ -29,6 +29,10 @@ var app = function() {
         }
         self.vue.uberURL = "https://m.uber.com/ul/" + "?" + $.param(pp);
     }
+    self.getmovielocation = function(movie_lat, movie_long) {
+        self.vue.getmovielocationurl = "https://www.google.com/maps/embed/v1/place?key=AIzaSyAJ1ZvhsklFbRlgcdg31NPxgvUysfXqxas&q="+movie_lat+","+movie_long;
+    };
+
 
     // ######################### Get polls
     function get_polls_url(start_idx, end_idx) {
@@ -119,7 +123,6 @@ var app = function() {
             }
         )
     };
-
     // ######################### Toggle PUblic
     self.toggle_public = function(poll_id) {
         $.post(toggle_public_url,
@@ -157,6 +160,7 @@ var app = function() {
             edit_id: 0,
 
             uberURL: null,
+            getmovielocationurl: null
         },
         methods: {
             get_more: self.get_more,
@@ -168,6 +172,7 @@ var app = function() {
             cancel_edit: self.cancel_edit,
             toggle_public: self.toggle_public,
             getUberURL: self.getUberURL,
+            getmovielocation: self.getmovielocation,
 
         }
 
@@ -176,6 +181,7 @@ var app = function() {
 
     self.get_polls();
     self.getUberURL();
+    self.getmovielocation(33.719944,-117.809505);
     $("#vue-div").show();
     return self;
 };

@@ -22,13 +22,6 @@
         <p>
             Login to create a poll and go to the movies!
         </p>
-        <iframe
-        width="600"
-        height="450"
-        frameborder="0" style="border:0"
-        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAJ1ZvhsklFbRlgcdg31NPxgvUysfXqxas
-            &q=Space+Needle,Seattle+WA" allowfullscreen>
-</iframe>
         <a href="{{=URL('default', 'user')}}" class="btn btn-primary">Login</a>
     </div>
     {{else:}}
@@ -43,7 +36,6 @@
             v-bind:class="{'disabled': !logged_in}">
             Add new poll
         </a>
-
 
         <!-- polls -->
         <!-- create the div for each poll -->

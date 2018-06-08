@@ -69,13 +69,15 @@ def add_poll():
 
     data = gluon.contrib.simplejson.loads(request.body.read())
     print "####################################"
-
     for r in data['movies']:
+        print "movie: "
         movie_title = r['title']
-        db.movie.insert(poll_id=p_id, title=movie_title)
+        print movie_title
+        # db.movie.insert(poll_id=p_id, title=movie_title)
 
     for r in data['showtimes']:
-        print r
+        print "showtime: "
+        print r['start_at']
         # db.movie.insert(poll_id=p_id, title=movie_title)
 
 

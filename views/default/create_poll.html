@@ -42,6 +42,13 @@
                             </p>
                         </div>
                     </div>
+                    <div v-for="movie in pollMovies" class="card" style="width: 18rem">
+                        <div class="card-body">
+                            <p class="card-text">
+                                ${movie.title}
+                            </p>
+                        </div>
+                    </div>       
                 </div>                
                 <!-- <div v-for="cinema in cinemas" class="card">
                     <h5 class="card-header">Cinema: ${cinema.name}</h5>

@@ -48,14 +48,28 @@ var app = function() {
         var movie = self.vue.movies.find( movie => movie.id === movieId );
         var showtime = movie.showtimes.find( showtime => showtime.id === showtimeId );
 
-        var inCart = self.vue.pollShowtimes.find( showtime => showtime.id === showtimeId );
+        var showtimeInCart = self.vue.pollShowtimes.find( showtime => showtime.id === showtimeId );
+        var movieInCart = self.vue.pollMovies.find( movie => movie.id === movieId );
 
-        if (!(inCart)) {
-            self.vue.pollShowtimes.push(showtime);    
+
+        if (!(showtimeInCart)) {        
+            self.vue.pollShowtimes.push(showtime);
+            
+            // if movie is not in cart, push the movie to pollMovies []
+            if (!(movieInCart)) {
+                self.vue.pollMovies.push(movie);
+            }
         } else {
-            var shoppingCartIndex = self.vue.pollShowtimes.indexOf(showtime);
-            self.vue.pollShowtimes.splice(shoppingCartIndex, 1); // delete image from cart
-        }        
+            var showtimeCartIndex = self.vue.pollShowtimes.indexOf(showtime);
+            self.vue.pollShowtimes.splice(showtimeCartIndex, 1);
+            
+            // if movie is in cart and none of the pollShowtimes [] has the movie then remove it
+            var movieInShowtimes = self.vue.pollShowtimes.find( showtime => showtime.movie_id === movieId );
+            var movieCartIndex = self.vue.pollShowtimes.indexOf(showtime);
+            if (movieInCart && !(movieInShowtimes)) {
+                self.vue.pollMovies.splice(movieCartIndex, 1);          
+            }
+        }
     };
 
 
@@ -145,7 +159,7 @@ var app = function() {
 
     // the actual call to the showtimes api
     self.getShowtimesFromApi = function (movieId, location, callback) {
-        console.log("in get showtimes");
+        console.log("in getShowtimesFromApi()");
         $.getJSON(get_showtimes_url,
             {
                 movie_id: movieId,

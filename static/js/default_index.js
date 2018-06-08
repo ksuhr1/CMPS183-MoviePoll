@@ -33,8 +33,8 @@ var app = function() {
         self.vue.getmovielocationurl = "https://www.google.com/maps/embed/v1/place?key=AIzaSyAJ1ZvhsklFbRlgcdg31NPxgvUysfXqxas&q="+movie_lat+","+movie_long;
     };
 
-
-    // ######################### Get polls
+    // ##############################################################
+    // Get polls
     function get_polls_url(start_idx, end_idx) {
         var pp = {
             start_idx: start_idx,
@@ -61,7 +61,9 @@ var app = function() {
     };
 
 
-    // ######################### Add polls
+
+    // ##############################################################
+    // Add poll
     self.add_poll_button = function () {
         // The button to add a track has been pressed.
         if(self.vue.logged_in)
@@ -83,7 +85,9 @@ var app = function() {
     };
 
 
-    // ######################### Edit polls
+
+    // ##############################################################
+    // Edit poll
     self.edit_poll_submit = function (poll_id) {
         poll = self.vue.polls.find(poll => poll.id === poll_id);
         poll.content = self.vue.edit_content;
@@ -110,7 +114,10 @@ var app = function() {
         self.vue.edit_id = 0;
     };
 
-    // ######################### Delete polls
+
+
+    // ##############################################################
+    // Delete poll
     self.delete_poll = function(poll_id) {
         $.post(del_poll_url,
     
@@ -123,7 +130,13 @@ var app = function() {
             }
         )
     };
-    // ######################### Toggle PUblic
+
+
+
+
+    // ##############################################################
+    // Toggle poll
+
     self.toggle_public = function(poll_id) {
         $.post(toggle_public_url,
             {
@@ -136,7 +149,10 @@ var app = function() {
         )
     };
 
-    // Complete as needed.
+
+
+
+
     self.vue = new Vue({
         el: "#vue-div",
         delimiters: ['${', '}'],
@@ -159,8 +175,10 @@ var app = function() {
             edit_content: null,
             edit_id: 0,
 
+
             uberURL: null,
             getmovielocationurl: null
+
         },
         methods: {
             get_more: self.get_more,
@@ -174,14 +192,15 @@ var app = function() {
             getUberURL: self.getUberURL,
             getmovielocation: self.getmovielocation,
 
+
         }
-
-
     });
 
     self.get_polls();
+
     self.getUberURL();
     self.getmovielocation(33.719944,-117.809505);
+
     $("#vue-div").show();
     return self;
 };

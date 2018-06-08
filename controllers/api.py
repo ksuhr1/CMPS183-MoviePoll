@@ -3,7 +3,9 @@
 # returns the name (first and last) of the user as a string
 
 import gluon.contrib.simplejson
+
 import json
+import requests
 
 def get_name(email):
     u = db(db.auth_user.email == email).select().first()
@@ -168,3 +170,112 @@ def get_poll():
     else:
         t = None
     return response.json(dict(poll=t))
+
+
+def search_movies():
+    try:
+        response_from_api = requests.get(
+            url="https://api.internationalshowtimes.com/v4/movies/",
+            params={
+                "countries": "US",
+                "limit": 20,
+                "search_query": request.vars.form_title,
+                "search_field": "title",
+            },
+            headers={
+                "X-API-Key": "Y8YxMBHwe7EPYnIVnKgPYlznt4Yiap6u",
+            },
+        )
+        # print('Response HTTP Status Code: {status_code}'.format(
+        #     status_code=response.status_code))
+        # print('Response HTTP Response Body: {content}'.format(
+        #     content=response.content))
+        response_content = response_from_api.content
+    except requests.exceptions.RequestException:
+        print('HTTP Request failed')
+
+    return response.json(dict(
+        response_content=response_content,
+    ))
+
+def get_showtimes():
+    print("in api get_showtimes")
+    try:
+        response_from_api = requests.get(
+            url="https://api.internationalshowtimes.com/v4/showtimes/",
+            params={
+                "limit": 20,
+                "movie_id": request.vars.movie_id,
+                "location": request.vars.location,
+                "distance": 30,
+            },
+            headers={
+                "X-API-Key": "Y8YxMBHwe7EPYnIVnKgPYlznt4Yiap6u",
+            },
+        )
+
+        # print('Response HTTP Status Code: {status_code}'.format(
+        #     status_code=response.status_code))
+        # print('Response HTTP Response Body: {content}'.format(
+        #     content=response.content))
+        response_showtimes = response_from_api.content
+    except requests.exceptions.RequestException:
+        print('HTTP Request failed')
+
+    return response.json(dict(
+        response_showtimes=response_showtimes,
+    ))
+
+
+
+def get_cities():
+    try:
+        response_from_api = requests.get(
+            url="https://api.internationalshowtimes.com/v4/cities/",
+            params={
+                "query": request.vars.form_city,
+
+            },
+            headers={
+                "X-API-Key": "Y8YxMBHwe7EPYnIVnKgPYlznt4Yiap6u",
+            },
+        )
+        # print('Response HTTP Status Code: {status_code}'.format(
+        #     status_code=response.status_code))
+        # print('Response HTTP Response Body: {content}'.format(
+        #     content=response.content))
+        response_city = response_from_api.content
+    except requests.exceptions.RequestException:
+        print('HTTP Request failed')
+
+    return response.json(dict(
+        response_city=response_city,
+    ))
+
+
+def get_cinemas():
+    try:
+        response_from_api = requests.get(
+            url="https://api.internationalshowtimes.com/v4/cinemas/",
+            params={
+                "location": request.vars.location,
+                "limit": 10,
+            },
+            headers={
+                "X-API-Key": "Y8YxMBHwe7EPYnIVnKgPYlznt4Yiap6u",
+            },
+        )
+        # print('Response HTTP Status Code: {status_code}'.format(
+        #     status_code=response.status_code))
+        # print('Response HTTP Response Body: {content}'.format(
+        #     content=response.content))
+        response_cinemas = response_from_api.content
+    except requests.exceptions.RequestException:
+        print('HTTP Request failed')
+
+    return response.json(dict(
+        response_cinemas=response_cinemas,
+    ))
+
+
+

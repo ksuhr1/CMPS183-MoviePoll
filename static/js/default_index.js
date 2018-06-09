@@ -98,7 +98,7 @@ var app = function() {
             },
             function (data) {
                 $.web2py.enableElement($("#edit_poll_submit"));
-                self.vue.editing = !self.vue.editing;
+                self.vue.editing = !self.vue.editing; 
             });
     };
 

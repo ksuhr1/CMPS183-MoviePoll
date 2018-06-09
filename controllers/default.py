@@ -15,6 +15,25 @@ def index():
     """
     return dict()
 
+def vote():
+
+    if request.args(0) is None:
+
+        redirect(URL('default', 'index'))
+
+    else:
+
+        q = (db.poll.id == request.args(0))
+        poll = db(q).select().first()
+
+        if poll is None:
+            session.flash = T("Poll not found")
+            redirect(URL('default', 'index'))
+
+
+    return dict(poll = poll)
+
+
 def results():
     if request.args(0) is None:
         # We send you back to the general index.

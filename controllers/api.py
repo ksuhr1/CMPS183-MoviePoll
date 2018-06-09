@@ -59,6 +59,26 @@ def get_polls():
     ))
 
 
+def get_poll():
+    q = (db.poll.id == request.vars.poll_id)
+    poll = db(q).select().first()
+
+    name = get_name(poll.user_email)
+
+    t = dict(
+        id=poll.id,
+        user_email=poll.user_email,
+        content=poll.poll_content,
+        created_on=poll.created_on,
+        updated_on=poll.updated_on,
+        is_public=poll.is_public,
+        name=name,
+        movies=(db(db.movie.poll_id == poll.id).select(db.movie.ALL))
+    )
+    
+    return response.json(dict(poll=t))
+
+
 # Note that we need the URL to be signed, as this changes the db.
 @auth.requires_signature()
 def add_poll():
@@ -102,6 +122,32 @@ def add_movie():
 
 
     return response.json(dict(movie=movie))
+
+
+@auth.requires_signature()
+def vote_movie():
+
+     if auth.user == None:
+         return "Not Authorized"
+    
+
+     q = (db.movie.id == request.vars.movie_id) 
+     movie = db(q).select().first()
+     print("API MOVIE", movie.vote)
+
+     if movie is None:
+        return "Not Authorized"
+     else:
+        vote = movie.vote
+        vote = vote+1
+        print(vote)
+        movie.update_record(vote=vote)
+        #vote = vote+1
+        # print(vote)
+          #movie.update_record(vote=vote)
+
+     return response.json(dict(movie=movie))
+
 
 
 @auth.requires_signature()

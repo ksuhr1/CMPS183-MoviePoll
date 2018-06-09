@@ -12,6 +12,7 @@ var app = function() {
         }
     };
     
+
     //Vote polls
     self.vote_poll = function(movieId) {
         console.log("Movie Id", movieId)
@@ -27,7 +28,6 @@ var app = function() {
                 self.vue.vote = data.vote;
                // print(data)
 
-                
                 
             }
         )
@@ -76,12 +76,21 @@ var app = function() {
         delimiters: ['${', '}'],
         unsafeDelimiters: ['!{', '}'],
         data: {
+            movies: [],
+            showtimes:[],
+            cinemas:[],
+
             poll: {},
-            polls: [],
-            vote: 0,
+            poll_movies: [],
+
+            logged_in: false,
 
 
-            uberURL: null,
+            form_title: null,
+            form_city:null,
+            form_content: null,
+
+            searching: false,
         },
         methods: {
             get_polls: self.get_polls,

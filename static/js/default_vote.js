@@ -12,6 +12,7 @@ var app = function() {
         }
     };
     
+
     //Vote polls
     self.vote_poll = function(movieId) {
         console.log("Movie Id", movieId);
@@ -91,12 +92,14 @@ var app = function() {
         delimiters: ['${', '}'],
         unsafeDelimiters: ['!{', '}'],
         data: {
+            movies: [],
+            showtimes:[],
+            cinemas:[],
+
             poll: {},
             polls: [],
             cart: [],
             vote: 0,
-            count: 0,
-            uberURL: null,
         },
         methods: {
             get_polls: self.get_polls,

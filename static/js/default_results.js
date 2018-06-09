@@ -48,10 +48,17 @@ var app = function() {
                 self.vue.poll = data.poll;
                 self.vue.logged_in = data.logged_in;
 
-                // dummy votes data for testing 
-                self.vue.poll.movies.forEach(function (movie) {
-                    movie['votes'] = Math.floor(Math.random()*10);
+                // // dummy votes data for testing 
+                // self.vue.poll.movies.forEach(function (movie) {
+                //     movie['votes'] = Math.floor(Math.random()*10);
+                //     console.log(movie);
+                // })
+
+
+                self.vue.poll.movies.forEach(function (movie){
+                    // movie['vote'] = movied;
                     console.log(movie);
+
                 })
 
                 if (!self.vue.pollActive) {

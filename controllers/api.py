@@ -144,12 +144,9 @@ def vote_movie():
         vote = vote+1
         print(vote)
         movie.update_record(vote=vote)
-        #vote = vote+1
-        # print(vote)
-          #movie.update_record(vote=vote)
+        
 
      return response.json(dict(movie=movie))
-
 
 
 @auth.requires_signature()

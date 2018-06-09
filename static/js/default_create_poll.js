@@ -35,7 +35,7 @@ var app = function() {
                 console.log('Poll sent to server');
                 var pollId = data.poll.id;
                 // redirect to the voting page
-                window.location = results_url + '/' + pollId;
+                window.location = vote_url + '/' + pollId;
             }
         });
     };
@@ -52,7 +52,7 @@ var app = function() {
         var movieInCart = self.vue.pollMovies.find( movie => movie.id === movieId );
 
 
-        if (!(showtimeInCart)) {        
+        if (!(showtimeInCart)) {
             self.vue.pollShowtimes.push(showtime);
             
             // if movie is not in cart, push the movie to pollMovies []
@@ -199,11 +199,11 @@ var app = function() {
     }
 
     self.convertTime = function (isoDate) {
-        var formattedDate;
+        var formattedTime;
         var event = new Date(isoDate);
         var options = { hour: 'numeric', minute: 'numeric' };
-        formattedDate = event.toLocaleTimeString('en-US', options);
-        return formattedDate;
+        formattedTime = event.toLocaleTimeString('en-US', options);
+        return formattedTime;
     }
 
 

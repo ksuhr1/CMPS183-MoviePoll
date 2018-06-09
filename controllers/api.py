@@ -88,17 +88,14 @@ def add_poll():
     p = db.poll(p_id)
 
     data = gluon.contrib.simplejson.loads(request.body.read())
+    
     print "####################################"
-    for r in data['movies']:
-        print "movie: "
-        movie_title = r['title']
-        print movie_title
-        # db.movie.insert(poll_id=p_id, title=movie_title)
-
-    for r in data['showtimes']:
-        print "showtime: "
-        print r['start_at']
-        # db.movie.insert(poll_id=p_id, title=movie_title)
+    for r1 in data['movies']:
+        movie_title = r1['title']
+        m_id = db.movie.insert(poll_id=p_id, title=movie_title)
+        for r2 in data['showtimes']:
+            if r2['movie_id'] == r1['id']:
+                db.showtime.insert(movie_id=m_id)
 
 
     name = get_name(p.user_email)
@@ -113,8 +110,9 @@ def add_poll():
         movies=(db(db.movie.poll_id == p_id).select(db.movie.ALL)),
     )
 
-
-    return response.json(dict(poll=poll))
+    print current.request.client
+    redirect(URL('default', 'vote', args=[p_id]))
+    # return response.json(dict(poll=poll))
 
 
 @auth.requires_signature()

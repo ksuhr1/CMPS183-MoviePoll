@@ -20,7 +20,7 @@ db.define_table('poll',
 db.define_table('movie',
                 Field('poll_id', 'reference poll'),	
                 Field('title', 'text'),
-                Field('vote', 'integer'),
+                Field('vote', 'integer', default=0),
                 )
 
 db.movie.poll_id.requires = IS_IN_DB(db, db.poll.id)

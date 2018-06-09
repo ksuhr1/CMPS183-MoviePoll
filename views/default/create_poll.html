@@ -106,7 +106,6 @@
                       <div v-for="cinema in cinemas" class="card">
                             <div class="card-header">Cinema: ${cinema.name}
                                 <div class="card-body">
-
                                     <div class="row">
                                         <div v-for="showtime in movie.showtimes" v-if="showtime.cinema_id == cinema.id">
                                             <div class="col-xs-3 w-100">

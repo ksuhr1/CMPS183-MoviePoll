@@ -12,6 +12,10 @@ var app = function() {
         }
     };
 
+    self.getMovieLocation = function(movie_lat, movie_long) {
+        self.vue.getMovieLocationUrl = "https://www.google.com/maps/embed/v1/place?key=AIzaSyAJ1ZvhsklFbRlgcdg31NPxgvUysfXqxas&q="+movie_lat+","+movie_long;
+        console.log("In getMovieLocation")};
+
     self.getUberURL = function () {
         var pp = {
             client_id: "<CLIENT_ID>",
@@ -29,8 +33,8 @@ var app = function() {
         }
         self.vue.uberURL = "https://m.uber.com/ul/" + "?" + $.param(pp);
     }
-    self.getmovielocation = function(movie_lat, movie_long) {
-        self.vue.getmovielocationurl = "https://www.google.com/maps/embed/v1/place?key=AIzaSyAJ1ZvhsklFbRlgcdg31NPxgvUysfXqxas&q="+movie_lat+","+movie_long;
+    self.getMovieLocation = function(movie_lat, movie_long) {
+        self.vue.getMovieLocationUrl = "https://www.google.com/maps/embed/v1/place?key=AIzaSyAJ1ZvhsklFbRlgcdg31NPxgvUysfXqxas&q="+movie_lat+","+movie_long;
     };
 
     // ##############################################################
@@ -177,7 +181,7 @@ var app = function() {
 
 
             uberURL: null,
-            getmovielocationurl: null
+            getMovieLocationUrl: null
 
         },
         methods: {
@@ -190,16 +194,15 @@ var app = function() {
             cancel_edit: self.cancel_edit,
             toggle_public: self.toggle_public,
             getUberURL: self.getUberURL,
-            getmovielocation: self.getmovielocation,
+            getMovieLocation: self.getMovieLocation,
 
 
         }
     });
 
     self.get_polls();
-
     self.getUberURL();
-    self.getmovielocation(33.719944,-117.809505);
+    self.getMovieLocation(33.719944,-117.809505);
 
     $("#vue-div").show();
     return self;

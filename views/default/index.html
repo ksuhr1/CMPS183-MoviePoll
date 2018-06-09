@@ -9,6 +9,7 @@
     var edit_poll_url = "{{=URL('api', 'edit_poll', user_signature=True)}}";
     var del_poll_url = "{{=URL('api', 'del_poll', user_signature=True)}}";
     var toggle_public_url = "{{=URL('api', 'toggle_public', user_signature=True)}}";
+    var getMovieLocationUrl = "{{=URL('api', 'getMovieLocation')}}";
 </script>
 {{end}}
 
@@ -28,7 +29,12 @@
             v-bind:class="{'disabled': !logged_in}">
             Add new poll
         </a>
-
+        <iframe
+            width="600"
+            height="450"
+            frameborder="0" style="border:0"
+            v-bind:src="getMovieLocationUrl" allowfullscreen>
+        </iframe>
         <!-- polls -->
         <!-- create the div for each poll -->
         <div v-for="poll in polls" class="poll text-left">

@@ -20,11 +20,11 @@ var app = function() {
     
             {
                 movie_id: movieId,
-                vote: self.vue.vote,
+                votes: self.vue.votes,
             },
             function (data) {
                 console.log("DATA",data)
-                self.vue.vote = data.vote;
+                self.vue.votes = data.votes;
                // print(data)
 
                 
@@ -78,7 +78,7 @@ var app = function() {
         data: {
             poll: {},
             polls: [],
-            vote: 0,
+            votes: 0,
 
 
             uberURL: null,

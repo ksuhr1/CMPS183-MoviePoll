@@ -27,8 +27,7 @@ def vote():
         poll = db(q).select().first()
 
         if poll is None:
-            session.flash = T("Poll not found")
-            redirect(URL('default', 'index'))
+            raise HTTP(404)
 
 
     return dict(poll = poll)

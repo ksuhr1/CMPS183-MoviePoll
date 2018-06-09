@@ -1,0 +1,66 @@
+{{extend 'layout.html'}}
+
+{{block head}}
+<script src="{{=URL('static', 'js/vue.js')}}"></script>
+
+<script>
+    var poll_id = "{{=poll.id}}";
+    var poll_url = "{{=URL('api', 'get_poll')}}";
+    var polls_url = "{{=URL('api', 'get_polls')}}";
+    var add_poll_url = "{{=URL('api', 'add_poll', user_signature=True)}}";
+    var edit_poll_url = "{{=URL('api', 'edit_poll', user_signature=True)}}";
+    var del_poll_url = "{{=URL('api', 'del_poll', user_signature=True)}}";
+    var toggle_public_url = "{{=URL('api', 'toggle_public', user_signature=True)}}";
+    var vote_poll_url = "{{=URL('api', 'vote_movie', user_signature=True)}}";
+</script>
+{{end}}
+
+
+<div class="main-content">
+
+
+    <div id="vue-div" class="display:none">
+        <!-- poll content  -->
+            <p>${poll.content}</p>
+            
+
+            <div class="card-columns"> 
+            <div v-for="movie in poll.movies" class="card">
+            
+            <div class="card-header">
+                 ${movie.title}
+            </div>
+
+            <!-- <div class="card-deck"> -->
+           <div class="card-body">
+                    <h5 class="card-title">Movies: ${movie.title}</h5>
+                    <p class="card-text">
+                        <small>
+                            Submitted at: ${poll.created_on} by ${poll.name}
+                            <br>
+                            Last updated: ${poll.updated_on} by ${poll.name}
+                        </small>
+                    </p>
+                    <button class="btn btn-default vote" 
+                    v-on:click="vote_poll(movie.id)">
+                    <img class="votebutton" src="{{=URL('static', 'images/check.png')}}">
+                    Click to Vote
+                </button>    
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+
+</div>
+
+
+
+
+
+<script src="{{=URL('static', 'js/default_vote.js')}}"></script>
+

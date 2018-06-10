@@ -33,6 +33,13 @@ var app = function() {
         }
         self.vue.uberURL = "https://m.uber.com/ul/" + "?" + $.param(pp);
     }
+
+
+    self.shareFacebookUrl = function(){
+            self.vue.shareFacebookUrl = "https://www.facebook.com/sharer/sharer.php?u=http%3A//127.0.0.1%3A8000/cs183moviepoll/default/index"
+    }
+
+
     self.getMovieLocation = function(movie_lat, movie_long) {
         self.vue.getMovieLocationUrl = "https://www.google.com/maps/embed/v1/place?key=AIzaSyAJ1ZvhsklFbRlgcdg31NPxgvUysfXqxas&q="+movie_lat+","+movie_long;
     };
@@ -195,6 +202,7 @@ var app = function() {
             toggle_public: self.toggle_public,
             getUberURL: self.getUberURL,
             getMovieLocation: self.getMovieLocation,
+            shareFacebookUrl: self.shareFacebookUrl,
 
 
         }
@@ -203,6 +211,7 @@ var app = function() {
     self.get_polls();
     self.getUberURL();
     self.getMovieLocation(33.719944,-117.809505);
+    self.shareFacebookUrl();
 
     $("#vue-div").show();
     return self;

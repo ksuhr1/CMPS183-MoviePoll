@@ -173,23 +173,23 @@
 
                                 <div v-for="cinema in cinemas" class="card">
                                     <div class="card-header">Cinema: ${cinema.name}
-                                        <div class="card-body">
+                                        <div class="container card-body">
+
                                             <div class="row">
-                                                <div v-for="showtime in movie.showtimes"
-                                                     v-show="(showtime.cinema_id === cinema.id) && 
-                                                             (selectedDate === convertDate(showtime.start_at))">
-                                                    <div class="col-xs-3 w-100">
-                                                        <div class="card-text" 
-                                                            v-bind:title="showtime.start_at"
-                                                            v-on:click="addMovie(movie.id, showtime.id)">
-                                                            <button href="#" class="btn btn-primary m-1">
-                                                                ${convertTime(showtime.start_at)}
-                                                            </button>
-                                                            <p>${showtime.booking_link}</p>
-                                                        </div>
-                                                    </div>
+                                                <div class="col-sm-3"
+                                                    v-for="showtime in movie.showtimes"
+                                                    v-show="(showtime.cinema_id === cinema.id) && 
+                                                        (selectedDate === dateErrorHandle(showtime.start_at))"
+                                                    v-bind:title="showtime.start_at">
+                                                    <button class="btn btn-outline-primary btn-block"
+                                                        v-bind:class="{ active: pollShowtimes.includes(showtime) }"
+                                                        v-on:click="addMovie(movie.id, showtime.id)">
+                                                        ${convertTime(showtime.start_at)}
+                                                    </button>
+                                                    <a v-bind:href="showtime.booking_link">Booking Link</a>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>

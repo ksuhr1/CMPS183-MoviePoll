@@ -193,7 +193,6 @@ var app = function () {
     self.convertDate = function (isoDate) {
         var formattedDate;
         var event = new Date(isoDate);
-        var options = { hour: 'numeric', minute: 'numeric' };
         formattedDate = event.toDateString();
         return formattedDate;
     };
@@ -206,8 +205,16 @@ var app = function () {
         return formattedTime;
     };
 
-    
-    
+    // decrease the date by 1 for regal movies
+    // because the api provides the incorrect links
+    self.dateErrorHandle = function (isoDate) {
+        var formattedDate;
+        var event = new Date(isoDate);
+        event.setDate(event.getDate()-1);
+        formattedDate = event.toDateString();
+        return formattedDate;
+    };
+        
     self.extractShowtimeDates = function (showtimes) {
         // extract the date from the showtime
         showtimes.forEach(function (showtime) {
@@ -249,7 +256,7 @@ var app = function () {
             form_content: null,
 
             searching: false,
-            selectedDate: "",
+            selectedDate: new Date ().toDateString(),
         },
         methods: {
             createPoll: self.createPoll,
@@ -262,6 +269,7 @@ var app = function () {
             convertDate: self.convertDate,
             convertTime: self.convertTime,
             extractShowtimeDates: self.extractShowtimeDates,
+            dateErrorHandle: self.dateErrorHandle,
         }
 
 

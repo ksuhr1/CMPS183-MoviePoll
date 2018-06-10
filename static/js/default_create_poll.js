@@ -1,12 +1,12 @@
 // This is the js for the default/index.html view.
 
-var app = function() {
+var app = function () {
 
     var self = {};
     Vue.config.silent = false; // show all warnings
 
     // Extends an array
-    self.extend = function(a, b) {
+    self.extend = function (a, b) {
         for (var i = 0; i < b.length; i++) {
             a.push(b[i]);
         }
@@ -101,10 +101,11 @@ var app = function() {
                     self.getCinemas(cinemaLocation);
 
                     // for each movie, get the showtimes
-                    self.vue.movies.forEach(function (data) {
-                        var movie = data;
-                        self.getShowtimes(movie.id, cinemaLocation);
+                    self.vue.movies.forEach(function (movie) {
+                        var movie = movie;
+                        self.getShowtimes(movie.id, cinemaLocation);                                             
                     })
+                    
                     self.vue.searching = false;
                 });
             }
@@ -120,17 +121,30 @@ var app = function() {
         var movie = self.vue.movies.find(movie => movie.id === movieId);
         
         self.getShowtimesFromApi(movieId, cinemaLocation, function (data) {
-
-            // movie.showtimes.forEach(function (showtime) {
-            //     showtime.cinema = {};
-            // })
             movie.showtimes = data;
-            // self.getCinemas(cinemaLocation);
+            self.extractShowtimeDates(movie.showtimes);
         });
-
-
     };
 
+    // the actual call to the showtimes api
+    self.getShowtimesFromApi = function (movieId, location, callback) {
+        console.log("in getShowtimesFromApi()");
+        var currentTime = new Date().toDateString();
+        $.getJSON(get_showtimes_url,
+            {
+                movie_id: movieId,
+                location: location,
+                timeFrom: currentTime,
+            },
+            function (data) {
+                var jsonData = JSON.parse(data.response_showtimes);
+                var showtimes = jsonData.showtimes;
+                callback(showtimes);
+            }
+        )
+    };    
+    
+    
     // Work in progress
     // instead of getting geo coord lat/long from the showtimes api
     // we can use google maps to get the lat/long from a given input of
@@ -157,24 +171,8 @@ var app = function() {
     };
 
 
-    // the actual call to the showtimes api
-    self.getShowtimesFromApi = function (movieId, location, callback) {
-        console.log("in getShowtimesFromApi()");
-        $.getJSON(get_showtimes_url,
-            {
-                movie_id: movieId,
-                location: location,
-            },
-            function (data) {
-                var jsonData = JSON.parse(data.response_showtimes);
-                var showtimes = jsonData.showtimes;
-                callback(showtimes);
-            }
-        )
-    };
-
-
     // might rewrite to cleanup
+    // not needed if we get cinemas in the getShowtimes function
     self.getCinemas = function (location) {
         console.log("in getCinemas()");
         $.getJSON(get_cinemas_url,
@@ -189,14 +187,16 @@ var app = function() {
     };
 
 
+
+    // ##############################################################
+    // Date handling
     self.convertDate = function (isoDate) {
         var formattedDate;
-        var event = new Date(isoDate);        
+        var event = new Date(isoDate);
         var options = { hour: 'numeric', minute: 'numeric' };
-        formattedDate = event.toDateString() + " at " 
-            + event.toLocaleTimeString('en-US', options);
+        formattedDate = event.toDateString();
         return formattedDate;
-    }
+    };
 
     self.convertTime = function (isoDate) {
         var formattedTime;
@@ -204,9 +204,27 @@ var app = function() {
         var options = { hour: 'numeric', minute: 'numeric' };
         formattedTime = event.toLocaleTimeString('en-US', options);
         return formattedTime;
-    }
+    };
 
+    
+    
+    self.extractShowtimeDates = function (showtimes) {
+        // extract the date from the showtime
+        showtimes.forEach(function (showtime) {
+            var event = new Date(showtime.start_at);
+            event = event.toDateString();
+            
+            // check if date is already in the showtimesDates array []
+            var inShowtimeDates = self.vue.showtimeDates.indexOf(event);
+            if (inShowtimeDates === -1) {
+                // if array doesn't already have showtime
+                self.vue.showtimeDates.push(event);
+            }
+        });
+    };
 
+    
+    
     // Complete as needed.
     self.vue = new Vue({
         el: "#vue-div",
@@ -214,10 +232,10 @@ var app = function() {
         unsafeDelimiters: ['!{', '}'],
         data: {
             movies: [],
-            cities:[],
-            showtimes:[],
-            location:[],
-            cinemas:[],
+            cities: [],
+            location: [],
+            cinemas: [],
+            showtimeDates: [],
 
             poll: {},
             pollShowtimes: [],
@@ -227,10 +245,11 @@ var app = function() {
 
 
             form_title: null,
-            form_city:null,
+            form_city: null,
             form_content: null,
 
             searching: false,
+            selectedDate: "",
         },
         methods: {
             createPoll: self.createPoll,
@@ -242,6 +261,7 @@ var app = function() {
             getShowtimes: self.getShowtimes,
             convertDate: self.convertDate,
             convertTime: self.convertTime,
+            extractShowtimeDates: self.extractShowtimeDates,
         }
 
 

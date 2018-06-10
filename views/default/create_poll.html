@@ -24,7 +24,7 @@
     <div id="vue-div" class="display:none">
         
 
-
+        <!-- Cart -->
         <button class="btn btn-default" 
             type="button" 
             data-toggle="collapse"
@@ -110,14 +110,40 @@
 
         <!-- Movie display scaffold -->
         <div v-if="!searching" >
-            <div class="row">
-               
-              <div class="col">col</div>
-              <div class="col">col</div>
-              <div class="col">col</div>
-              <div class="col">col</div>
-            </div>
 
+            
+            
+            
+<!--            bunch of testing for date select -->
+<!--
+            <div class="row">            
+                <div v-for="date in showtimeDates" class="col btn btn-outline-primary">${date}</div>
+            </div>
+-->
+            
+<!--
+            <nav class="nav nav-pills nav-justified">
+                <a v-for="date in showtimeDates" class="nav-item nav-link btn btn-outline-primary" href="#">${date}</a>
+            </nav>
+-->
+
+<!--
+            <div v-if="cinemas.length != 0" class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ${selectedDate}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a v-for="date in showtimeDates" class="dropdown-item">${date}</a>
+                </div>
+            </div>
+-->
+            
+            <select v-if="cinemas.length != 0" class="custom-select" v-model="selectedDate">
+                <option disabled value="">Pick a date</option>
+                <option v-for="date in showtimeDates">${date}</option>
+            </select>
+            
+            
             <div v-for="movie in movies" class="card">
 
                 <div class="row">
@@ -149,13 +175,17 @@
                                     <div class="card-header">Cinema: ${cinema.name}
                                         <div class="card-body">
                                             <div class="row">
-                                                <div v-for="showtime in movie.showtimes" v-if="showtime.cinema_id == cinema.id">
+                                                <div v-for="showtime in movie.showtimes"
+                                                     v-show="(showtime.cinema_id === cinema.id) && 
+                                                             (selectedDate === convertDate(showtime.start_at))">
                                                     <div class="col-xs-3 w-100">
-                                                        <div class="card-text" v-bind:title="showtime.start_at" 
+                                                        <div class="card-text" 
+                                                            v-bind:title="showtime.start_at"
                                                             v-on:click="addMovie(movie.id, showtime.id)">
                                                             <button href="#" class="btn btn-primary m-1">
                                                                 ${convertTime(showtime.start_at)}
                                                             </button>
+                                                            <p>${showtime.booking_link}</p>
                                                         </div>
                                                     </div>
                                                 </div>

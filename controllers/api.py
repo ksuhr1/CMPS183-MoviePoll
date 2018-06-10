@@ -110,9 +110,9 @@ def add_poll():
         movies=(db(db.movie.poll_id == p_id).select(db.movie.ALL)),
     )
 
-    print current.request.client
-    redirect(URL('default', 'vote', args=[p_id]))
-    # return response.json(dict(poll=poll))
+    # supposed to print IP of the requester but not working
+    # print current.request.client
+    return response.json(dict(poll=poll))
 
 
 @auth.requires_signature()
@@ -263,6 +263,7 @@ def get_showtimes():
                 "movie_id": request.vars.movie_id,
                 "location": request.vars.location,
                 "distance": 30,
+                "time_from": request.vars.timeFrom,
             },
             headers={
                 "X-API-Key": "Y8YxMBHwe7EPYnIVnKgPYlznt4Yiap6u",

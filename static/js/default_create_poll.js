@@ -1,12 +1,12 @@
 // This is the js for the default/index.html view.
 
-var app = function() {
+var app = function () {
 
     var self = {};
     Vue.config.silent = false; // show all warnings
 
     // Extends an array
-    self.extend = function(a, b) {
+    self.extend = function (a, b) {
         for (var i = 0; i < b.length; i++) {
             a.push(b[i]);
         }
@@ -18,34 +18,66 @@ var app = function() {
 
 
     // ##############################################################
-    // Add poll
-    self.add_poll = function () {
-        $.ajax({
-            type: 'POST',
-            url: add_poll_url,
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(
-                {
-                    content: self.vue.form_content, 
-                    movies: self.vue.movies,
-                }),
-            dataType: 'json',
-            success: function (data) {
-                console.log('Poll sent to server');
-            }
-        });
+    // Create the poll
+    self.createPoll = function () {
+        if (self.vue.pollMovies.length > 0) {
+            $.ajax({
+                type: 'POST',
+                url: add_poll_url,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(
+                    {
+                        content: self.vue.form_content, 
+                        movies: self.vue.pollMovies,
+                        showtimes: self.vue.pollShowtimes,
+                    }),
+                dataType: 'json',
+                success: function (data) {
+                    console.log('Poll sent to server');
+                    var pollId = data.poll.id;
+                    // redirect to the voting page
+                    window.location = vote_url + '/' + pollId;
+                },
+                error: function (data) {
+                    console.log(data);
+                    alert("Something went wrong");
+                }
+            });
+        } else {
+            alert("Poll cannot be empty!");
+        }
     };
 
 
 
     // ##############################################################
-    // WIP
-    // Add movies to the a "cart" that will be sent to the server when
-    // the user clicks 'create poll'
-    self.addMovie = function (movieId) {
-        // should we add movies? or show times?
-        alert("Added to poll:" + movieId);
+    // add poll option to the poll
+    self.addMovie = function (movieId, showtimeId) {
+        var movie = self.vue.movies.find( movie => movie.id === movieId );
+        var showtime = movie.showtimes.find( showtime => showtime.id === showtimeId );
 
+        var showtimeInCart = self.vue.pollShowtimes.find( showtime => showtime.id === showtimeId );
+        var movieInCart = self.vue.pollMovies.find( movie => movie.id === movieId );
+
+
+        if (!(showtimeInCart)) {
+            self.vue.pollShowtimes.push(showtime);
+            
+            // if movie is not in cart, push the movie to pollMovies []
+            if (!(movieInCart)) {
+                self.vue.pollMovies.push(movie);
+            }
+        } else {
+            var showtimeCartIndex = self.vue.pollShowtimes.indexOf(showtime);
+            self.vue.pollShowtimes.splice(showtimeCartIndex, 1);
+            
+            // if movie is in cart and none of the pollShowtimes [] has the movie then remove it
+            var movieInShowtimes = self.vue.pollShowtimes.find( showtime => showtime.movie_id === movieId );
+            var movieCartIndex = self.vue.pollShowtimes.indexOf(showtime);
+            if (movieInCart && !(movieInShowtimes)) {
+                self.vue.pollMovies.splice(movieCartIndex, 1);          
+            }
+        }
     };
 
 
@@ -77,10 +109,11 @@ var app = function() {
                     self.getCinemas(cinemaLocation);
 
                     // for each movie, get the showtimes
-                    self.vue.movies.forEach(function (data) {
-                        var movie = data;
-                        self.getShowtimes(movie.id, cinemaLocation);
+                    self.vue.movies.forEach(function (movie) {
+                        var movie = movie;
+                        self.getShowtimes(movie.id, cinemaLocation);                                             
                     })
+                    
                     self.vue.searching = false;
                 });
             }
@@ -96,16 +129,30 @@ var app = function() {
         var movie = self.vue.movies.find(movie => movie.id === movieId);
         
         self.getShowtimesFromApi(movieId, cinemaLocation, function (data) {
-            movie.showtimes.forEach(function (showtime) {
-                showtime.cinema = {};
-            })
             movie.showtimes = data;
-            // self.getCinemas(cinemaLocation);
+            self.extractShowtimeDates(movie.showtimes);
         });
-
-
     };
 
+    // the actual call to the showtimes api
+    self.getShowtimesFromApi = function (movieId, location, callback) {
+        console.log("in getShowtimesFromApi()");
+        var currentTime = new Date().toDateString();
+        $.getJSON(get_showtimes_url,
+            {
+                movie_id: movieId,
+                location: location,
+                timeFrom: currentTime,
+            },
+            function (data) {
+                var jsonData = JSON.parse(data.response_showtimes);
+                var showtimes = jsonData.showtimes;
+                callback(showtimes);
+            }
+        )
+    };    
+    
+    
     // Work in progress
     // instead of getting geo coord lat/long from the showtimes api
     // we can use google maps to get the lat/long from a given input of
@@ -132,24 +179,8 @@ var app = function() {
     };
 
 
-    // the actual call to the showtimes api
-    self.getShowtimesFromApi = function (movieId, location, callback) {
-        console.log("in get showtimes");
-        $.getJSON(get_showtimes_url,
-            {
-                movie_id: movieId,
-                location: location,
-            },
-            function (data) {
-                var jsonData = JSON.parse(data.response_showtimes);
-                var showtimes = jsonData.showtimes;
-                callback(showtimes);
-            }
-        )
-    };
-
-
     // might rewrite to cleanup
+    // not needed if we get cinemas in the getShowtimes function
     self.getCinemas = function (location) {
         console.log("in getCinemas()");
         $.getJSON(get_cinemas_url,
@@ -159,37 +190,56 @@ var app = function() {
             function (data) {
                 jsonData = JSON.parse(data.response_cinemas);
                 self.vue.cinemas = jsonData.cinemas;
-
-                // // Work in progress
-                // // match the showtime.cinema_id with the actual name
-                // self.vue.showtimes.forEach(function (showtime) {
-                //     var cinema = self.vue.cinemas.find(cinema => cinema.id === showtime.cinema_id);
-                //     showtime.cinema_id = cinema.name; // lose the cinema id and get just the name 
-                //     // right now we replace the id with the name                     
-                // })
             }
         )
     };
 
 
+
+    // ##############################################################
+    // Date handling
     self.convertDate = function (isoDate) {
         var formattedDate;
-        var event = new Date(isoDate);        
-        var options = { hour: 'numeric', minute: 'numeric' };
-        formattedDate = event.toDateString() + " at " 
-            + event.toLocaleTimeString('en-US', options);
+        var event = new Date(isoDate);
+        formattedDate = event.toDateString();
         return formattedDate;
-    }
+    };
 
     self.convertTime = function (isoDate) {
-        var formattedDate;
+        var formattedTime;
         var event = new Date(isoDate);
         var options = { hour: 'numeric', minute: 'numeric' };
-        formattedDate = event.toLocaleTimeString('en-US', options);
+        formattedTime = event.toLocaleTimeString('en-US', options);
+        return formattedTime;
+    };
+
+    // decrease the date by 1 for regal movies
+    // because the api provides the incorrect links
+    self.dateErrorHandle = function (isoDate) {
+        var formattedDate;
+        var event = new Date(isoDate);
+        event.setDate(event.getDate()-1);
+        formattedDate = event.toDateString();
         return formattedDate;
-    }
+    };
 
+    self.extractShowtimeDates = function (showtimes) {
+        // extract the date from the showtime
+        showtimes.forEach(function (showtime) {
+            var event = new Date(showtime.start_at);
+            event = event.toDateString();
+            
+            // check if date is already in the showtimesDates array []
+            var inShowtimeDates = self.vue.showtimeDates.indexOf(event);
+            if (inShowtimeDates === -1) {
+                // if array doesn't already have showtime
+                self.vue.showtimeDates.push(event);
+            }
+        });
+    };
 
+    
+    
     // Complete as needed.
     self.vue = new Vue({
         el: "#vue-div",
@@ -197,25 +247,27 @@ var app = function() {
         unsafeDelimiters: ['!{', '}'],
         data: {
             movies: [],
-            cities:[],
-            showtimes:[],
-            location:[],
-            cinemas:[],
+            cities: [],
+            location: [],
+            cinemas: [],
+            showtimeDates: [],
 
             poll: {},
-            poll_movies: [],
+            pollShowtimes: [],
+            pollMovies: [],
 
             logged_in: false,
 
 
             form_title: null,
-            form_city:null,
+            form_city: null,
             form_content: null,
 
             searching: false,
+            selectedDate: new Date ().toDateString(),
         },
         methods: {
-            add_poll: self.add_poll,
+            createPoll: self.createPoll,
             addMovie: self.addMovie,
             searchMovies: self.searchMovies,
             getGeocoordsFromCity: self.getGeocoordsFromCity,
@@ -224,6 +276,8 @@ var app = function() {
             getShowtimes: self.getShowtimes,
             convertDate: self.convertDate,
             convertTime: self.convertTime,
+            extractShowtimeDates: self.extractShowtimeDates,
+            dateErrorHandle: self.dateErrorHandle,
         }
 
 

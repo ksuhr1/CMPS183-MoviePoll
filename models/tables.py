@@ -23,11 +23,17 @@ db.define_table('movie',
                 Field('votes', 'integer', default=0),
                 )
 
+db.define_table('showtime',
+                Field('movie_id', 'reference movie'),
+                Field('votes', 'integer'),
+                )
+
+db.showtime.movie_id.requires = IS_IN_DB(db, db.movie.id)
+
 db.movie.poll_id.requires = IS_IN_DB(db, db.poll.id)
 
-# I don't want to display the user email by default in all forms.
-db.poll.user_email.readable = db.poll.user_email.writable = False
 db.poll.poll_content.requires = IS_NOT_EMPTY()
+db.poll.user_email.readable = db.poll.user_email.writable = False
 db.poll.created_on.readable = db.poll.created_on.writable = False
 db.poll.updated_on.readable = db.poll.updated_on.writable = False
 db.poll.is_public.readable = db.poll.is_public.writable = False

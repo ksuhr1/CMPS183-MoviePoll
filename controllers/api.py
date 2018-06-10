@@ -151,15 +151,14 @@ def vote_movie():
         return "Not Authorized"
      else:
         vote = movie.vote
+        if vote is None:
+            vote = 0
         vote = vote+1
         print(vote)
         movie.update_record(vote=vote)
-        #vote = vote+1
-        # print(vote)
-          #movie.update_record(vote=vote)
+        
 
      return response.json(dict(movie=movie))
-
 
 
 @auth.requires_signature()

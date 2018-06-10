@@ -20,24 +20,32 @@ var app = function () {
     // ##############################################################
     // Create the poll
     self.createPoll = function () {
-        $.ajax({
-            type: 'POST',
-            url: add_poll_url,
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(
-                {
-                    content: self.vue.form_content, 
-                    movies: self.vue.pollMovies,
-                    showtimes: self.vue.pollShowtimes,
-                }),
-            dataType: 'json',
-            success: function (data) {
-                console.log('Poll sent to server');
-                var pollId = data.poll.id;
-                // redirect to the voting page
-                window.location = vote_url + '/' + pollId;
-            }
-        });
+        if (self.vue.pollMovies.length > 0) {
+            $.ajax({
+                type: 'POST',
+                url: add_poll_url,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(
+                    {
+                        content: self.vue.form_content, 
+                        movies: self.vue.pollMovies,
+                        showtimes: self.vue.pollShowtimes,
+                    }),
+                dataType: 'json',
+                success: function (data) {
+                    console.log('Poll sent to server');
+                    var pollId = data.poll.id;
+                    // redirect to the voting page
+                    window.location = vote_url + '/' + pollId;
+                },
+                error: function (data) {
+                    console.log(data);
+                    alert("Something went wrong");
+                }
+            });
+        } else {
+            alert("Poll cannot be empty!");
+        }
     };
 
 
@@ -214,7 +222,7 @@ var app = function () {
         formattedDate = event.toDateString();
         return formattedDate;
     };
-        
+
     self.extractShowtimeDates = function (showtimes) {
         // extract the date from the showtime
         showtimes.forEach(function (showtime) {

@@ -74,41 +74,44 @@ def get_poll():
         is_public=poll.is_public,
         name=name,
         movies=(db(db.movie.poll_id == poll.id).select(db.movie.ALL))
-    )
-    
+    )    
     return response.json(dict(poll=t))
+
+
 
 
 # Note that we need the URL to be signed, as this changes the db.
 @auth.requires_signature()
 def add_poll():
     
-    user_email = auth.user.email or None
-    p_id = db.poll.insert(poll_content=request.vars.content)
-    p = db.poll(p_id)
-
     data = gluon.contrib.simplejson.loads(request.body.read())
-    
-    print "####################################"
-    for r1 in data['movies']:
-        movie_title = r1['title']
-        m_id = db.movie.insert(poll_id=p_id, title=movie_title)
-        for r2 in data['showtimes']:
-            if r2['movie_id'] == r1['id']:
-                db.showtime.insert(movie_id=m_id)
+
+    if data['movies']:
+        user_email = auth.user.email or None
+        p_id = db.poll.insert(poll_content=request.vars.content)
+        p = db.poll(p_id)
+
+        print "####################################"
+        
+        for r1 in data['movies']:
+            movie_title = r1['title']
+            m_id = db.movie.insert(poll_id=p_id, title=movie_title)
+            for r2 in data['showtimes']:
+                if r2['movie_id'] == r1['id']:
+                    db.showtime.insert(movie_id=m_id)
 
 
-    name = get_name(p.user_email)
-    poll = dict(
-        id=p.id,
-        user_email=p.user_email,
-        content=p.poll_content,
-        created_on=p.created_on,
-        updated_on=p.updated_on,
-        is_public=p.is_public,
-        name=name,
-        movies=(db(db.movie.poll_id == p_id).select(db.movie.ALL)),
-    )
+        name = get_name(p.user_email)
+        poll = dict(
+            id=p.id,
+            user_email=p.user_email,
+            content=p.poll_content,
+            created_on=p.created_on,
+            updated_on=p.updated_on,
+            is_public=p.is_public,
+            name=name,
+            movies=(db(db.movie.poll_id == p_id).select(db.movie.ALL)),
+        )
 
     # supposed to print IP of the requester but not working
     # print current.request.client
@@ -205,27 +208,6 @@ def del_poll():
 
 
 
-def get_poll():
-    q = (db.poll.id == request.vars.poll_id)
-    poll = db(q).select().first()
-
-    if poll is not None:
-        name = get_name(poll.user_email)
-
-        t = dict(
-            id=poll.id,
-            user_email=poll.user_email,
-            content=poll.poll_content,
-            created_on=poll.created_on,
-            updated_on=poll.updated_on,
-            is_public=poll.is_public,
-            name=name,
-            movies=(db(db.movie.poll_id == poll.id).select(db.movie.ALL))
-        )
-    else:
-        t = None
-    return response.json(dict(poll=t))
-
 
 def search_movies():
     try:
@@ -252,6 +234,7 @@ def search_movies():
     return response.json(dict(
         response_content=response_content,
     ))
+
 
 def get_showtimes():
     print("in api get_showtimes")
@@ -281,7 +264,6 @@ def get_showtimes():
     return response.json(dict(
         response_showtimes=response_showtimes,
     ))
-
 
 
 def get_cities():

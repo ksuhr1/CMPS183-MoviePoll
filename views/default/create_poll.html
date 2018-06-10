@@ -36,7 +36,7 @@
             <h5 class="card-header">Movies in your Poll</h5>
             <div class="card-body">
                 <div class="card-columns"> 
-                    <div v-for="movie in pollMovies" class="card" style="width: 18rem">
+                    <div v-for="movie in pollMovies" class="card">
                         <div class="card-body">
                             <h5 class="card-title">${movie.title}</h5>
                             <img v-bind:src="movie.poster_image_thumbnail" class="padded"/>
@@ -45,7 +45,11 @@
                                 class="card">
                                 <div class="card-body">
                                     <p class="card-text" v-bind:title="showtime.start_at">
-                                        ${convertTime(showtime.start_at)}
+                                        ${convertTime(showtime.start_at)} 
+                                        on ${convertDate(showtime.start_at)}
+                                        <br>
+                                        at ${showtime.cinema_id}
+                                        <!-- at ${cinemas.find( cinema => cinema.id === showtime.cinema_id).name} -->
                                     </p>
                                 </div>
                             </div>
@@ -179,7 +183,7 @@
                                                 <div class="col-sm-3"
                                                     v-for="showtime in movie.showtimes"
                                                     v-show="(showtime.cinema_id === cinema.id) && 
-                                                        (selectedDate === dateErrorHandle(showtime.start_at))"
+                                                        (selectedDate === convertDate(showtime.start_at))"
                                                     v-bind:title="showtime.start_at">
                                                     <button class="btn btn-outline-primary btn-block"
                                                         v-bind:class="{ active: pollShowtimes.includes(showtime) }"

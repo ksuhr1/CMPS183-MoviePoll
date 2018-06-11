@@ -188,7 +188,8 @@
                                                     <button class="btn btn-outline-primary btn-block"
                                                         v-bind:class="{ active: pollShowtimes.includes(showtime) }"
                                                         v-on:click="addMovie(movie.id, showtime.id)">
-                                                        ${convertTime(showtime.start_at)}
+                                                        <!-- ${convertTime(showtime.start_at)} -->
+                                                        ${showtime.start_at_norm}
                                                     </button>
                                                     <a v-bind:href="showtime.booking_link">Booking Link</a>
                                                 </div>

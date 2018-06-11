@@ -144,7 +144,7 @@ var app = function() {
     // self.get_polls();
     self.get_poll(poll_id);
     self.getUberURL();
-    self.shareFacebookURL(2);
+    self.shareFacebookURL(poll_id);
 
     $("#vue-div").show();
     return self;

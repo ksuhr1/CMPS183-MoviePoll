@@ -41,7 +41,6 @@ def get_polls():
                 is_public=r.is_public,
                 name=name,
             )
-
             # returns all movies that belong to this poll 
             movies = db(db.movie.poll_id == r.id).select(db.movie.ALL)
             t['movies'] = movies
@@ -65,6 +64,16 @@ def get_poll():
 
     name = get_name(poll.user_email)
 
+    # movies = (db(db.movie.poll_id == poll.id).select(db.movie.ALL))
+    #
+    # showtimes = (db(db.showtime.movie_id == request.vars).select(db.showtime.ALL))
+    #
+    # print(showtimes)
+    # print (movies)
+    # for r in (movies):
+    #     #print(r)
+    #     r.showtime = (db(db.showtime.movie_id == r.id).select(db.showtime.ALL))
+
     t = dict(
         id=poll.id,
         user_email=poll.user_email,
@@ -73,11 +82,16 @@ def get_poll():
         updated_on=poll.updated_on,
         is_public=poll.is_public,
         name=name,
-        movies=(db(db.movie.poll_id == poll.id).select(db.movie.ALL))
+        movies=(db(db.movie.poll_id == poll.id).select(db.movie.ALL)),
     )    
     return response.json(dict(poll=t))
 
 
+def showtimes():
+    q = (db.movie.id == request.vars.movie_id)
+    movie = db(q).select().first()
+    showtimes = (db(db.showtime.movie_id == movie.id).select(db.showtime.ALL))
+    return response.json(dict(showtimes=showtimes))
 
 
 # Note that we need the URL to be signed, as this changes the db.
@@ -120,7 +134,6 @@ def add_poll():
 
 @auth.requires_signature()
 def add_movie():
-    """Received the metadata for a new track."""
     # Inserts the track information.
     user_email = auth.user.email or None
     t_id = db.movie.insert(title=request.vars.title)
@@ -141,8 +154,6 @@ def vote_movie():
 
      if auth.user == None:
          return "Not Authorized"
-    
-
      q = (db.movie.id == request.vars.movie_id) 
      movie = db(q).select().first()
      print("API MOVIE", movie.vote)
@@ -236,7 +247,6 @@ def search_movies():
 
 
 def get_showtimes():
-    print("in api get_showtimes")
     try:
         response_from_api = requests.get(
             url="https://api.internationalshowtimes.com/v4/showtimes/",

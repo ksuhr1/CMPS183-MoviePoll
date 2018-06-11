@@ -75,7 +75,7 @@ var app = function() {
     self.get_poll = function (pollId) {
         $.getJSON(poll_url,
             {
-                poll_id: poll_id,
+                poll_id: pollId,
             },
             function (data) {
                 console.log("here is your poll: ");

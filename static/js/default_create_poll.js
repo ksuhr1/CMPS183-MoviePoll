@@ -128,9 +128,14 @@ var app = function () {
         console.log("in function getShowtimes()");
         var movie = self.vue.movies.find(movie => movie.id === movieId);
         
-        self.getShowtimesFromApi(movieId, cinemaLocation, function (data) {
-            movie.showtimes = data;
-            self.extractShowtimeDates(movie.showtimes);
+        self.getShowtimesFromApi(movieId, cinemaLocation, function (data) {            
+            var showtimes = data;
+            showtimes.forEach(function (showtime) {
+                showtime.start_at_norm = self.convertTime(showtime.start_at);
+            });
+
+            movie.showtimes = showtimes;
+            // self.extractShowtimeDates(movie.showtimes);
         });
     };
 
@@ -238,6 +243,15 @@ var app = function () {
         });
     };
 
+    self.calendarShowtimeDates = function () {
+        var event = new Date ();        
+        for (i = 0; i < 7; i++) {
+            var dateString = event.toDateString();
+            self.vue.showtimeDates.push(dateString);
+            event.setDate(event.getDate()+1);
+        }
+    }
+
     
     
     // Complete as needed.
@@ -278,9 +292,7 @@ var app = function () {
             convertTime: self.convertTime,
             extractShowtimeDates: self.extractShowtimeDates,
             dateErrorHandle: self.dateErrorHandle,
-        }
-
-
+        },
     });
 
     $("#vue-div").show();

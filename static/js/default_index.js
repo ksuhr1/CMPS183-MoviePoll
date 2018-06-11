@@ -12,6 +12,11 @@ var app = function() {
         }
     };
 
+
+
+
+
+
     self.getMovieLocation = function(movie_lat, movie_long) {
         self.vue.getMovieLocationUrl = "https://www.google.com/maps/embed/v1/place?key=AIzaSyAJ1ZvhsklFbRlgcdg31NPxgvUysfXqxas&q="+movie_lat+","+movie_long;
         console.log("In getMovieLocation")};
@@ -204,6 +209,7 @@ var app = function() {
             getUberURL: self.getUberURL,
             getMovieLocation: self.getMovieLocation,
             shareFacebookUrl: self.shareFacebookUrl,
+
 
 
         }

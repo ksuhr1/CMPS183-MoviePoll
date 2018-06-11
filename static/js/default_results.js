@@ -5,12 +5,18 @@ var app = function() {
     var self = {};
     Vue.config.silent = false; // show all warnings
 
+
     // Extends an array
     self.extend = function(a, b) {
         for (var i = 0; i < b.length; i++) {
             a.push(b[i]);
         }
     };
+
+
+    self.copyURL = function(poll_id) {
+        self.vue.copyURL = "http://127.0.0.1:8000/cs183moviepoll/default/results/" + poll_id;
+    }
 
 
     self.shareFacebookURL = function(poll_id) {
@@ -141,6 +147,8 @@ var app = function() {
             getUberURL: self.getUberURL,
             getMovieLocation: self.getMovieLocation,
             shareFacebookURL: self.shareFacebookURL,
+            copyURL: self.copyURL,
+
 
         }
 
@@ -152,6 +160,9 @@ var app = function() {
     self.getMovieLocation(33.719944,-117.809505);
     self.getUberURL();
     self.shareFacebookURL(poll_id);
+    self.copyURL(poll_id);
+
+
 
     $("#vue-div").show();
     return self;

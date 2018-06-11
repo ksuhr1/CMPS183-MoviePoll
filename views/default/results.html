@@ -9,13 +9,18 @@
     var polls_url = "{{=URL('api', 'get_polls')}}";
     var shareFacebookURL = "{{=URL('api', 'shareFacebookURL')}}";
     var getMovieLocationUrl = "{{=URL('api', 'getMovieLocation')}}";
+    var returnURL = "{{=URL('api', 'returnURL')}}";
 </script>
 {{end}}
 
 
 <div class="main-content">
 
+
+
     <div id="vue-div" class="display:none">
+
+
 
     <a v-bind:href="shareFacebookURL">Share your poll on Facebook</a>
     <h1>Results</h1>
@@ -51,6 +56,30 @@
             </div>
         </div>
     </div>
+       <!DOCTYPE html>
+        <html>
+        <body>
+
+        <p>Click on the button to copy the text from the text field. Try to paste the tex</p>
+
+        <input type="text" value="Hello World" id="myInput">
+        <button onclick="myFunction()">Copy text</button>
+
+
+        <script>
+        function myFunction() {
+          var copyText = document.getElementById("myInput");
+          var x = document.URL;
+          document.getElementById("myInput").innerHTML = x;
+          copyText.select();
+          document.execCommand("copy");
+          alert("Copied the text: " + copyText.value);
+        }
+        </script>
+
+        </body>
+        </html>
+
 
 
     <div v-if="!pollActive">

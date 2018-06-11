@@ -17,6 +17,10 @@ var app = function() {
             self.vue.shareFacebookURL = "https://www.facebook.com/sharer/sharer.php?u=http%3A//127.0.0.1%3A8000/cs183moviepoll/default/results/"+poll_id;
     };
 
+    self.getMovieLocation = function(movie_lat, movie_long) {
+        self.vue.getMovieLocationUrl = "https://www.google.com/maps/embed/v1/place?key=AIzaSyAJ1ZvhsklFbRlgcdg31NPxgvUysfXqxas&q="+movie_lat+","+movie_long;
+        console.log("In getMovieLocation")};
+
 
     // ##############################################################
     // Get polls
@@ -124,6 +128,7 @@ var app = function() {
 
 
             uberURL: null,
+            getMovieLocationUrl: null,
 
 
             winningMovie: {},
@@ -134,6 +139,7 @@ var app = function() {
             get_polls: self.get_polls,
             get_poll: self.get_poll,
             getUberURL: self.getUberURL,
+            getMovieLocation: self.getMovieLocation,
             shareFacebookURL: self.shareFacebookURL,
 
         }
@@ -143,6 +149,7 @@ var app = function() {
 
     // self.get_polls();
     self.get_poll(poll_id);
+    self.getMovieLocation(33.719944,-117.809505);
     self.getUberURL();
     self.shareFacebookURL(poll_id);
 

@@ -8,6 +8,7 @@
     var poll_url = "{{=URL('api', 'get_poll')}}";
     var polls_url = "{{=URL('api', 'get_polls')}}";
     var shareFacebookURL = "{{=URL('api', 'shareFacebookURL')}}";
+    var getMovieLocationUrl = "{{=URL('api', 'getMovieLocation')}}";
 </script>
 {{end}}
 
@@ -23,6 +24,12 @@
 
     <div v-if="pollActive">        
         <p>Poll is still active until: TIME</p>
+        <iframe
+            width="600"
+            height="450"
+            frameborder="0" style="border:0"
+            v-bind:src="getMovieLocationUrl" allowfullscreen>
+        </iframe>
         <div class="card-columns"> 
             <div v-for="movie in poll.movies" class="card">
                 
@@ -45,6 +52,7 @@
         </div>
     </div>
 
+
     <div v-if="!pollActive">
         <p>Poll has ended! Here are final results</p>
         <div class="card">                
@@ -61,6 +69,12 @@
                         Last updated: ${poll.updated_on} by ${poll.name}
                     </small>
                 </p>
+                <iframe
+                    width="600"
+                    height="450"
+                    frameborder="0" style="border:0"
+                    v-bind:src="getMovieLocationUrl" allowfullscreen>
+                </iframe>
 
                 <button class="btn btn-default" 
                     v-on:click="">

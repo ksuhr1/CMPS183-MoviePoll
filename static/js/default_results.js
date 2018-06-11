@@ -12,6 +12,12 @@ var app = function() {
         }
     };
 
+
+    self.shareFacebookURL = function(poll_id) {
+            self.vue.shareFacebookURL = "https://www.facebook.com/sharer/sharer.php?u=http%3A//127.0.0.1%3A8000/cs183moviepoll/default/results/"+poll_id;
+    };
+
+
     // ##############################################################
     // Get polls
     function get_polls_url(start_idx, end_idx) {
@@ -98,7 +104,9 @@ var app = function() {
             product_id: "a1111c8c-c720-46c3-8534-2fcdd730040d",
         }
         self.vue.uberURL = "https://m.uber.com/ul/" + "?" + $.param(pp);
-    }
+    };
+
+
 
 
 
@@ -117,13 +125,16 @@ var app = function() {
 
             uberURL: null,
 
+
             winningMovie: {},
             pollActive: true,
+
         },
         methods: {
             get_polls: self.get_polls,
             get_poll: self.get_poll,
             getUberURL: self.getUberURL,
+            shareFacebookURL: self.shareFacebookURL,
 
         }
 
@@ -133,7 +144,8 @@ var app = function() {
     // self.get_polls();
     self.get_poll(poll_id);
     self.getUberURL();
-    self.shareFacebookUrl(2);
+    self.shareFacebookURL(2);
+
     $("#vue-div").show();
     return self;
 };

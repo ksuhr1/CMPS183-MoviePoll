@@ -185,7 +185,7 @@ var app = function() {
             form_content: null,
             edit_content: null,
             edit_id: 0,
-            movie_poll_id: 0,
+            //deleted movie_poll_id: 0
 
 
             uberURL: null,

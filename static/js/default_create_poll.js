@@ -295,6 +295,7 @@ var app = function () {
         },
     });
 
+    self.calendarShowtimeDates();
     $("#vue-div").show();
     return self;
 };

@@ -12,26 +12,36 @@ var app = function() {
         }
     };
     
+
     //Vote polls
     self.vote_poll = function(movieId) {
-        console.log("Movie Id", movieId)
-        console.log("DEFAULT: In vote poll")
+        console.log("Movie Id", movieId);
         $.post(vote_poll_url,
-    
+
             {
                 movie_id: movieId,
                 vote: self.vue.vote,
             },
             function (data) {
-                console.log("DATA",data)
-                self.vue.vote = data.vote;
-               // print(data)
-
-                
-                
+             self.vue.vote = data.vote;
             }
         )
     };
+
+    self.vote = function (movieId) {
+        var movie = self.vue.poll.movies.find( movie => movie.id === movieId);
+        var inCart = self.vue.cart.indexOf(movie);
+        console.log("cart",inCart);
+        //add to the cart
+        if (inCart === -1) {
+            self.vue.cart.push(movie);
+        //take out of cart
+        } else {
+            self.vue.cart.splice(inCart, 1);
+        }
+        console.log(self.vue.cart);
+    };
+
 
 
 
@@ -53,6 +63,12 @@ var app = function() {
             self.vue.logged_in = data.logged_in;
         })
     };
+
+
+    // $('.movie-results').on('click', function(event) {
+    //  alert('You clicked the Bootstrap Card');
+    // });
+
 
     // ##############################################################
     // Get single poll based on poll id
@@ -76,17 +92,20 @@ var app = function() {
         delimiters: ['${', '}'],
         unsafeDelimiters: ['!{', '}'],
         data: {
+            movies: [],
+            showtimes:[],
+            cinemas:[],
+
             poll: {},
             polls: [],
+            cart: [],
             vote: 0,
-
-
-            uberURL: null,
         },
         methods: {
             get_polls: self.get_polls,
             get_poll: self.get_poll,
             vote_poll: self.vote_poll,
+            vote: self.vote,
         }
 
 

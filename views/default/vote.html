@@ -20,20 +20,23 @@
 
 
     <div id="vue-div" class="display:none">
+        <div class="title">
+            <h4>Choose 3 Movies</h4>
+        </div>
+        <div class="jumbotron">
+
+
+        </div>
         <!-- poll content  -->
             <p>${poll.content}</p>
-            
-
             <div class="card-columns"> 
-            <div v-for="movie in poll.movies" class="card">
-            
-            <div class="card-header">
+            <div v-for="movie in poll.movies" class="card shadow p-3 mb-5 bg-dark rounded" v-on:click="vote(movie.id)">
+            <div class="card-header ">
                  ${movie.title}
             </div>
-
             <!-- <div class="card-deck"> -->
            <div class="card-body">
-                    <h5 class="card-title">Movies: ${movie.title}</h5>
+                    <h5 class="card-title">${movie.title}</h5>
                     <p class="card-text">
                         <small>
                             Submitted at: ${poll.created_on} by ${poll.name}
@@ -41,21 +44,11 @@
                             Last updated: ${poll.updated_on} by ${poll.name}
                         </small>
                     </p>
-                    <button class="btn btn-default vote" 
-                    v-on:click="vote_poll(movie.id)">
-                    <img class="votebutton" src="{{=URL('static', 'images/check.png')}}">
-                    Click to Vote
-                </button>    
                 </div>
-
-            </div>
+            <div/>
         </div>
     </div>
     </div>
-
-
-
-
 </div>
 
 

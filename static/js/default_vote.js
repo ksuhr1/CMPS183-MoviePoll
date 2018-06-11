@@ -20,10 +20,11 @@ var app = function() {
 
             {
                 movie_id: movieId,
-                vote: self.vue.vote,
+                votes: self.vue.vote,
             },
             function (data) {
-             self.vue.vote = data.vote;
+                console.log("DATA",data);
+                self.vue.vote = data.vote;
             }
         )
     };
@@ -65,10 +66,6 @@ var app = function() {
     };
 
 
-    // $('.movie-results').on('click', function(event) {
-    //  alert('You clicked the Bootstrap Card');
-    // });
-
 
     // ##############################################################
     // Get single poll based on poll id
@@ -82,9 +79,30 @@ var app = function() {
                 console.log(data);
                 self.vue.poll = data.poll;
                 self.vue.logged_in = data.logged_in;
+
+                var movies = self.vue.poll.movies;
+                movies.forEach(function (movie) {
+                    // self.get_showtimes(movie.id);
+                    self.get_showtimes(movie);
+                })
             }
         )
     };
+
+    self.get_showtimes = function (movie) {
+        console.log("movieId", movie);
+        $.getJSON(showtimes_url,
+            {
+                movie_id: movie.id,
+            },
+            function (data) {
+                Vue.set(movie, 'showtimes', data.showtimes);
+                console.log("movie",movie);
+
+            }
+        )
+    };
+
 
 
     self.vue = new Vue({
@@ -106,12 +124,13 @@ var app = function() {
             get_poll: self.get_poll,
             vote_poll: self.vote_poll,
             vote: self.vote,
+            get_showtimes:self.get_showtimes,
         }
 
 
     });
 
-    // self.get_polls();
+
     self.get_poll(poll_id);
     $("#vue-div").show();
     return self;

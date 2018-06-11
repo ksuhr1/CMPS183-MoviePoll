@@ -115,33 +115,6 @@
         <!-- Movie display scaffold -->
         <div v-if="!searching" >
 
-            
-            
-            
-<!--            bunch of testing for date select -->
-<!--
-            <div class="row">            
-                <div v-for="date in showtimeDates" class="col btn btn-outline-primary">${date}</div>
-            </div>
--->
-            
-<!--
-            <nav class="nav nav-pills nav-justified">
-                <a v-for="date in showtimeDates" class="nav-item nav-link btn btn-outline-primary" href="#">${date}</a>
-            </nav>
--->
-
-<!--
-            <div v-if="cinemas.length != 0" class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    ${selectedDate}
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a v-for="date in showtimeDates" class="dropdown-item">${date}</a>
-                </div>
-            </div>
--->
-            
             <select v-if="cinemas.length != 0" class="custom-select" v-model="selectedDate">
                 <option disabled value="">Pick a date</option>
                 <option v-for="date in showtimeDates">${date}</option>

@@ -78,6 +78,9 @@ var app = function () {
                 self.vue.pollMovies.splice(movieCartIndex, 1);          
             }
         }
+
+        console.log("showtimeInCart", self.vue.pollShowtimes);
+        console.log("movie", self.vue.pollMovies);
     };
 
 

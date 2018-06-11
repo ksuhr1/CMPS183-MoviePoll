@@ -12,6 +12,7 @@
     var del_poll_url = "{{=URL('api', 'del_poll', user_signature=True)}}";
     var toggle_public_url = "{{=URL('api', 'toggle_public', user_signature=True)}}";
     var vote_poll_url = "{{=URL('api', 'vote_movie', user_signature=True)}}";
+    var showtimes_url = "{{=URL('api', 'showtimes', user_signature=True)}}";
 </script>
 {{end}}
 
@@ -23,21 +24,21 @@
         <div class="title">
             <h4>Choose 3 Movies</h4>
         </div>
-        <div class="jumbotron">
-
-
-        </div>
         <!-- poll content  -->
             <p>${poll.content}</p>
             <div class="card-columns"> 
-            <div v-for="movie in poll.movies" class="card shadow p-3 mb-5 bg-dark rounded" v-on:click="vote(movie.id)">
+            <div v-for="movie in poll.movies" class="card shadow p-3 mb-5 bg-dark rounded">
+                <div v-for="showtime in movie.showtimes">
+                    ${showtime.id}
+                </div>
             <div class="card-header ">
                  ${movie.title}
             </div>
             <!-- <div class="card-deck"> -->
            <div class="card-body">
-                    <h5 class="card-title">${movie.title}</h5>
+                    <h5 class="card-title">${movie.title} </h5>
                     <p class="card-text">
+                        <button class="vote-button" v-on:click="vote(movie.id)">Vote</button>
                         <small>
                             Submitted at: ${poll.created_on} by ${poll.name}
                             <br>

@@ -35,9 +35,9 @@ var app = function() {
     }
 
 
-    self.shareFacebookUrl = function(){
-            self.vue.shareFacebookUrl = "https://www.facebook.com/sharer/sharer.php?u=http%3A//127.0.0.1%3A8000/cs183moviepoll/default/index"
-    }
+    self.shareFacebookUrl = function(movie_poll_id){
+            self.vue.shareFacebookUrl = "https://www.facebook.com/sharer/sharer.php?u=http%3A//127.0.0.1%3A8000/cs183moviepoll/default/results/"+movie_poll_id;
+    };
 
 
     self.getMovieLocation = function(movie_lat, movie_long) {
@@ -185,6 +185,7 @@ var app = function() {
             form_content: null,
             edit_content: null,
             edit_id: 0,
+            movie_poll_id: 0,
 
 
             uberURL: null,
@@ -211,7 +212,7 @@ var app = function() {
     self.get_polls();
     self.getUberURL();
     self.getMovieLocation(33.719944,-117.809505);
-    self.shareFacebookUrl();
+    self.shareFacebookUrl(2);
 
     $("#vue-div").show();
     return self;

@@ -13,7 +13,9 @@ var app = function() {
     };
     
 
-
+    self.shareFacebookUrl = function(movie_poll_id){
+            self.vue.shareFacebookUrl = "https://www.facebook.com/sharer/sharer.php?u=http%3A//127.0.0.1%3A8000/cs183moviepoll/default/results/"+movie_poll_id;
+    };
 
     // ##############################################################
     // Get polls
@@ -100,6 +102,8 @@ var app = function() {
 
 
 
+
+
     self.vue = new Vue({
         el: "#vue-div",
         delimiters: ['${', '}'],
@@ -108,7 +112,7 @@ var app = function() {
             poll: {},
             polls: [],
 
-
+            movie_poll_id: null,
             uberURL: null,
 
             winningMovie: {},
@@ -117,7 +121,8 @@ var app = function() {
         methods: {
             get_polls: self.get_polls,
             get_poll: self.get_poll,
-            getUberURL: self.getUberURL,            
+            getUberURL: self.getUberURL,
+            shareFacebookUrl: self.shareFacebookUrl,
         }
 
 
@@ -126,6 +131,7 @@ var app = function() {
     // self.get_polls();
     self.get_poll(poll_id);
     self.getUberURL();
+    self.shareFacebookUrl(2);
     $("#vue-div").show();
     return self;
 };

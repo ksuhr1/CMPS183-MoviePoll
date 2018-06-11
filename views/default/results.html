@@ -7,6 +7,7 @@
     var poll_id = "{{=poll.id}}";
     var poll_url = "{{=URL('api', 'get_poll')}}";
     var polls_url = "{{=URL('api', 'get_polls')}}";
+    var shareFacebookUrl = "{{=URL('api', 'shareFacebookUrl')}}";
 </script>
 {{end}}
 
@@ -14,7 +15,7 @@
 <div class="main-content">
 
     <div id="vue-div" class="display:none">
-
+        <a v-bind:href="shareFacebookUrl">Share on Facebook</a>
 
 
     <h1>Results</h1>

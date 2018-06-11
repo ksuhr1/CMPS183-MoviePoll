@@ -40,7 +40,7 @@ var app = function() {
         console.log("getting single poll with id: " + pollId)
         $.getJSON(poll_url,
             {
-                poll_id: poll_id,
+                poll_id: pollId,
             },
             function (data) {
                 console.log("here is your poll: ");
@@ -54,17 +54,29 @@ var app = function() {
                 //     console.log(movie);
                 // })
 
-
-                self.vue.poll.movies.forEach(function (movie){
-                    // movie['vote'] = movied;
-                    console.log(movie);
-
+                var movies = self.vue.poll.movies;
+                movies.forEach(function (movie) {
+                    // self.get_showtimes(movie.id);
+                    self.get_showtimes(movie);
                 })
 
                 if (!self.vue.pollActive) {
                     winningMovie();
                 }
 
+            }
+        )
+    };
+
+    self.get_showtimes = function (movie) {
+        console.log("movieId", movie);
+        $.getJSON(showtimes_url,
+            {
+                movie_id: movie.id,
+            },
+            function (data) {
+                console.log(data);
+                Vue.set(movie, 'showtimes', data.showtimes);
             }
         )
     };
@@ -124,6 +136,7 @@ var app = function() {
         methods: {
             get_polls: self.get_polls,
             get_poll: self.get_poll,
+            get_showtimes: self.get_showtimes,
             getUberURL: self.getUberURL,            
         }
 

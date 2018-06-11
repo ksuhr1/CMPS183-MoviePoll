@@ -150,26 +150,25 @@ def add_movie():
 
 
 @auth.requires_signature()
-def vote_movie():
-
-     if auth.user == None:
-         return "Not Authorized"
-     q = (db.movie.id == request.vars.movie_id) 
-     movie = db(q).select().first()
-     print("API MOVIE", movie.vote)
-
-     if movie is None:
-        return "Not Authorized"
-     else:
-        vote = movie.vote
-        if vote is None:
-            vote = 0
-        vote = vote+1
-        print(vote)
-        movie.update_record(vote=vote)
+def process_showtimes_vote():
+    data = gluon.contrib.simplejson.loads(request.body.read())    
+    if data['showtimes']:
+        user_email = auth.user.email or None
         
-
-     return response.json(dict(movie=movie))
+        for r1 in data['showtimes']:
+            showtime_id = r1['id']
+            q = (db.showtime.id == showtime_id)
+            showtime = db(q).select().first()
+            
+            if showtime is None:
+                return "Not Authorized"
+            else:
+                votes = showtime.votes
+                if votes is None:
+                    votes = 0
+                votes = votes+1
+                showtime.update_record(votes=votes)
+    return response.json(dict())
 
 
 @auth.requires_signature()

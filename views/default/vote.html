@@ -7,12 +7,10 @@
     var poll_id = "{{=poll.id}}";
     var poll_url = "{{=URL('api', 'get_poll')}}";
     var polls_url = "{{=URL('api', 'get_polls')}}";
-    var add_poll_url = "{{=URL('api', 'add_poll', user_signature=True)}}";
-    var edit_poll_url = "{{=URL('api', 'edit_poll', user_signature=True)}}";
-    var del_poll_url = "{{=URL('api', 'del_poll', user_signature=True)}}";
-    var toggle_public_url = "{{=URL('api', 'toggle_public', user_signature=True)}}";
-    var vote_poll_url = "{{=URL('api', 'vote_movie', user_signature=True)}}";
+    var cast_vote_url = "{{=URL('api', 'process_showtimes_vote', user_signature=True)}}";
     var showtimes_url = "{{=URL('api', 'showtimes', user_signature=True)}}";
+    var get_cinemas_url = "{{=URL('api', 'get_cinemas')}}";
+    var results_url = "{{=URL('default', 'results')}}";
 </script>
 {{end}}
 
@@ -24,32 +22,76 @@
         <div class="title">
             <h4>Choose 3 Movies</h4>
         </div>
-        <!-- poll content  -->
-            <p>${poll.content}</p>
-            <div class="card-columns"> 
-            <div v-for="movie in poll.movies" class="card shadow p-3 mb-5 bg-dark rounded">
-                <div v-for="showtime in movie.showtimes">
-                    ${showtime.id}
+
+        <!-- poll description-->
+        <p>${poll.content}</p>
+
+        <!-- Cart -->
+        <button class="btn btn-default" 
+            type="button" 
+            data-toggle="collapse"
+            data-target="#collapseVoteCart"
+            aria-expanded="false">
+            Vote
+        </button>
+        <div class="collapse card" id="collapseVoteCart">
+            <h5 class="card-header">Showtimes u down fo</h5>
+            <div class="card-body">
+                <div class="card-columns"> 
+                    <div v-for="showtime in voteCartShowtimes" class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Movie ID: ${showtime.movie_id}</h5>                        
+                            <p class="card-text">
+                                showtime ID: ${showtime.id}
+                                5:30 fake time
+                                on 6/9/18 fake date
+                                <br>
+                                at fake cinema
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            <div class="card-header ">
-                 ${movie.title}
+                <p class="card-text">puhl ih duuh</p>
+                <button class="btn btn-default"
+                    v-on:click="sendVoteServer()">
+                    Cast your vote
+                </button>
             </div>
-            <!-- <div class="card-deck"> -->
-           <div class="card-body">
-                    <h5 class="card-title">${movie.title} </h5>
-                    <p class="card-text">
-                        <button class="vote-button" v-on:click="vote(movie.id)">Vote</button>
-                        <small>
-                            Submitted at: ${poll.created_on} by ${poll.name}
-                            <br>
-                            Last updated: ${poll.updated_on} by ${poll.name}
-                        </small>
-                    </p>
+        </div>        
+
+        <div class="card-deck"> 
+            <div v-for="movie in poll.movies" class="card shadow p-3 mb-5 bg-dark rounded">
+                <div class="card-header">${movie.title}</div>
+
+                <div class="card-body">
+                    <h5 class="card-title">Select the showtimes u down fo</h5>
+
+                    <div v-for="cinema in cinemas" class="card">
+                        <div class="card-header">Cinema: ${cinema.name}
+                            <div class="container card-body">
+
+                                <div class="row">
+                                    <div class="col-sm-3"
+                                        v-for="showtime in movie.showtimes">
+                                        <button class="btn btn-outline-primary btn-block"
+                                            v-bind:class="{ active: voteCartShowtimes.includes(showtime) }"
+                                            v-on:click="addToVoteCart(movie.id, showtime.id)">
+                                            ${showtime.id}
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-            <div/>
+            </div>
         </div>
     </div>
-    </div>
+
+
+
 </div>
 
 

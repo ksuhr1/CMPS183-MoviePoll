@@ -14,35 +14,74 @@ var app = function() {
     
 
     //Vote polls
-    self.vote_poll = function(movieId) {
-        console.log("Movie Id", movieId);
-        $.post(vote_poll_url,
-
-            {
-                movie_id: movieId,
-                votes: self.vue.vote,
-            },
-            function (data) {
-                console.log("DATA",data);
-                self.vue.vote = data.vote;
-            }
-        )
+    self.sendVoteServer = function () {
+        if (self.vue.voteCartShowtimes.length > 0) {
+            $.ajax({
+                type: 'POST',
+                url: cast_vote_url,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(
+                    {
+                        showtimes: self.vue.voteCartShowtimes,
+                        poll_id: poll_id,
+                    }),
+                dataType: 'json',
+                success: function (data) {
+                    console.log('Vote sent to server');
+                    // redirect to the voting page
+                    window.location = results_url + '/' + poll_id;
+                },
+                error: function (data) {
+                    console.log(data);
+                    alert("Something went wrong");
+                }
+            });
+        } else {
+            alert("Please select a showtime u d0wn fo");
+        }
     };
 
-    self.vote = function (movieId) {
-        var movie = self.vue.poll.movies.find( movie => movie.id === movieId);
-        var inCart = self.vue.cart.indexOf(movie);
-        console.log("cart",inCart);
+    self.addToVoteCart = function (showtimeId) {
+        var showtime = self.vue.poll.movies.find( movie => movie.id === movieId);
+        var inCart = self.vue.voteCartShowtimes.indexOf(showtime);
+        console.log("cart", inCart);
         //add to the cart
         if (inCart === -1) {
-            self.vue.cart.push(movie);
+            self.vue.voteCartShowtimes.push(movie);
         //take out of cart
         } else {
-            self.vue.cart.splice(inCart, 1);
+            self.vue.voteCartShowtimes.splice(inCart, 1);
         }
         console.log(self.vue.cart);
     };
 
+
+    self.addToVoteCart = function (movieId, showtimeId) {
+        var movie = self.vue.poll.movies.find( movie => movie.id === movieId );
+        var showtime = movie.showtimes.find( showtime => showtime.id === showtimeId );
+
+        var indexShowtimeInCart = self.vue.voteCartShowtimes.indexOf(showtime);
+        var indexMovieInCart = self.vue.voteCartMovies.indexOf(movie);
+
+
+        if (indexShowtimeInCart === -1) { // if showtime not in cart
+            self.vue.voteCartShowtimes.push(showtime); // add it in
+            
+            // if movie is not in cart, push the movie to pollMovies []
+            if (indexMovieInCart === -1) {
+                self.vue.voteCartMovies.push(movie);
+            }
+        } else {
+            self.vue.voteCartShowtimes.splice(indexShowtimeInCart, 1);
+            
+            // if movie is in cart and none of the showtimes in the voteCartShowtimes [] has the movie
+            // then remove it
+            // var movieInShowtimes = self.vue.voteCartShowtimes.find( showtime => showtime.movie_id === movieId );            
+            // if ((indexMovieInCart != -1) && !(movieInShowtimes)) {
+            //     self.vue.voteCartMovies.splice(indexMovieInCart, 1);
+            // }
+        }
+    };
 
 
 
@@ -82,27 +121,38 @@ var app = function() {
 
                 var movies = self.vue.poll.movies;
                 movies.forEach(function (movie) {
-                    // self.get_showtimes(movie.id);
-                    self.get_showtimes(movie);
+                    // self.getShowtimes(movie.id);
+                    self.getShowtimes(movie);
                 })
             }
-        )
+        );
     };
 
-    self.get_showtimes = function (movie) {
-        console.log("movieId", movie);
+    self.getShowtimes = function (movie) {
         $.getJSON(showtimes_url,
             {
                 movie_id: movie.id,
             },
             function (data) {
                 Vue.set(movie, 'showtimes', data.showtimes);
-                console.log("movie",movie);
+            }
+        );
+    };
 
+
+    // may not need later if we get the cinemas along with the showtime
+    self.getCinemas = function (location) {
+        console.log("in getCinemas()");
+        $.getJSON(get_cinemas_url,
+            {
+                location: location,
+            },
+            function (data) {
+                jsonData = JSON.parse(data.response_cinemas);
+                self.vue.cinemas = jsonData.cinemas;
             }
         )
     };
-
 
 
     self.vue = new Vue({
@@ -110,27 +160,27 @@ var app = function() {
         delimiters: ['${', '}'],
         unsafeDelimiters: ['!{', '}'],
         data: {
-            movies: [],
             showtimes:[],
             cinemas:[],
 
             poll: {},
             polls: [],
-            cart: [],
+            voteCartShowtimes: [],
+            voteCartMovies: [],
             vote: 0,
         },
         methods: {
             get_polls: self.get_polls,
             get_poll: self.get_poll,
-            vote_poll: self.vote_poll,
-            vote: self.vote,
-            get_showtimes:self.get_showtimes,
+            sendVoteServer: self.sendVoteServer,
+            addToVoteCart: self.addToVoteCart,
+            getShowtimes:self.getShowtimes,
         }
 
 
     });
 
-
+    self.getCinemas('37.0108489,-121.9862189');
     self.get_poll(poll_id);
     $("#vue-div").show();
     return self;

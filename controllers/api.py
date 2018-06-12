@@ -38,6 +38,7 @@ def get_polls():
                 created_on=r.created_on,
                 updated_on=r.updated_on,
                 is_public=r.is_public,
+                is_active=r.is_active,
                 name=name,
             )
             # returns all movies that belong to this poll 
@@ -80,12 +81,14 @@ def get_poll():
         created_on=poll.created_on,
         updated_on=poll.updated_on,
         is_public=poll.is_public,
+        is_active=poll.is_active,
         name=name,
         movies=(db(db.movie.poll_id == poll.id).select(db.movie.ALL)),
     )    
     return response.json(dict(poll=t))
 
 
+# get showtimes for a given movie
 def get_showtimes():
     q = (db.movie.id == request.vars.movie_id)
     movie = db(q).select().first()
@@ -119,6 +122,7 @@ def add_poll():
             created_on=p.created_on,
             updated_on=p.updated_on,
             is_public=p.is_public,
+            is_active=p.is_active,
             name=name,
             movies=(db(db.movie.poll_id == p_id).select(db.movie.ALL)),
         )
@@ -166,6 +170,27 @@ def process_showtimes_vote():
                 votes = votes+1
                 showtime.update_record(votes=votes)
     return response.json(dict())
+
+
+@auth.requires_signature()
+def toggle_active():
+    if auth.user == None:
+        return "Not Authorized"
+
+    q = ((db.poll.user_email == auth.user.email) &
+         (db.poll.id == request.vars.poll_id))
+
+    poll = db(q).select().first()
+
+    if poll is None:
+        return "Not Authorized"
+    else:
+        if (poll.is_active):
+            poll.update_record(is_active=False)
+        else:
+            poll.update_record(is_active=True)
+    # return poll
+    return response.json(dict(poll=poll))
 
 
 ############################################################

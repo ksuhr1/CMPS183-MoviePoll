@@ -6,8 +6,9 @@
 <script>
     var poll_id = "{{=poll.id}}";
     var poll_url = "{{=URL('api', 'get_poll')}}";
-    var polls_url = "{{=URL('api', 'get_polls')}}";
     var showtimes_url = "{{=URL('api', 'get_showtimes', user_signature=True)}}";
+    var get_one_showtime_ist_url = "{{=URL('api', 'get_one_showtime_ist')}}";
+    var get_one_movie_ist_url = "{{=URL('api', 'get_one_movie_ist')}}";    
 </script>
 {{end}}
 
@@ -24,23 +25,19 @@
 
     <div v-if="pollActive">        
         
-        <p>Poll is still active until: TIME</p>
-        <span>
-            Submitted at: ${poll.created_on} by ${poll.name}
-            <br>
-            Last updated: ${poll.updated_on} by ${poll.name}
-        </span>
+        <p>Poll is still active!</p>
 
-        <div class="card-columns"> 
+        <div class="card-columns">
             <div v-for="movie in poll.movies" class="card">
                 <div class="card-header">
                     ${movie.title}
                 </div>
+                <img class="card-img-top" v-bind:src="movie.poster_image_thumbnail" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">Here are the number of votes for each showtime</h5>
                     <p class="card-text">
                         <div v-for="showtime in movie.showtimes">
-                            Regal at 7:00PM - ${showtime.votes}
+                            ${showtime.cinema} at ${showtime.time} on ${showtime.date} - ${showtime.votes}
                         </div>
                     </p>
                 </div>

@@ -13,27 +13,6 @@ var app = function() {
     };
     
 
-
-
-    // ##############################################################
-    // Get polls
-    function get_polls_url(start_idx, end_idx) {
-        var pp = {
-            start_idx: start_idx,
-            end_idx: end_idx
-        };
-        return polls_url + "?" + $.param(pp);
-    }
-
-    self.get_polls = function () {
-        var poll_len = self.vue.polls.length;
-        $.getJSON(get_polls_url(poll_len, poll_len+4), function (data) {
-            self.vue.polls = data.polls;
-            self.vue.has_more = data.has_more;
-            self.vue.logged_in = data.logged_in;
-        })
-    };
-
     // ##############################################################
     // Get single poll based on poll id
     self.get_poll = function (pollId) {
@@ -48,16 +27,15 @@ var app = function() {
                 self.vue.poll = data.poll;
                 self.vue.logged_in = data.logged_in;
 
-                // // dummy votes data for testing 
-                // self.vue.poll.movies.forEach(function (movie) {
-                //     movie['votes'] = Math.floor(Math.random()*10);
-                //     console.log(movie);
-                // })
 
                 var movies = self.vue.poll.movies;
                 movies.forEach(function (movie) {
-                    // self.get_showtimes(movie.id);
-                    self.get_showtimes(movie);
+                    self.getShowtimes(movie);
+                    self.getMoviesFromIstApi(movie, function (data) {
+                        var mov = data.movie;
+                        var img = mov.poster_image_thumbnail;
+                        Vue.set(movie, 'poster_image_thumbnail', img);
+                    });
                 })
 
                 if (!self.vue.pollActive) {
@@ -68,18 +46,69 @@ var app = function() {
         )
     };
 
-    self.get_showtimes = function (movie) {
-        console.log("movieId", movie);
+
+
+    // ##############################################################
+    // get showtimes
+    self.getShowtimes = function (movie) {
         $.getJSON(showtimes_url,
             {
                 movie_id: movie.id,
             },
             function (data) {
-                console.log(data);
+                // set new properties so that vue will track them
                 Vue.set(movie, 'showtimes', data.showtimes);
+                Vue.set(movie, 'cinemas', []);
+
+                movie.showtimes.forEach(function (showtime) {
+                    self.getShowtimeFromIstApi(showtime, function (data) {
+                        // data has a showtime, cinema, and movie
+                        var st = data.showtime;
+                        var cin = data.cinema;
+                        var normTime = self.convertTime(st.start_at);
+                        var normDate = self.convertDate(st.start_at);
+                        Vue.set(showtime, 'time', normTime);
+                        Vue.set(showtime, 'date', normDate);
+                        Vue.set(showtime, 'cinema_id', st.cinema_id);
+                        Vue.set(showtime, 'cinema', cin.name);
+
+                        // add cinema to the movie.cinemas array
+                        if (!(movie.cinemas.find( cinema => cinema.id === data.cinema.id))) {
+                            movie.cinemas.push(data.cinema);
+                        }
+                    });
+                });
             }
-        )
+        );
     };
+    
+    // get the full showtime data from international showtimes api
+    self.getShowtimeFromIstApi = function (showtime, callback) {
+        $.getJSON(get_one_showtime_ist_url,
+            {
+                showtime_id: showtime.ist_api_id,
+            },
+            function (data) {
+                var jsonData = JSON.parse(data.response_content);
+                callback(jsonData);
+            }
+        );
+    };
+
+    // get the full movie data from international showtimes api
+    self.getMoviesFromIstApi = function (movie, callback) {
+        $.getJSON(get_one_movie_ist_url,
+            {
+                movie_id: movie.ist_api_id,
+            },
+            function (data) {
+                var jsonData = JSON.parse(data.response_content);                
+                callback(jsonData);
+            }
+        );
+    };
+
+
 
     // ##############################################################
     // Determine winning movie
@@ -93,6 +122,7 @@ var app = function() {
         })
         self.vue.winningMovie = winningMovie;
     }
+
 
 
     // ##############################################################
@@ -116,6 +146,23 @@ var app = function() {
     }
 
 
+    // ##############################################################
+    // time stuff
+    self.convertTime = function (isoDate) {
+        var formattedTime;
+        var event = new Date(isoDate);
+        var options = { hour: 'numeric', minute: 'numeric' };
+        formattedTime = event.toLocaleTimeString('en-US', options);
+        return formattedTime;
+    };
+
+    self.convertDate = function (isoDate) {
+        var formattedDate;
+        var event = new Date(isoDate);
+        formattedDate = event.toDateString();
+        return formattedDate;
+    };
+
 
 
 
@@ -134,9 +181,8 @@ var app = function() {
             pollActive: true,
         },
         methods: {
-            get_polls: self.get_polls,
             get_poll: self.get_poll,
-            get_showtimes: self.get_showtimes,
+            getShowtimes: self.getShowtimes,
             getUberURL: self.getUberURL,            
         }
 

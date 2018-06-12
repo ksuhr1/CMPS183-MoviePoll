@@ -77,14 +77,17 @@ var app = function() {
                 console.log(data);
                 Vue.set(movie, 'showtimes', data.showtimes);
 
+                var count = movie.showtimes.length;
                 movie.showtimes.forEach(function (showtime) {                
                     self.dataArray.push(showtime.votes);
                     self.showtimeArray.push(showtime.id);
-                    self.colorsArray.push();
+                    console.log("count", count);
+                    count--;
+                    if (count === 0) {
+                        self.createChart();
+                    }
                 });   
-                console.log(self.showtimeArray)
-                console.log(self.showtimeArray)
-               
+                console.log(self.showtimeArray);         
             }
         )
     };
@@ -147,6 +150,11 @@ var app = function() {
             get_poll: self.get_poll,
             get_showtimes: self.get_showtimes,
             getUberURL: self.getUberURL,
+        },
+        mounted: function () {
+          this.$nextTick(function () {
+            // self.createChart();
+          })
         }
 
 
@@ -154,50 +162,49 @@ var app = function() {
 
 
     self.dataArray = [];
-    self.colorsArray = [];
+    colorsarray = [];
+    copyarray = [];
     self.showtimeArray = [];
     
     function getRandomColor () {
         var len = self.showtimeArray.length
-        console.log(len);
         var letters = '0123456789ABCDEF';
-        var color = '#';
         colarray = [];
-        for(var shows = 0; shows<len; shows++){
+        for(var shows = 0; shows<40; shows++){
+            var color = '#';
             for (var i = 0; i < 6; i++) {
-                console.log(letters[Math.floor(Math.random() * 16)])
                 color += letters[Math.floor(Math.random() * 16)];
             }
             colarray[shows] = color
         }
-        console.log(colarray);
         return colarray;
     }                                   
         
  
-    
-    var ctx = document.getElementById('myChart').getContext('2d');
+    self.createChart = function () {
+        console.log("in createChart");
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myDoughnutChart = new Chart(ctx, {
+            //colorsarray: getRandomColor(),
+            //The type of chart we want to create
+            type: 'doughnut',
 
-    var myDoughnutChart = new Chart(ctx, {
-        //colorsarray: getRandomColor(),
-        //The type of chart we want to create
-        type: 'doughnut',
+            // The data for our dataset
+            data: {
+                labels: self.showtimeArray,
+                datasets: [{
+                    
+                    backgroundColor: getRandomColor(), 
+                    data: self.dataArray
+                }]
+            },
 
-        // The data for our dataset
-        data: {
-            labels: self.showtimeArray,
-            backgroundColor: self.colorsArray, 
-            datasets: [{
-                
-                //backgroundColor: self.colorsArray, 
-                data: self.dataArray
-            }]
-        },
+            // Configuration options go here
+            options: {}
 
-        // Configuration options go here
-        options: {}
+        });
+    }
 
-    });
 
     // self.get_polls();
     self.get_poll(poll_id);

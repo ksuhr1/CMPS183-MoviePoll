@@ -134,7 +134,8 @@ var app = function () {
         self.getShowtimesFromApi(movieId, cinemaLocation, function (data) {            
             var showtimes = data;
             showtimes.forEach(function (showtime) {
-                showtime.start_at_norm = self.convertTime(showtime.start_at);
+                showtime.time = self.convertTime(showtime.start_at);
+                showtime.date = self.convertDate(showtime.start_at);
             });
 
             movie.showtimes = showtimes;
@@ -146,7 +147,7 @@ var app = function () {
     self.getShowtimesFromApi = function (movieId, location, callback) {
         console.log("in getShowtimesFromApi()");
         var currentTime = new Date().toDateString();
-        $.getJSON(get_showtimes_url,
+        $.getJSON(get_showtimes_ist_url,
             {
                 movie_id: movieId,
                 location: location,

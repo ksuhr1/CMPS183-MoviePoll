@@ -10,7 +10,7 @@
     var add_poll_url = "{{=URL('api', 'add_poll', user_signature=True)}}";
     var search_movies_url = "{{=URL('api', 'search_movies')}}";
     var get_cities_url = "{{=URL('api', 'get_cities')}}";
-    var get_showtimes_url = "{{=URL('api', 'get_showtimes')}}";
+    var get_showtimes_ist_url = "{{=URL('api', 'get_showtimes_ist')}}";
     var get_cinemas_url = "{{=URL('api', 'get_cinemas')}}";
     var results_url = "{{=URL('default', 'results')}}";
     var vote_url = "{{=URL('default', 'vote')}}";
@@ -45,11 +45,10 @@
                                 class="card">
                                 <div class="card-body">
                                     <p class="card-text" v-bind:title="showtime.start_at">
-                                        ${convertTime(showtime.start_at)} 
-                                        on ${convertDate(showtime.start_at)}
+                                        ${showtime.time}
+                                        on ${showtime.date}
                                         <br>
-                                        at ${showtime.cinema_id}
-                                        <!-- at ${cinemas.find( cinema => cinema.id === showtime.cinema_id).name} -->
+                                        at ${cinemas.find( cinema => cinema.id === showtime.cinema_id).name}
                                     </p>
                                 </div>
                             </div>
@@ -156,13 +155,12 @@
                                                 <div class="col-sm-3"
                                                     v-for="showtime in movie.showtimes"
                                                     v-show="(showtime.cinema_id === cinema.id) && 
-                                                        (selectedDate === convertDate(showtime.start_at))"
+                                                        (selectedDate === showtime.date)"
                                                     v-bind:title="showtime.start_at">
                                                     <button class="btn btn-outline-primary btn-block"
                                                         v-bind:class="{ active: pollShowtimes.includes(showtime) }"
                                                         v-on:click="addMovie(movie.id, showtime.id)">
-                                                        <!-- ${convertTime(showtime.start_at)} -->
-                                                        ${showtime.start_at_norm}
+                                                        ${showtime.time}
                                                     </button>
                                                     <a v-bind:href="showtime.booking_link">Booking Link</a>
                                                 </div>

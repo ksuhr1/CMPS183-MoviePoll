@@ -28,6 +28,7 @@ var app = function() {
         var poll_len = self.vue.polls.length;
         $.getJSON(get_polls_url(poll_len, poll_len+4), function (data) {
             self.vue.polls = data.polls;
+            console.log(self.vue.polls);
             self.vue.has_more = data.has_more;
             self.vue.logged_in = data.logged_in;
         })

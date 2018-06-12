@@ -124,7 +124,7 @@ var app = function () {
     };
 
 
-    // ##############################################################
+    // ##############################################################collapsePollCart
     // Get showtimes of a movie in a given location
     // location is specified by vue.form_city
     self.getShowtimes = function (movieId, cinemaLocation) {

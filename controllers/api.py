@@ -203,15 +203,17 @@ def del_poll():
     if auth.user == None:
         return "Not Authorized"
 
-    q = ((db.poll.user_email == auth.user.email) &
-         (db.poll.id == request.vars.poll_id))
+    q = ((db.poll.user_email == auth.user.email) & (db.poll.id == request.vars.poll_id))
+    poll = db(q).delete()
+   # poll.delete()
 
-    poll = db(q).select().first()
-
-    if poll is None:
-        return "Not Authorized"
-    else: 
-        poll.delete()
+    # q = (db(db.poll.user_email == auth.user.email) & (db.poll.id == request.vars.poll_id))
+    # poll = db(q).select().first()
+    # if poll is None:
+    #     return "Not Authorized"
+    # else:
+    #     db(db.post.id == request.vars.post_id).delete()
+    #     poll.delete()
     return "ok"
 
 
@@ -230,6 +232,7 @@ def search_movies():
                 "limit": 20,
                 "search_query": request.vars.form_title,
                 "search_field": "title",
+                "min_poster_image_thumbnail_width":"300"
             },
             headers={
                 "X-API-Key": "Y8YxMBHwe7EPYnIVnKgPYlznt4Yiap6u",

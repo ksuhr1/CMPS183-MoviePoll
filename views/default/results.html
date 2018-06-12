@@ -30,9 +30,9 @@
                     ${movie.title}
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">Votes: ${movie.votes}</h5>
                     <div v-for="showtime in movie.showtimes">
                     ${showtime.id}
+                    <h5 class="card-title">Votes: ${showtime.votes}</h5>
                 </div> 
                     <p class="card-text">
                         <small>

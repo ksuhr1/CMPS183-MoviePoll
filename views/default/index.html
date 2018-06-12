@@ -9,6 +9,8 @@
     var edit_poll_url = "{{=URL('api', 'edit_poll', user_signature=True)}}";
     var del_poll_url = "{{=URL('api', 'del_poll', user_signature=True)}}";
     var toggle_public_url = "{{=URL('api', 'toggle_public', user_signature=True)}}";
+    var poll_url = "{{=URL('api', 'get_poll')}}";
+    var polls_url = "{{=URL('api', 'get_polls')}}";
 </script>
 {{end}}
 
@@ -30,41 +32,29 @@
         </a>
 
 
-        <!-- polls -->
-        <!-- create the div for each poll -->
-        <div v-for="poll in polls" class="poll text-left">
-            <!-- poll content  -->
-            <div class="movie row">
-                <div v-for="movie in poll.movies">
-                    <div class="movie-title col">${movie.title}</div>
-                    <div class="movie-thumbnail col">${movie.title}</div>
+         <h2 class="text mt-4">My Movie Polls</h2>
+        <div v-for="poll in polls">
+             <div class="jumbotron">
+                <div class="card-body">
+                    <div class="card-columns">
+                        <div v-for="movie in poll.movies" class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">${movie.title}</h5>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-            </div>
-             <!-- author and date info -->
-                <small>
-                    Submitted at: ${poll.created_on} by ${poll.name}
-                    <br>
-                    Last updated: ${poll.updated_on}
-                </small>
-            <!-- Edit, Delete, Toggle buttons -->
+                 <!-- Edit, Delete, Toggle buttons -->
                 <div class="button-bar" v-if="poll.user_email == '{{=auth.user.email}}'">
-                    <button class="btn btn-default btn-sm"
+                    <button class="btn btn-default btn-lg float-right"
                         v-on:click="delete_poll(poll.id)">
-                        <i class="fa fa-trash-o"></i>
-                    </button>
-                    <button v-if="!poll.is_public"
-                            class="btn btn-default btn-sm"
-                            v-on:click="toggle_public(poll.id)">
-                            <i class="fa fa-user"></i>
-                    </button>
-                    <button v-if="poll.is_public"
-                            class="btn btn-default btn-sm"
-                            v-on:click="toggle_public(poll.id)">
-                            <i class="fa fa-users"></i>
+                        <i class="fa fa-trash fa-2x" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
+        </div>
+
+
             <!-- Load more button -->
             <button v-if="has_more"
                 class="btn btn-primary btn-sm"

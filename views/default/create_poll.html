@@ -10,7 +10,7 @@
     var add_poll_url = "{{=URL('api', 'add_poll', user_signature=True)}}";
     var search_movies_url = "{{=URL('api', 'search_movies')}}";
     var get_cities_url = "{{=URL('api', 'get_cities')}}";
-    var get_showtimes_url = "{{=URL('api', 'get_showtimes')}}";
+    var get_showtimes_ist_url = "{{=URL('api', 'get_showtimes_ist')}}";
     var get_cinemas_url = "{{=URL('api', 'get_cinemas')}}";
     var results_url = "{{=URL('default', 'results')}}";
     var vote_url = "{{=URL('default', 'vote')}}";
@@ -19,45 +19,57 @@
 {{end}}
 
 <div class="container">
-
-
     <div id="vue-div" class="display:none">
-        
+         <!-- Search movie box  -->
+        <div class="container">
+            <!-- search form  -->
+            <form class ="form-horizontal"
+                action="#" v-on:submit.prevent="searchMovies">
+                <div class="row">
+                    <div class="col-md-8 col-xs-12">
+                        <div class="form-group">
+                            <input class="form-control" name="Search movies..." type="text" v-model="form_title" placeholder="Search a movie..." required/>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-xs-12">
+                        <div class="form-group">
+                            <input class="form-control" name="City" type="text" v-model="form_city" placeholder="City" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input class="btn btn-primary" type="submit" value="Search" />
+                </div>
+            </form>
+        </div>
 
         <!-- Cart -->
-        <button class="btn btn-default" 
-            type="button" 
-            data-toggle="collapse"
-            data-target="#collapsePollCart"
-            aria-expanded="false">
-            Movies in your Poll
-        </button>
-        <div class="collapse card" id="collapsePollCart">
-            <h5 class="card-header">Movies in your Poll</h5>
+        <div class="jumbotron">
+             <h3 class="text-center">Movies in your Poll</h3>
             <div class="card-body">
                 <div class="card-columns"> 
                     <div v-for="movie in pollMovies" class="card">
                         <div class="card-body">
                             <h5 class="card-title">${movie.title}</h5>
-                            <img v-bind:src="movie.poster_image_thumbnail" class="padded"/>
+                            <div class="movie-img w-100">
+                                <img v-bind:src="movie.poster_image_thumbnail" class="padded img-fluid" alt="Responsive image" />
+                            </div>
                             <div v-for="showtime in pollShowtimes" 
                                 v-if="showtime.movie_id === movie.id"
                                 class="card">
                                 <div class="card-body">
                                     <p class="card-text" v-bind:title="showtime.start_at">
-                                        ${convertTime(showtime.start_at)} 
-                                        on ${convertDate(showtime.start_at)}
+                                      ${showtime.time}
+                                        on ${showtime.date}
                                         <br>
-                                        at ${showtime.cinema_id}
-                                        <!-- at ${cinemas.find( cinema => cinema.id === showtime.cinema_id).name} -->
+                                        at ${cinemas.find( cinema => cinema.id === showtime.cinema_id).name}
                                     </p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <p class="card-text">puhl ih duuh</p>
-                <button class="btn btn-default"
+                 <button class="btn btn-primary"
                     v-on:click="createPoll()">
                     Create Poll
                 </button>
@@ -67,46 +79,6 @@
 
 
 
-        <!-- Search movie box  -->
-        <div class="container">
-            <div class="jumbotron">
-                <h3 class="text-center">Search For Any Movie</h3>
-
-                <!-- search form  -->
-                <form class ="form-horizontal"
-                    action="#" v-on:submit.prevent="searchMovies">
-                    <div class="row">
-                        <div class="col-md-8 col-xs-12">
-                            <div class="form-group">
-                                <input
-                                    class="form-control"
-                                    name="Search movies..."
-                                    type="text"
-                                    v-model="form_title"
-                                    placeholder="Search a movie..."
-                                    required/>
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-xs-12">
-                            <div class="form-group">
-                                <input
-                                    class="form-control"
-                                    name="City"
-                                    type="text"
-                                    v-model="form_city"
-                                    placeholder="City" 
-                                    required/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <input class="btn btn-primary" type="submit" value="Search" />
-                    </div>
-                </form>
-            </div>
-        </div>
-
-
         <!-- loading spinner -->
         <div class="container">
             <i v-if="searching" class="fa fa-circle-o-notch fa-spin" style="font-size:56px"></i>
@@ -114,64 +86,56 @@
 
         <!-- Movie display scaffold -->
         <div v-if="!searching" >
-
-            <select v-if="cinemas.length != 0" class="custom-select" v-model="selectedDate">
+            <select v-if="cinemas.length != 0" class="custom-select mb-4" v-model="selectedDate">
                 <option disabled value="">Pick a date</option>
                 <option v-for="date in showtimeDates">${date}</option>
             </select>
             
             
             <div v-for="movie in movies" class="card">
-
                 <div class="row">
-                    <div class="col-sm-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">${movie.title}</h5>
-                                <img v-bind:src="movie.poster_image_thumbnail" class="padded"/>
-                                <p class="card-text">Movie ID: ${movie.id}</p>
-                                <button class="btn btn-default"
-                                    type="button"
-                                    data-toggle="collapse"
-                                    v-bind:data-target="'#collapseShowtimes'+movie.id"
-                                    aria-expanded="false">
-                                    Showtimes
-                                </button>
-                                <a action="#" class="btn btn-primary">More info</a>
+                    <div class="col-sm-6">
+                            <div class="container-fluid card-body">
+                                 <h2 class="title">${movie.title}</h2>
+                                <div class="movie-img">
+                                    <img v-bind:src="movie.poster_image_thumbnail" class="padded img-fluid" alt="Responsive image"/>
+                                </div>
                             </div>
-                        </div>
+
                     </div>
-
-                    <div class="col-sm-8">
-                        <div class="collapse showtimes" v-bind:id="'collapseShowtimes'+movie.id">
+                    <div class="col-sm-6">
+                        <div v-if="movie.showtimes.length != 0" class="title showtimes">
                             <div class="p-4">
-                                <h5 v-if="movie.showtimes.length != 0" class="card-title">Showtimes</h5>
-                                <h5 v-else class="card-title">No showtimes in your location</h5>
-
-                                <div v-for="cinema in cinemas" class="card">
-                                    <div class="card-header">Cinema: ${cinema.name}
+                                <h2>Showtimes</h2>
+                                <div v-for="cinema in cinemas" class="card mb-md-3">
+                                    <div class="card-header text-white">Cinema: ${cinema.name} </div>
                                         <div class="container card-body">
 
                                             <div class="row">
                                                 <div class="col-sm-3"
                                                     v-for="showtime in movie.showtimes"
                                                     v-show="(showtime.cinema_id === cinema.id) && 
-                                                        (selectedDate === convertDate(showtime.start_at))"
+                                                        (selectedDate === showtime.date)"
                                                     v-bind:title="showtime.start_at">
-                                                    <button class="btn btn-outline-primary btn-block"
+                                                    <button class="btn btn-primary"
                                                         v-bind:class="{ active: pollShowtimes.includes(showtime) }"
                                                         v-on:click="addMovie(movie.id, showtime.id)">
-                                                        <!-- ${convertTime(showtime.start_at)} -->
-                                                        ${showtime.start_at_norm}
+                                                        ${showtime.time}
                                                     </button>
-                                                    <a v-bind:href="showtime.booking_link">Booking Link</a>
                                                 </div>
                                             </div>
 
                                         </div>
-                                    </div>
+
                                 </div>
 
+                            </div>
+                        </div>
+                        <div v-else class="align-middle">
+                            <div class="p-4">
+                                <span class="align-middle">
+                                <h2 class="title">No showtimes in your location</h2>
+                                    </span>
                             </div>
                         </div>
                     </div>

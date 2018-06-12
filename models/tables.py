@@ -20,12 +20,14 @@ db.define_table('poll',
 db.define_table('movie',
                 Field('poll_id', 'reference poll'),	
                 Field('title', 'text'),
-                Field('vote', 'integer'),
+                Field('votes', 'integer', default=0),
+                Field('ist_api_id'),
                 )
 
 db.define_table('showtime',
                 Field('movie_id', 'reference movie'),
                 Field('votes', 'integer'),
+                Field('ist_api_id'),
                 )
 
 db.showtime.movie_id.requires = IS_IN_DB(db, db.movie.id)

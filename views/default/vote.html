@@ -25,15 +25,11 @@
         <div class="title">
             <h1>Let's Vote</h1>
         </div>
-        <div class="title float-right">
-            <h4>Choose 3 Movies</h4>
-        </div>
-
         <!-- poll description-->
         <p>${poll.content}</p>
 
         <!-- Cart -->
-        <button class="btn btn-default" 
+        <button class="btn btn-default btn-block mb-5 mt-5"
             type="button" 
             data-toggle="collapse"
             data-target="#collapseVoteCart"
@@ -41,14 +37,14 @@
             Vote
         </button>
         <div class="collapse card" id="collapseVoteCart">
-            <h5 class="card-header">Showtimes u down fo</h5>
             <div class="card-body">
                 <div class="card-columns">
-
                     <div v-for="movie in voteCartMovies" class="card">
                         <div class="card-body">
-                            <h5 class="card-title">${movie.title}</h5>
+                            <h5 class="card-title center">${movie.title}</h5>
+                            <div class="movie-img center">
                             <img v-bind:src="movie.poster_image_thumbnail" class="padded"/>
+                            </div>
                             <div v-for="showtime in voteCartShowtimes" 
                                 v-show="showtime.movie_id === movie.id"
                                 class="card">
@@ -65,7 +61,7 @@
                     </div>
 
                 </div>
-                <p class="card-text">puhl ih duuh</p>
+                <p class="card-text"></p>
                 <button class="btn btn-default"
                     v-on:click="sendVoteServer()">
                     Cast your vote
@@ -76,34 +72,39 @@
 
 
         <!-- Movie display scaffold -->
-        <div class="card-deck"> 
-            <div v-for="movie in poll.movies" class="card shadow p-3 mb-5">
-                    <h4>${movie.title}</h4>
-
-                <div class="card-body">
+        <div class="vote-movies mt-5">
+            <div v-for="movie in poll.movies" class="card p-3 mb-5">
+                <h4>${movie.title}</h4>
+                <div class="row">
+                    <div class="col-sm-6">
                     <div class="movie-img">
                         <img v-bind:src="movie.poster_image_thumbnail" class="padded"/>
                     </div>
+                    </div>
+                    <div class="col-sm-6">
                     <div v-for="cinema in movie.cinemas" class="card">
-                        <div class="card-header">Cinema: ${cinema.name}
-                            <div class="container card-body">                                
-                                <div class="row">
-                                    <div class="col-sm-3"
-                                        v-for="showtime in movie.showtimes"
-                                        v-show="showtime.cinema_id === cinema.id">
-                                        <button class="btn btn-outline-primary btn-block"
-                                            v-bind:class="{ active: voteCartShowtimes.includes(showtime) }"
-                                            v-on:click="addToVoteCart(movie.id, showtime.id)">
-                                            ${showtime.time}
-                                        </button>
-                                    </div>
+                        <div class="card-header">
+                            ${cinema.name}
+                        </div>
+                        <div class="card-body bg-secondary">
+                            <div class="row">
+                                <div class="col-sm-3" v-for="showtime in movie.showtimes" v-show="showtime.cinema_id === cinema.id">
+                                    <button class="btn btn-outline-primary m-2"
+                                        v-bind:class="{ active: voteCartShowtimes.includes(showtime) }"
+                                        v-on:click="addToVoteCart(movie.id, showtime.id)">
+                                        ${showtime.time}
+                                    </button>
                                 </div>
                             </div>
+                        </div>
+                        </div>
                         </div>
                     </div>
 
                 </div>
+
             </div>
+
         </div>
     </div>
 

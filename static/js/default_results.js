@@ -38,7 +38,7 @@ var app = function() {
                     });
                 })
 
-                if (!self.vue.pollActive) {
+                if (!self.vue.poll.is_active) {
                     winningMovie();
                 }
 
@@ -112,9 +112,8 @@ var app = function() {
 
     // ##############################################################
     // Determine winning movie
-    function winningMovie() {
-        console.log("determining winning movie");
-        var winningMovie = self.vue.poll.movies[0];
+    function winningMovie () {
+        var winningMovie;
         self.vue.poll.movies.forEach(function (movie) {            
             if (movie.votes > winningMovie.votes) {
                 winningMovie = movie;
@@ -178,7 +177,6 @@ var app = function() {
             uberURL: null,
 
             winningMovie: {},
-            pollActive: true,
         },
         methods: {
             get_poll: self.get_poll,

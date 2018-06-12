@@ -6,6 +6,7 @@
 <script>
     var polls_url = "{{=URL('api', 'get_polls')}}";
     var del_poll_url = "{{=URL('api', 'del_poll', user_signature=True)}}";
+    var toggle_active_url = "{{=URL('api', 'toggle_active', user_signature=True)}}";
     var poll_url = "{{=URL('api', 'get_poll')}}";
     var polls_url = "{{=URL('api', 'get_polls')}}";
     var get_one_movie_ist_url = "{{=URL('api', 'get_one_movie_ist')}}";
@@ -51,6 +52,11 @@
                         v-on:click="delete_poll(poll.id)">
                         <i class="fa fa-trash fa-2x" aria-hidden="true"></i>
                     </button>
+                    <button class="btn btn-default btn-lg float-right"
+                        v-on:click="toggle_active(poll.id)">
+                        <p v-if="poll.is_active">Turn Poll Off</p>
+                        <p v-else>Turn Poll On</p> 
+                    </button>                    
                 </div>
             </div>
         </div>

@@ -15,6 +15,7 @@ db.define_table('poll',
                 Field('created_on', 'datetime', default=datetime.datetime.utcnow()),
                 Field('updated_on', 'datetime', update=datetime.datetime.utcnow()),
                 Field('is_public', 'boolean', default=False),
+                Field('is_active', 'boolean', default=True),
                 )
 
 db.define_table('movie',
@@ -26,7 +27,7 @@ db.define_table('movie',
 
 db.define_table('showtime',
                 Field('movie_id', 'reference movie'),
-                Field('votes', 'integer'),
+                Field('votes', 'integer', default=0),
                 Field('ist_api_id'),
                 )
 

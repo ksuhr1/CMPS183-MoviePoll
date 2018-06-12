@@ -92,6 +92,21 @@ var app = function() {
         )
     };
 
+    // ##############################################################
+    // toggle poll active
+    self.toggle_active = function(pollId) {
+        var poll = self.vue.polls.find( poll => poll.id === pollId );
+        $.post(toggle_active_url,
+    
+            {
+                poll_id: pollId
+            },
+            function (data) {
+                var pollActive = data.poll.is_active;
+                poll.is_active = pollActive;
+            }
+        )
+    };
 
 
 
@@ -142,6 +157,7 @@ var app = function() {
         methods: {
             get_more: self.get_more,
             delete_poll: self.delete_poll,
+            toggle_active: self.toggle_active,
             getUrl: self.getUrl
         }
     });

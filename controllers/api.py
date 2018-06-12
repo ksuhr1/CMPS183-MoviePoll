@@ -85,7 +85,7 @@ def get_poll():
     )    
     return response.json(dict(poll=t))
 
-
+# get showtimes for a given movie
 def get_showtimes():
     q = (db.movie.id == request.vars.movie_id)
     movie = db(q).select().first()

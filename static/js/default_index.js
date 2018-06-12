@@ -28,12 +28,16 @@ var app = function() {
         var poll_len = self.vue.polls.length;
         $.getJSON(get_polls_url(poll_len, poll_len+4), function (data) {
             self.vue.polls = data.polls;
-            console.log(self.vue.polls);
             self.vue.has_more = data.has_more;
             self.vue.logged_in = data.logged_in;
-        })
+
+            self.vue.polls.forEach(function (poll) {
+                self.processPoll(poll);
+            });      
+        });
     };
 
+    // not properly working because it doesn't process poll (iterate the movies)
     self.get_more = function () {
         var num_polls = self.vue.polls.length;
         $.getJSON(get_polls_url(num_polls, num_polls + 4), function (data) {
@@ -42,59 +46,34 @@ var app = function() {
         });
     };
 
+    self.processPoll = function (poll) {
+        var movies = poll.movies;
+        movies.forEach(function (movie) {
+            self.getMoviesFromIstApi(movie, function (data) {
+                var mov = data.movie;
+                var img = mov.poster_image_thumbnail;
+                Vue.set(movie, 'poster_image_thumbnail', img);
+            });
+        });        
+    }
 
 
     // ##############################################################
-    // Add poll
-    self.add_poll_button = function () {
-        // The button to add a track has been pressed.
-        if(self.vue.logged_in)
-          self.vue.is_adding_poll = !self.vue.is_adding_poll;
-    };
-
-    self.add_poll = function () {
-        // The submit button to add a track has been added.
-        $.ajax({
-            type: 'POST',
-            url: add_poll_url,
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({content: self.vue.form_content, movies: self.vue.movies,}),
-            dataType: 'json',
-            success: function (data) {
-                alert('Data sent');
-            }
-        });
-    };
-
-
-
-    // ##############################################################
-    // Edit poll
-    self.edit_poll_submit = function (poll_id) {
-        poll = self.vue.polls.find(poll => poll.id === poll_id);
-        poll.content = self.vue.edit_content;
-        $.post(edit_poll_url,
+    // get the full movie data from international showtimes api
+    self.getMoviesFromIstApi = function (movie, callback) {
+        $.getJSON(get_one_movie_ist_url,
             {
-                poll_content: self.vue.edit_content,
-                id: self.vue.edit_id
+                movie_id: movie.ist_api_id,
             },
             function (data) {
-                $.web2py.enableElement($("#edit_poll_submit"));
-                self.vue.editing = !self.vue.editing; 
-            });
+                var jsonData = JSON.parse(data.response_content);                
+                callback(jsonData);
+            }
+        );
     };
 
-    self.edit_poll = function(poll_id) {
-        self.vue.editing = !self.vue.editing;
-        self.vue.edit_id = poll_id;
-        poll = self.vue.polls.find(poll => poll.id === poll_id);
-        self.vue.edit_content = poll.content;
-    };
 
-    self.cancel_edit = function () {
-        self.vue.editing = !self.vue.editing;
-        self.vue.edit_id = 0;
-    };
+
 
 
 
@@ -115,22 +94,28 @@ var app = function() {
 
 
 
+
     // ##############################################################
-    // Toggle poll
-    self.toggle_public = function(poll_id) {
-        $.post(toggle_public_url,
-            {
-                poll_id: poll_id
-            },
-            function (data) {
-                poll = self.vue.polls.find(poll => poll.id === poll_id);
-                poll.is_public = data.poll.is_public;
-            }
-        )
+    // time stuff
+    self.convertTime = function (isoDate) {
+        var formattedTime;
+        var event = new Date(isoDate);
+        var options = { hour: 'numeric', minute: 'numeric' };
+        formattedTime = event.toLocaleTimeString('en-US', options);
+        return formattedTime;
     };
 
+    self.convertDate = function (isoDate) {
+        var formattedDate;
+        var event = new Date(isoDate);
+        formattedDate = event.toDateString();
+        return formattedDate;
+    };
 
-
+    self.getUrl = function (poll) {
+        var url = results_url + "/" + poll.id
+        return url;
+    };
 
 
     self.vue = new Vue({
@@ -140,7 +125,6 @@ var app = function() {
         data: {
             polls: [],
             movies:[],
-            poll:[],
 
             get_more: false,
             has_more: false,
@@ -157,13 +141,8 @@ var app = function() {
         },
         methods: {
             get_more: self.get_more,
-            add_poll_button: self.add_poll_button,
-            add_poll: self.add_poll,
             delete_poll: self.delete_poll,
-            edit_poll: self.edit_poll,
-            edit_poll_submit: self.edit_poll_submit,
-            cancel_edit: self.cancel_edit,
-            toggle_public: self.toggle_public,
+            getUrl: self.getUrl
         }
     });
 

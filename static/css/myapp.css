@@ -68,3 +68,8 @@
 .movie-title {
   text-align: center;
 }
+
+/* line 60, ../sass/_main.scss */
+.vote-card {
+  color: #929191;
+}

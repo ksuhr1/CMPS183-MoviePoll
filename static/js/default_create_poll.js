@@ -146,7 +146,7 @@ var app = function () {
     self.getShowtimesFromApi = function (movieId, location, callback) {
         console.log("in getShowtimesFromApi()");
         var currentTime = new Date().toDateString();
-        $.getJSON(get_showtimes_url,
+        $.getJSON(get_showtimes_ist_url,
             {
                 movie_id: movieId,
                 location: location,

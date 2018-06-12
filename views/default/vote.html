@@ -8,8 +8,9 @@
     var poll_url = "{{=URL('api', 'get_poll')}}";
     var polls_url = "{{=URL('api', 'get_polls')}}";
     var cast_vote_url = "{{=URL('api', 'process_showtimes_vote', user_signature=True)}}";
-    var showtimes_url = "{{=URL('api', 'showtimes', user_signature=True)}}";
+    var showtimes_url = "{{=URL('api', 'get_showtimes', user_signature=True)}}";
     var get_cinemas_url = "{{=URL('api', 'get_cinemas')}}";
+    var get_showtime_ist_url = "{{=URL('api', 'get_showtime_ist')}}";
     var results_url = "{{=URL('default', 'results')}}";
 </script>
 {{end}}

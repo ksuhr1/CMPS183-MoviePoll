@@ -13,7 +13,6 @@ var app = function() {
     };
     
 
-    //Vote polls
     self.sendVoteServer = function () {
         if (self.vue.voteCartShowtimes.length > 0) {
             $.ajax({
@@ -135,6 +134,21 @@ var app = function() {
             },
             function (data) {
                 Vue.set(movie, 'showtimes', data.showtimes);
+                movie.showtimes.forEach(function (showtime) {
+                    self.getShowtimeFromIstApi(showtime);
+                });
+            }
+        );
+    };
+
+    self.getShowtimeFromIstApi = function (showtime) {
+        $.getJSON(get_showtime_ist_url,
+            {
+                showtime_id: showtime.ist_api_id,
+            },
+            function (data) {
+                var jsonData = JSON.parse(data.response_content);
+                console.log(jsonData);
             }
         );
     };

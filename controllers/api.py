@@ -3,7 +3,6 @@
 # returns the name (first and last) of the user as a string
 
 import gluon.contrib.simplejson
-
 import json
 import requests
 
@@ -87,11 +86,10 @@ def get_poll():
     return response.json(dict(poll=t))
 
 
-def showtimes():
+def get_showtimes():
     q = (db.movie.id == request.vars.movie_id)
     movie = db(q).select().first()
     showtimes = (db(db.showtime.movie_id == movie.id).select(db.showtime.ALL))
-    print showtimes
     return response.json(dict(showtimes=showtimes))
 
 
@@ -113,7 +111,7 @@ def add_poll():
             m_id = db.movie.insert(poll_id=p_id, title=movie_title)
             for r2 in data['showtimes']:
                 if r2['movie_id'] == r1['id']:
-                    db.showtime.insert(movie_id=m_id)
+                    db.showtime.insert(movie_id=m_id, ist_api_id=r2['id'])
 
 
         name = get_name(p.user_email)
@@ -132,7 +130,7 @@ def add_poll():
     # print current.request.client
     return response.json(dict(poll=poll))
 
-
+# not used
 @auth.requires_signature()
 def add_movie():
     # Inserts the track information.
@@ -219,6 +217,10 @@ def del_poll():
 
 
 
+############################################################
+# international showtimes api calls
+############################################################
+
 def search_movies():
     try:
         response_from_api = requests.get(
@@ -246,7 +248,29 @@ def search_movies():
     ))
 
 
-def get_showtimes():
+def get_showtime_ist():
+    try:
+        url_string = "https://api.internationalshowtimes.com/v4/showtimes/"+request.vars.showtime_id
+        response_from_api = requests.get(
+            url=url_string,
+            params={
+                "append": "movie,cinema",
+            },
+            headers={
+                "X-API-Key": "Y8YxMBHwe7EPYnIVnKgPYlznt4Yiap6u",
+            },
+        )
+
+        response_content = response_from_api.content
+    except requests.exceptions.RequestException:
+        print('HTTP Request failed')
+
+    return response.json(dict(
+        response_content=response_content,
+    ))
+
+
+def get_showtimes_ist():
     try:
         response_from_api = requests.get(
             url="https://api.internationalshowtimes.com/v4/showtimes/",

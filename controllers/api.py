@@ -3,7 +3,6 @@
 # returns the name (first and last) of the user as a string
 
 import gluon.contrib.simplejson
-
 import json
 import requests
 
@@ -87,11 +86,10 @@ def get_poll():
     return response.json(dict(poll=t))
 
 
-def showtimes():
+def get_showtimes():
     q = (db.movie.id == request.vars.movie_id)
     movie = db(q).select().first()
     showtimes = (db(db.showtime.movie_id == movie.id).select(db.showtime.ALL))
-    print showtimes
     return response.json(dict(showtimes=showtimes))
 
 
@@ -105,16 +103,13 @@ def add_poll():
         user_email = auth.user.email or None
         p_id = db.poll.insert(poll_content=request.vars.content)
         p = db.poll(p_id)
-
-        print "####################################"
         
-        for r1 in data['movies']:
-            movie_title = r1['title']
-            m_id = db.movie.insert(poll_id=p_id, title=movie_title)
-            for r2 in data['showtimes']:
-                if r2['movie_id'] == r1['id']:
-                    db.showtime.insert(movie_id=m_id)
-
+        for movie_item in data['movies']:
+            movie_title = movie_item['title']
+            m_id = db.movie.insert(poll_id=p_id, title=movie_title, ist_api_id=movie_item['id'])
+            for showtime_item in data['showtimes']:
+                if showtime_item['movie_id'] == movie_item['id']:
+                    db.showtime.insert(movie_id=m_id, ist_api_id=showtime_item['id'])
 
         name = get_name(p.user_email)
         poll = dict(
@@ -133,6 +128,7 @@ def add_poll():
     return response.json(dict(poll=poll))
 
 
+# not used
 @auth.requires_signature()
 def add_movie():
     # Inserts the track information.
@@ -172,6 +168,9 @@ def process_showtimes_vote():
     return response.json(dict())
 
 
+############################################################
+# remnants
+############################################################
 @auth.requires_signature()
 def toggle_public():
     if auth.user == None:
@@ -199,7 +198,6 @@ def edit_poll():
 
     return dict()
 
-
 @auth.requires_signature()
 def del_poll():
     if auth.user == None:
@@ -220,6 +218,10 @@ def del_poll():
 
 
 
+
+############################################################
+# international showtimes api calls
+############################################################
 
 def search_movies():
     try:
@@ -249,7 +251,48 @@ def search_movies():
     ))
 
 
-def get_showtimes():
+def get_one_movie_ist():
+    try:
+        url_string = "https://api.internationalshowtimes.com/v4/movies/"+request.vars.movie_id
+        response_from_api = requests.get(
+            url=url_string,
+            headers={
+                "X-API-Key": "Y8YxMBHwe7EPYnIVnKgPYlznt4Yiap6u",
+            },
+        )
+
+        response_content = response_from_api.content
+    except requests.exceptions.RequestException:
+        print('HTTP Request failed')
+
+    return response.json(dict(
+        response_content=response_content,
+    ))
+
+
+def get_one_showtime_ist():
+    try:
+        url_string = "https://api.internationalshowtimes.com/v4/showtimes/"+request.vars.showtime_id
+        response_from_api = requests.get(
+            url=url_string,
+            params={
+                "append": "movie,cinema",
+            },
+            headers={
+                "X-API-Key": "Y8YxMBHwe7EPYnIVnKgPYlznt4Yiap6u",
+            },
+        )
+
+        response_content = response_from_api.content
+    except requests.exceptions.RequestException:
+        print('HTTP Request failed')
+
+    return response.json(dict(
+        response_content=response_content,
+    ))
+
+
+def get_showtimes_ist():
     try:
         response_from_api = requests.get(
             url="https://api.internationalshowtimes.com/v4/showtimes/",

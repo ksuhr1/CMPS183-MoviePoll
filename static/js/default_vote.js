@@ -13,7 +13,12 @@ var app = function() {
     };
     
 
-    //Vote polls
+
+
+
+
+    // ##############################################################
+    // voting
     self.sendVoteServer = function () {
         if (self.vue.voteCartShowtimes.length > 0) {
             $.ajax({
@@ -41,20 +46,6 @@ var app = function() {
         }
     };
 
-    self.addToVoteCart = function (showtimeId) {
-        var showtime = self.vue.poll.movies.find( movie => movie.id === movieId);
-        var inCart = self.vue.voteCartShowtimes.indexOf(showtime);
-        console.log("cart", inCart);
-        //add to the cart
-        if (inCart === -1) {
-            self.vue.voteCartShowtimes.push(movie);
-        //take out of cart
-        } else {
-            self.vue.voteCartShowtimes.splice(inCart, 1);
-        }
-        console.log(self.vue.cart);
-    };
-
 
     self.addToVoteCart = function (movieId, showtimeId) {
         var movie = self.vue.poll.movies.find( movie => movie.id === movieId );
@@ -74,12 +65,13 @@ var app = function() {
         } else {
             self.vue.voteCartShowtimes.splice(indexShowtimeInCart, 1);
             
-            // if movie is in cart and none of the showtimes in the voteCartShowtimes [] has the movie
+            // if movie is in cart and 
+            // none of the showtimes in the voteCartShowtimes [] has the movie
             // then remove it
-            // var movieInShowtimes = self.vue.voteCartShowtimes.find( showtime => showtime.movie_id === movieId );            
-            // if ((indexMovieInCart != -1) && !(movieInShowtimes)) {
-            //     self.vue.voteCartMovies.splice(indexMovieInCart, 1);
-            // }
+            var movieInShowtimes = self.vue.voteCartShowtimes.find( showtime => showtime.movie_id === movieId );
+            if ((indexMovieInCart != -1) && !(movieInShowtimes)) {
+                self.vue.voteCartMovies.splice(indexMovieInCart, 1);
+            }
         }
     };
 
@@ -121,38 +113,97 @@ var app = function() {
 
                 var movies = self.vue.poll.movies;
                 movies.forEach(function (movie) {
-                    // self.getShowtimes(movie.id);
                     self.getShowtimes(movie);
+                    self.getMoviesFromIstApi(movie, function (data) {
+                        var mov = data.movie;
+                        var img = mov.poster_image_thumbnail;
+                        Vue.set(movie, 'poster_image_thumbnail', img);
+                    });
                 })
             }
         );
     };
 
+
+    // ##############################################################
+    // get showtimes
     self.getShowtimes = function (movie) {
         $.getJSON(showtimes_url,
             {
                 movie_id: movie.id,
             },
             function (data) {
+                // set new properties so that vue will track them
                 Vue.set(movie, 'showtimes', data.showtimes);
+                Vue.set(movie, 'cinemas', []);
+
+                movie.showtimes.forEach(function (showtime) {
+                    self.getShowtimeFromIstApi(showtime, function (data) {
+                        // data has a showtime, cinema, and movie
+                        var st = data.showtime;
+                        var cin = data.cinema;
+                        var normTime = self.convertTime(st.start_at);
+                        var normDate = self.convertDate(st.start_at);
+                        Vue.set(showtime, 'time', normTime);
+                        Vue.set(showtime, 'date', normDate);
+                        Vue.set(showtime, 'cinema_id', st.cinema_id);
+                        Vue.set(showtime, 'cinema', cin.name);
+
+                        // add cinema to the movie.cinemas array
+                        if (!(movie.cinemas.find( cinema => cinema.id === data.cinema.id))) {
+                            movie.cinemas.push(data.cinema);
+                        }
+                    });
+                });
+            }
+        );
+    };
+    
+    // get the full showtime data from international showtimes api
+    self.getShowtimeFromIstApi = function (showtime, callback) {
+        $.getJSON(get_one_showtime_ist_url,
+            {
+                showtime_id: showtime.ist_api_id,
+            },
+            function (data) {
+                var jsonData = JSON.parse(data.response_content);
+                callback(jsonData);
+            }
+        );
+    };
+
+    // get the full movie data from international showtimes api
+    self.getMoviesFromIstApi = function (movie, callback) {
+        $.getJSON(get_one_movie_ist_url,
+            {
+                movie_id: movie.ist_api_id,
+            },
+            function (data) {
+                var jsonData = JSON.parse(data.response_content);                
+                callback(jsonData);
             }
         );
     };
 
 
-    // may not need later if we get the cinemas along with the showtime
-    self.getCinemas = function (location) {
-        console.log("in getCinemas()");
-        $.getJSON(get_cinemas_url,
-            {
-                location: location,
-            },
-            function (data) {
-                jsonData = JSON.parse(data.response_cinemas);
-                self.vue.cinemas = jsonData.cinemas;
-            }
-        )
+
+    // ##############################################################
+    // time stuff
+    self.convertTime = function (isoDate) {
+        var formattedTime;
+        var event = new Date(isoDate);
+        var options = { hour: 'numeric', minute: 'numeric' };
+        formattedTime = event.toLocaleTimeString('en-US', options);
+        return formattedTime;
     };
+
+    self.convertDate = function (isoDate) {
+        var formattedDate;
+        var event = new Date(isoDate);
+        formattedDate = event.toDateString();
+        return formattedDate;
+    };
+
 
 
     self.vue = new Vue({
@@ -180,7 +231,6 @@ var app = function() {
 
     });
 
-    self.getCinemas('37.0108489,-121.9862189');
     self.get_poll(poll_id);
     $("#vue-div").show();
     return self;

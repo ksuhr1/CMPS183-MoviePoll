@@ -45,18 +45,18 @@
 
         <!-- Cart -->
         <div class="jumbotron">
-             <h3 class="text-center">Movies in your Poll</h3>
+             <h3 class="text center">Movies in your Poll</h3>
             <div class="card-body">
                 <div class="card-columns"> 
-                    <div v-for="movie in pollMovies" class="card">
+                    <div v-for="movie in pollMovies" class="card bg-white">
                         <div class="card-body">
-                            <h5 class="card-title">${movie.title}</h5>
+                            <h5 class="title text-dark">${movie.title}</h5>
                             <div class="movie-img w-100">
                                 <img v-bind:src="movie.poster_image_thumbnail" class="padded img-fluid" alt="Responsive image" />
                             </div>
                             <div v-for="showtime in pollShowtimes" 
                                 v-if="showtime.movie_id === movie.id"
-                                class="card">
+                                class="card pt-1">
                                 <div class="card-body">
                                     <p class="card-text" v-bind:title="showtime.start_at">
                                       ${showtime.time}

@@ -32,7 +32,7 @@
         </a>
 
 
-         <h2 class="text mt-4">My Movie Polls</h2>
+         <h2 class="text mt-4 mb-4">My Movie Polls</h2>
         <div v-for="poll in polls">
              <div class="jumbotron">
                 <div class="card-body">
@@ -57,7 +57,7 @@
 
             <!-- Load more button -->
             <button v-if="has_more"
-                class="btn btn-primary btn-sm"
+                class="btn btn-primary btn-primary"
                 v-on:click="get_more()">
                 Load more
             </button>

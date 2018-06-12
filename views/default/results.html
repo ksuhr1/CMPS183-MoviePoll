@@ -7,6 +7,7 @@
     var poll_id = "{{=poll.id}}";
     var poll_url = "{{=URL('api', 'get_poll')}}";
     var polls_url = "{{=URL('api', 'get_polls')}}";
+    var showtimes_url = "{{=URL('api', 'showtimes', user_signature=True)}}";
 </script>
 {{end}}
 
@@ -25,11 +26,14 @@
         <p>Poll is still active until: TIME</p>
         <div class="card-columns"> 
             <div v-for="movie in poll.movies" class="card">
-                <div class="card-header">
+               <div class="card-header">
                     ${movie.title}
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Votes: ${movie.votes}</h5>
+                    <div v-for="showtime in movie.showtimes">
+                    ${showtime.id}
+                </div> 
                     <p class="card-text">
                         <small>
                             Submitted at: ${poll.created_on} by ${poll.name}

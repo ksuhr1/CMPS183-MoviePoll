@@ -91,6 +91,7 @@ def showtimes():
     q = (db.movie.id == request.vars.movie_id)
     movie = db(q).select().first()
     showtimes = (db(db.showtime.movie_id == movie.id).select(db.showtime.ALL))
+    print showtimes
     return response.json(dict(showtimes=showtimes))
 
 

@@ -12,6 +12,11 @@ var app = function() {
         }
     };
     
+
+
+
+
+
     // ##############################################################
     // voting
     self.sendVoteServer = function () {
@@ -109,6 +114,11 @@ var app = function() {
                 var movies = self.vue.poll.movies;
                 movies.forEach(function (movie) {
                     self.getShowtimes(movie);
+                    self.getMoviesFromIstApi(movie, function (data) {
+                        var mov = data.movie;
+                        var img = mov.poster_image_thumbnail;
+                        Vue.set(movie, 'poster_image_thumbnail', img);
+                    });
                 })
             }
         );
@@ -142,7 +152,7 @@ var app = function() {
                         // add cinema to the movie.cinemas array
                         if (!(movie.cinemas.find( cinema => cinema.id === data.cinema.id))) {
                             movie.cinemas.push(data.cinema);
-                        }                        
+                        }
                     });
                 });
             }
@@ -154,6 +164,19 @@ var app = function() {
         $.getJSON(get_one_showtime_ist_url,
             {
                 showtime_id: showtime.ist_api_id,
+            },
+            function (data) {
+                var jsonData = JSON.parse(data.response_content);
+                callback(jsonData);
+            }
+        );
+    };
+
+    // get the full movie data from international showtimes api
+    self.getMoviesFromIstApi = function (movie, callback) {
+        $.getJSON(get_one_movie_ist_url,
+            {
+                movie_id: movie.ist_api_id,
             },
             function (data) {
                 var jsonData = JSON.parse(data.response_content);                

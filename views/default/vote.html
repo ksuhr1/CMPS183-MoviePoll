@@ -12,6 +12,7 @@
     var showtimes_url = "{{=URL('api', 'get_showtimes', user_signature=True)}}";
     var get_cinemas_url = "{{=URL('api', 'get_cinemas')}}";
     var get_one_showtime_ist_url = "{{=URL('api', 'get_one_showtime_ist')}}";
+    var get_one_movie_ist_url = "{{=URL('api', 'get_one_movie_ist')}}";
     var results_url = "{{=URL('default', 'results')}}";
 </script>
 {{end}}
@@ -78,11 +79,10 @@
 
                 <div class="card-body">
                     <h5 class="card-title">Select the showtimes u down fo</h5>
-
+                    <img v-bind:src="movie.poster_image_thumbnail" class="padded"/>
                     <div v-for="cinema in movie.cinemas" class="card">
                         <div class="card-header">Cinema: ${cinema.name}
-                            <div class="container card-body">
-
+                            <div class="container card-body">                                
                                 <div class="row">
                                     <div class="col-sm-3"
                                         v-for="showtime in movie.showtimes"

@@ -106,7 +106,7 @@ def add_poll():
         
         for movie_item in data['movies']:
             movie_title = movie_item['title']
-            m_id = db.movie.insert(poll_id=p_id, title=movie_title)
+            m_id = db.movie.insert(poll_id=p_id, title=movie_title, ist_api_id=movie_item['id'])
             for showtime_item in data['showtimes']:
                 if showtime_item['movie_id'] == movie_item['id']:
                     db.showtime.insert(movie_id=m_id, ist_api_id=showtime_item['id'])
@@ -239,6 +239,25 @@ def search_movies():
         #     status_code=response.status_code))
         # print('Response HTTP Response Body: {content}'.format(
         #     content=response.content))
+        response_content = response_from_api.content
+    except requests.exceptions.RequestException:
+        print('HTTP Request failed')
+
+    return response.json(dict(
+        response_content=response_content,
+    ))
+
+
+def get_one_movie_ist():
+    try:
+        url_string = "https://api.internationalshowtimes.com/v4/movies/"+request.vars.movie_id
+        response_from_api = requests.get(
+            url=url_string,
+            headers={
+                "X-API-Key": "Y8YxMBHwe7EPYnIVnKgPYlznt4Yiap6u",
+            },
+        )
+
         response_content = response_from_api.content
     except requests.exceptions.RequestException:
         print('HTTP Request failed')

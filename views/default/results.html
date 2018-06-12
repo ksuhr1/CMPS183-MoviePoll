@@ -3,6 +3,7 @@
 {{block head}}
 <title>Results - Poll it Dude</title>
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 <script>
     var poll_id = "{{=poll.id}}";
     var poll_url = "{{=URL('api', 'get_poll')}}";
@@ -11,6 +12,7 @@
 </script>
 {{end}}
 
+<canvas id="myChart"></canvas>
 
 <div class="main-content">
 

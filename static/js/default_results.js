@@ -11,9 +11,8 @@ var app = function() {
             a.push(b[i]);
         }
     };
-    
 
-
+   
 
     // ##############################################################
     // Get polls
@@ -77,6 +76,15 @@ var app = function() {
             function (data) {
                 console.log(data);
                 Vue.set(movie, 'showtimes', data.showtimes);
+
+                movie.showtimes.forEach(function (showtime) {                
+                    self.dataArray.push(showtime.votes);
+                    self.showtimeArray.push(showtime.id);
+                    self.colorsArray.push();
+                });   
+                console.log(self.showtimeArray)
+                console.log(self.showtimeArray)
+               
             }
         )
     };
@@ -93,6 +101,7 @@ var app = function() {
         })
         self.vue.winningMovie = winningMovie;
     }
+
 
 
     // ##############################################################
@@ -137,9 +146,56 @@ var app = function() {
             get_polls: self.get_polls,
             get_poll: self.get_poll,
             get_showtimes: self.get_showtimes,
-            getUberURL: self.getUberURL,            
+            getUberURL: self.getUberURL,
         }
 
+
+    });
+
+
+    self.dataArray = [];
+    self.colorsArray = [];
+    self.showtimeArray = [];
+    
+    function getRandomColor () {
+        var len = self.showtimeArray.length
+        console.log(len);
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        colarray = [];
+        for(var shows = 0; shows<len; shows++){
+            for (var i = 0; i < 6; i++) {
+                console.log(letters[Math.floor(Math.random() * 16)])
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            colarray[shows] = color
+        }
+        console.log(colarray);
+        return colarray;
+    }                                   
+        
+ 
+    
+    var ctx = document.getElementById('myChart').getContext('2d');
+
+    var myDoughnutChart = new Chart(ctx, {
+        //colorsarray: getRandomColor(),
+        //The type of chart we want to create
+        type: 'doughnut',
+
+        // The data for our dataset
+        data: {
+            labels: self.showtimeArray,
+            backgroundColor: self.colorsArray, 
+            datasets: [{
+                
+                //backgroundColor: self.colorsArray, 
+                data: self.dataArray
+            }]
+        },
+
+        // Configuration options go here
+        options: {}
 
     });
 
@@ -148,7 +204,10 @@ var app = function() {
     self.getUberURL();
     $("#vue-div").show();
     return self;
+
 };
+
+
 
 var APP = null;
 

@@ -20,7 +20,7 @@ db.define_table('poll',
 db.define_table('movie',
                 Field('poll_id', 'reference poll'),	
                 Field('title', 'text'),
-                Field('votes', 'integer', default=0),
+                Field('vote', 'integer'),
                 )
 
 db.define_table('showtime',

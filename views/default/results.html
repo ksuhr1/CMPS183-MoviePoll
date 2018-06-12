@@ -3,6 +3,7 @@
 {{block head}}
 <title>Results - Poll it Dude</title>
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 <script>
     var poll_id = "{{=poll.id}}";
     var poll_url = "{{=URL('api', 'get_poll')}}";
@@ -15,7 +16,7 @@
 <div class="main-content">
 
     <div id="vue-div" class="display:none">
-
+    <canvas id="myChart"></canvas>
 
 
     <h1>Results</h1>
@@ -37,7 +38,10 @@
                     ${movie.title}
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">Here are the number of votes for each showtime</h5>
+                    <div v-for="showtime in movie.showtimes">
+                        ${showtime.id}
+                    <h5 class="card-title">Votes: ${showtime.votes}</h5>
+                    </div> 
                     <p class="card-text">
                         <div v-for="showtime in movie.showtimes">
                             Regal at 7:00PM - ${showtime.votes}

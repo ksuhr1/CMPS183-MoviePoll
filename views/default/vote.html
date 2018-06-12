@@ -1,6 +1,7 @@
 {{extend 'layout.html'}}
 
 {{block head}}
+<title>Vote - Poll it Dude</title>
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 
 <script>
@@ -58,8 +59,11 @@
                     Cast your vote
                 </button>
             </div>
-        </div>        
+        </div> 
 
+
+
+        <!-- Movie display scaffold -->
         <div class="card-deck"> 
             <div v-for="movie in poll.movies" class="card shadow p-3 mb-5 bg-dark rounded">
                 <div class="card-header">${movie.title}</div>
@@ -77,7 +81,7 @@
                                         <button class="btn btn-outline-primary btn-block"
                                             v-bind:class="{ active: voteCartShowtimes.includes(showtime) }"
                                             v-on:click="addToVoteCart(movie.id, showtime.id)">
-                                            ${showtime.id}
+                                            ${showtime.time}
                                         </button>
                                     </div>
                                 </div>

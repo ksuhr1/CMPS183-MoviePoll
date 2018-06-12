@@ -127,6 +127,9 @@ var app = function() {
         );
     };
 
+
+    // ##############################################################
+    // get showtimes
     self.getShowtimes = function (movie) {
         $.getJSON(showtimes_url,
             {
@@ -135,20 +138,24 @@ var app = function() {
             function (data) {
                 Vue.set(movie, 'showtimes', data.showtimes);
                 movie.showtimes.forEach(function (showtime) {
-                    self.getShowtimeFromIstApi(showtime);
+                    self.getShowtimeFromIstApi(showtime, function (data) {
+                        var normTime = self.convertTime(data.showtime.start_at);
+                        Vue.set(showtime, 'time', normTime);
+                    });
                 });
             }
         );
     };
-
-    self.getShowtimeFromIstApi = function (showtime) {
+    
+    // get the full showtime data from international showtimes api
+    self.getShowtimeFromIstApi = function (showtime, callback) {
         $.getJSON(get_showtime_ist_url,
             {
                 showtime_id: showtime.ist_api_id,
             },
             function (data) {
-                var jsonData = JSON.parse(data.response_content);
-                console.log(jsonData);
+                var jsonData = JSON.parse(data.response_content);                
+                callback(jsonData);
             }
         );
     };
@@ -167,6 +174,20 @@ var app = function() {
             }
         )
     };
+
+
+    // ##############################################################
+    // time stuff
+    self.convertTime = function (isoDate) {
+        var formattedTime;
+        var event = new Date(isoDate);
+        var options = { hour: 'numeric', minute: 'numeric' };
+        formattedTime = event.toLocaleTimeString('en-US', options);
+        return formattedTime;
+    };
+
+
+
 
 
     self.vue = new Vue({

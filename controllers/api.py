@@ -103,16 +103,13 @@ def add_poll():
         user_email = auth.user.email or None
         p_id = db.poll.insert(poll_content=request.vars.content)
         p = db.poll(p_id)
-
-        print "####################################"
         
-        for r1 in data['movies']:
-            movie_title = r1['title']
+        for movie_item in data['movies']:
+            movie_title = movie_item['title']
             m_id = db.movie.insert(poll_id=p_id, title=movie_title)
-            for r2 in data['showtimes']:
-                if r2['movie_id'] == r1['id']:
-                    db.showtime.insert(movie_id=m_id, ist_api_id=r2['id'])
-
+            for showtime_item in data['showtimes']:
+                if showtime_item['movie_id'] == movie_item['id']:
+                    db.showtime.insert(movie_id=m_id, ist_api_id=showtime_item['id'])
 
         name = get_name(p.user_email)
         poll = dict(
@@ -129,6 +126,7 @@ def add_poll():
     # supposed to print IP of the requester but not working
     # print current.request.client
     return response.json(dict(poll=poll))
+
 
 # not used
 @auth.requires_signature()
@@ -170,6 +168,9 @@ def process_showtimes_vote():
     return response.json(dict())
 
 
+############################################################
+# remnants
+############################################################
 @auth.requires_signature()
 def toggle_public():
     if auth.user == None:
@@ -196,7 +197,6 @@ def edit_poll():
     poll.update_record(poll_content=request.vars.poll_content)
 
     return dict()
-
 
 @auth.requires_signature()
 def del_poll():

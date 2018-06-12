@@ -248,7 +248,7 @@ def search_movies():
     ))
 
 
-def get_showtime_ist():
+def get_one_showtime_ist():
     try:
         url_string = "https://api.internationalshowtimes.com/v4/showtimes/"+request.vars.showtime_id
         response_from_api = requests.get(

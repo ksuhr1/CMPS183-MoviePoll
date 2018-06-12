@@ -12,7 +12,8 @@ var app = function() {
         }
     };
     
-
+    // ##############################################################
+    // voting
     self.sendVoteServer = function () {
         if (self.vue.voteCartShowtimes.length > 0) {
             $.ajax({
@@ -40,20 +41,6 @@ var app = function() {
         }
     };
 
-    self.addToVoteCart = function (showtimeId) {
-        var showtime = self.vue.poll.movies.find( movie => movie.id === movieId);
-        var inCart = self.vue.voteCartShowtimes.indexOf(showtime);
-        console.log("cart", inCart);
-        //add to the cart
-        if (inCart === -1) {
-            self.vue.voteCartShowtimes.push(movie);
-        //take out of cart
-        } else {
-            self.vue.voteCartShowtimes.splice(inCart, 1);
-        }
-        console.log(self.vue.cart);
-    };
-
 
     self.addToVoteCart = function (movieId, showtimeId) {
         var movie = self.vue.poll.movies.find( movie => movie.id === movieId );
@@ -73,12 +60,13 @@ var app = function() {
         } else {
             self.vue.voteCartShowtimes.splice(indexShowtimeInCart, 1);
             
-            // if movie is in cart and none of the showtimes in the voteCartShowtimes [] has the movie
+            // if movie is in cart and 
+            // none of the showtimes in the voteCartShowtimes [] has the movie
             // then remove it
-            // var movieInShowtimes = self.vue.voteCartShowtimes.find( showtime => showtime.movie_id === movieId );            
-            // if ((indexMovieInCart != -1) && !(movieInShowtimes)) {
-            //     self.vue.voteCartMovies.splice(indexMovieInCart, 1);
-            // }
+            var movieInShowtimes = self.vue.voteCartShowtimes.find( showtime => showtime.movie_id === movieId );
+            if ((indexMovieInCart != -1) && !(movieInShowtimes)) {
+                self.vue.voteCartMovies.splice(indexMovieInCart, 1);
+            }
         }
     };
 
@@ -120,7 +108,6 @@ var app = function() {
 
                 var movies = self.vue.poll.movies;
                 movies.forEach(function (movie) {
-                    // self.getShowtimes(movie.id);
                     self.getShowtimes(movie);
                 })
             }
@@ -136,11 +123,26 @@ var app = function() {
                 movie_id: movie.id,
             },
             function (data) {
+                // set new properties so that vue will track them
                 Vue.set(movie, 'showtimes', data.showtimes);
+                Vue.set(movie, 'cinemas', []);
+
                 movie.showtimes.forEach(function (showtime) {
                     self.getShowtimeFromIstApi(showtime, function (data) {
-                        var normTime = self.convertTime(data.showtime.start_at);
+                        // data has a showtime, cinema, and movie
+                        var st = data.showtime;
+                        var cin = data.cinema;
+                        var normTime = self.convertTime(st.start_at);
+                        var normDate = self.convertDate(st.start_at);
                         Vue.set(showtime, 'time', normTime);
+                        Vue.set(showtime, 'date', normDate);
+                        Vue.set(showtime, 'cinema_id', st.cinema_id);
+                        Vue.set(showtime, 'cinema', cin.name);
+
+                        // add cinema to the movie.cinemas array
+                        if (!(movie.cinemas.find( cinema => cinema.id === data.cinema.id))) {
+                            movie.cinemas.push(data.cinema);
+                        }                        
                     });
                 });
             }
@@ -149,7 +151,7 @@ var app = function() {
     
     // get the full showtime data from international showtimes api
     self.getShowtimeFromIstApi = function (showtime, callback) {
-        $.getJSON(get_showtime_ist_url,
+        $.getJSON(get_one_showtime_ist_url,
             {
                 showtime_id: showtime.ist_api_id,
             },
@@ -160,20 +162,6 @@ var app = function() {
         );
     };
 
-
-    // may not need later if we get the cinemas along with the showtime
-    self.getCinemas = function (location) {
-        console.log("in getCinemas()");
-        $.getJSON(get_cinemas_url,
-            {
-                location: location,
-            },
-            function (data) {
-                jsonData = JSON.parse(data.response_cinemas);
-                self.vue.cinemas = jsonData.cinemas;
-            }
-        )
-    };
 
 
     // ##############################################################
@@ -186,7 +174,12 @@ var app = function() {
         return formattedTime;
     };
 
-
+    self.convertDate = function (isoDate) {
+        var formattedDate;
+        var event = new Date(isoDate);
+        formattedDate = event.toDateString();
+        return formattedDate;
+    };
 
 
 
@@ -215,7 +208,6 @@ var app = function() {
 
     });
 
-    self.getCinemas('37.0108489,-121.9862189');
     self.get_poll(poll_id);
     $("#vue-div").show();
     return self;

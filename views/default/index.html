@@ -5,12 +5,12 @@
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 <script>
     var polls_url = "{{=URL('api', 'get_polls')}}";
-    var add_poll_url = "{{=URL('api', 'add_poll', user_signature=True)}}";
-    var edit_poll_url = "{{=URL('api', 'edit_poll', user_signature=True)}}";
     var del_poll_url = "{{=URL('api', 'del_poll', user_signature=True)}}";
-    var toggle_public_url = "{{=URL('api', 'toggle_public', user_signature=True)}}";
+    var toggle_active_url = "{{=URL('api', 'toggle_active', user_signature=True)}}";
     var poll_url = "{{=URL('api', 'get_poll')}}";
     var polls_url = "{{=URL('api', 'get_polls')}}";
+    var get_one_movie_ist_url = "{{=URL('api', 'get_one_movie_ist')}}";
+    var results_url = "{{=URL('default', 'results')}}";
 </script>
 {{end}}
 
@@ -28,7 +28,7 @@
         <a href="{{=URL('default', 'create_poll')}}"
             class="btn btn-primary btn-lg btn-block"
             v-bind:class="{'disabled': !logged_in}">
-            Add new poll
+            Create a poll duuuh
         </a>
 
 
@@ -36,8 +36,10 @@
         <div v-for="poll in polls">
              <div class="jumbotron">
                 <div class="card-body">
+                    <h5 class="card-title"><a v-bind:href="getUrl(poll)">${poll.created_on}</a></h5>
                     <div class="card-columns">
                         <div v-for="movie in poll.movies" class="card">
+                            <img class="card-img-top" v-bind:src="movie.poster_image_thumbnail" alt="Card image cap">
                             <div class="card-body">
                                 <h5 class="card-title">${movie.title}</h5>
                             </div>
@@ -50,6 +52,11 @@
                         v-on:click="delete_poll(poll.id)">
                         <i class="fa fa-trash fa-2x" aria-hidden="true"></i>
                     </button>
+                    <button class="btn btn-default btn-lg float-right"
+                        v-on:click="toggle_active(poll.id)">
+                        <p v-if="poll.is_active">Turn Poll Off</p>
+                        <p v-else>Turn Poll On</p> 
+                    </button>                    
                 </div>
             </div>
         </div>
